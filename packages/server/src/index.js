@@ -3,11 +3,24 @@ const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const { join } = require('path');
+const session = require('express-session');
+const passport = require('passport');
 const router = require('./routes');
 
 const PORT = process.env.CUSTOM_PORT;
 const app = express();
 dotenv.config();
+
+app.use(
+  session({
+    secret: process.env.JWT_SECRET,
+    resave: false,
+    saveUninitialized: true,
+  }),
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(cors());
 
