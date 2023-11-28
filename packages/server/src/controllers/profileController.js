@@ -1,6 +1,7 @@
 const { User, User_Profile } = require('../models');
 const { sequelize } = require('../models');
-const uploadProfilePicture = require('../utils/uploadProfilePicture');
+const fs = require('fs');
+const path = require('path');
 
 const updateOrCreateProfile = async (req, res) => {
   try {
@@ -134,19 +135,34 @@ const uploadProfile = async (req, res) => {
       throw new Error('image harus di input');
     }
 
-    if (ProfileData.image) {
-      // ambil nama file image yang lama
-      const fileName = ProfileData.image.replace(
-        `${req.protocol}://${req.get('host')}/src/public/profile/`,
-        '',
-      );
-      const filePath = `./src/public/profile/${fileName}`;
+    // if (ProfileData.image) {
+    //   const fileName = ProfileData.image.replace(
+    //     `${req.protocol}://${req.get('host')}/src/public/profile/`,
+    //     '',
+    //   );
+    //   const filePath = `./src/public/profile/${fileName}`;
 
-      // menghapus file
-      fs.unlink(filePath, (err) => {
+    //   // menghapus file
+    //   fs.unlink(filePath, (err) => {
+    //     if (err) {
+    //       res.status(400);
+    //       throw new Error('file tidak ditemukan');
+    //     }
+    //   });
+    // }
+
+    if (ProfileData.profile_picture) {
+      const oldImagePath = ProfileData.profile_picture;
+      const oldImageName = path.basename(oldImagePath);
+      const oldImagePathOnServer = path.join(
+        __dirname,
+        `../public/profile/${oldImageName}`,
+      );
+
+      fs.unlink(oldImagePathOnServer, (err) => {
         if (err) {
           res.status(400);
-          throw new Error('file tidak ditemukan');
+          throw new Error('file tidak ditemukan atau gagal dihapus');
         }
       });
     }
