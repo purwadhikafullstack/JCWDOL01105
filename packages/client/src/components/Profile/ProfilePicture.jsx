@@ -27,6 +27,7 @@ const ProfilePicture = ({ showToast }) => {
     try {
       const response = await api.get('/profile/picture');
       const data = await response.data;
+      console.log(response.data);
       showToast('Update Success', 'success');
       setProfilePicture(data.profile_picture);
     } catch (error) {
@@ -36,7 +37,7 @@ const ProfilePicture = ({ showToast }) => {
 
   return (
     <div className="bg-white shadow sm:rounded-lg p-6">
-      <h2 className="text-2xl font-semibold mb-4">Username</h2>
+      <h2 className="text-2xl font-semibold mb-4">Profile Picture</h2>
       <div className="flex items-center justify-center mb-6">
         <img
           src={profilePicture}

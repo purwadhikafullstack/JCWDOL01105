@@ -69,7 +69,7 @@ const ProfilePage = () => {
       <Navbar />
       <div>
         <div
-          className="mt-8  bg-color-pallete3 container mx-auto border border-gray-300 p-4 rounded-md"
+          className="mt-8  bg-color-pallete1 container mx-auto border border-gray-300 p-4 rounded-md mb-5"
           //   style={{ backgroundImage: `url(${bg.src})` }}
         >
           <h1 className="text-2xl font-bold mb-4">Profile Page</h1>

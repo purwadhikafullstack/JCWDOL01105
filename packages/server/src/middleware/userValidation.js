@@ -139,4 +139,4 @@ module.exports = {
   userValidationRegister,
   userValidationLogin,
   userProfileValidation,
-};
+}

@@ -25,8 +25,6 @@ app.use(passport.session());
 
 app.use(cors());
 
-// const staticFilesDirectory = path.join(__dirname, 'src', 'public');
-// app.use('/src/public', express.static(staticFilesDirectory));
 
 app.use(
   '/src/public/profile',
