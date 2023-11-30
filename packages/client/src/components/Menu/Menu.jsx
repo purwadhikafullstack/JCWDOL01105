@@ -3,17 +3,26 @@ import { List, House } from '@phosphor-icons/react';
 import { useCallback, useState } from 'react';
 import MenuItem from '../Navbar/MenuItem';
 
-const Menu = () => {
+import { useRouter } from 'next/router';
+
+const Menu = ({ currentUser }) => {
+  const router = useRouter();
+
   const [isOpen, setIsOpen] = useState(false);
+
   const toggleOpen = useCallback(() => {
     setIsOpen((value) => !value);
   }, []);
+
+  const onRent = useCallback(() => {
+    router.push('/PropertyListing');
+  }, [router]);
 
   return (
     <div className="relative">
       <div className="side-btn flex flex-row items-center gap-3">
         <div
-          onClick={() => {}}
+          onClick={onRent}
           className="hidden md:block text-sm font-semibold py-3 px-4 rounded-full  transition cursor-pointer"
         >
           <House size={32} />
@@ -29,12 +38,27 @@ const Menu = () => {
       {isOpen && (
         <div className="absolute rounded-xl shadow-md bg-color-primary w-[170px] md:w3/4 overflow-hidden right-10 top-15 text-sm">
           <div className="flex flex-col cursor-pointer  text-color-pallete1 bg-color-primary">
-            <>
-              <MenuItem onClick={() => {}} label="Login" />
-              <MenuItem onClick={() => {}} label="Sign up" />
-              <MenuItem onClick={() => {}} label="About us" />
-              <MenuItem onClick={() => {}} label="Rent yours" />
-            </>
+            {currentUser ? (
+              <>
+                <MenuItem label="My reservation" />
+                <MenuItem label="My favorites" />
+                <MenuItem label="Rent yours" />
+                <MenuItem label="My properties" />
+                <hr />
+                <MenuItem label="Logout" />
+              </>
+            ) : (
+              <>
+                <MenuItem
+                  label="Login"
+                  onClick={() => router.push('/user/login')}
+                />
+                <MenuItem
+                  label="Sign up"
+                  onClick={() => router.push('user/register')}
+                />
+              </>
+            )}
           </div>
         </div>
       )}

@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
       category_id: DataTypes.UUID,
       name: DataTypes.STRING,
       address: DataTypes.STRING,
-      pictures: DataTypes.TEXT,
+      pictures: DataTypes.ARRAY(DataTypes.STRING),
       description: DataTypes.TEXT,
       avg_rating: DataTypes.FLOAT,
     },
