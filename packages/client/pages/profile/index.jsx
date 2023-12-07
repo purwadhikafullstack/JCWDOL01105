@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import bg from '../../public/bg-profile.jpg';
 import ProfilePicture from '../../src/components/Profile/ProfilePicture';
 import ChangePassword from '../../src/components/Profile/ChangePassword';
 import UserProfile from '../../src/components/Profile/UserProfile';
