@@ -169,6 +169,11 @@ const UserProfile = ({ showToast }) => {
                   type="text"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      setEditable(false);
+                    }
+                  }}
                   className="border rounded-md px-2 py-1 w-full"
                 />
               ) : (

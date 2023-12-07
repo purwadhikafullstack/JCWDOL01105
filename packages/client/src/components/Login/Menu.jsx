@@ -3,10 +3,12 @@ import { List, House } from '@phosphor-icons/react';
 import { useCallback, useEffect, useState } from 'react';
 import MenuItem from '../Navbar/MenuItem';
 import { useRouter } from 'next/router';
+import UserLoginModal from './ModalLogin';
 
 const Menu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
   const toggleOpen = useCallback(() => {
     setIsOpen((value) => !value);
@@ -14,7 +16,7 @@ const Menu = () => {
 
   const handleClick = (label) => {
     if (label === 'Login') {
-      router.push('/user/login');
+      setIsModalOpen(true);
     } else if (label === 'Register') {
       router.push('/user/register');
     } else if (label === 'AboutUs') {
@@ -25,9 +27,26 @@ const Menu = () => {
       router.push('profile');
     }
   };
+
+  const handleModalOpen = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+  };
   const handleLogout = () => {
-    localStorage.removeItem('token');
+    localStorage.clear();
     setIsLoggedIn(false);
+    window.location.reload();
+  };
+
+  const handleUserLogin = () => {
+    router.push('/user/login');
+  };
+
+  const handleTenantLogin = () => {
+    router.push('/tenant/login');
   };
 
   useEffect(() => {
@@ -41,7 +60,7 @@ const Menu = () => {
   }, [router]);
 
   return (
-    <div className="relative">
+    <div className="relative z-20">
       <div className="side-btn flex flex-row items-center gap-3">
         <div
           onClick={onRent}
@@ -75,6 +94,7 @@ const Menu = () => {
             ) : (
               <>
                 <MenuItem onClick={() => handleClick('Login')} label="Login" />
+                <MenuItem onClick={handleModalOpen} label="Login" />
                 <MenuItem
                   onClick={() => handleClick('Sign up')}
                   label="Sign up"
@@ -92,6 +112,13 @@ const Menu = () => {
           </div>
         </div>
       )}
+      {/* User Login Modal */}
+      <UserLoginModal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        onUserLogin={handleUserLogin}
+        onTenantLogin={handleTenantLogin}
+      />
     </div>
   );
 };

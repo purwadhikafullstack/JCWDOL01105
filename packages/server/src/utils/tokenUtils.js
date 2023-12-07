@@ -6,7 +6,7 @@ const signToken = (id) => {
   });
 };
 
-const createSendToken = (user, statusCode, res) => {
+const createSendToken = (user, statusCode, res, userType, role) => {
   const token = signToken(user.id);
 
   const cookieOptions = {
@@ -16,19 +16,25 @@ const createSendToken = (user, statusCode, res) => {
     httpOnly: true,
   };
 
-  // Set cookie options
   res.cookie('jwt', token, cookieOptions);
 
-  // Send response to client with token
+  let userDataToSend = {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    phone_number: user.phone_number,
+    role,
+  };
+
+  if (userType === 'tenant') {
+    userDataToSend.idCard_number = user.idCard_number;
+    // Tambahkan atribut lain yang dimiliki oleh tenant
+  }
+
   res.status(statusCode).json({
     status: 'success',
     token,
-    data: {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      phone_number: user.phone_number,
-    },
+    data: userDataToSend,
   });
 };
 

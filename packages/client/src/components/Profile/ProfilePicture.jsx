@@ -6,6 +6,8 @@ const ProfilePicture = ({ showToast }) => {
   const [profilePicture, setProfilePicture] = useState('');
   const [showModal, setShowModal] = useState(false);
 
+  const name = localStorage.getItem('name');
+
   const handleModalToggle = () => {
     setShowModal(!showModal); // Mengubah nilai state untuk menampilkan/sembunyikan modal
   };
@@ -27,7 +29,6 @@ const ProfilePicture = ({ showToast }) => {
     try {
       const response = await api.get('/profile/picture');
       const data = await response.data;
-      console.log(response.data);
       showToast('Update Success', 'success');
       setProfilePicture(data.profile_picture);
     } catch (error) {
@@ -37,7 +38,7 @@ const ProfilePicture = ({ showToast }) => {
 
   return (
     <div className="bg-white shadow sm:rounded-lg p-6">
-      <h2 className="text-2xl font-semibold mb-4">Profile Picture</h2>
+      <h2 className="text-2xl font-semibold mb-4">{name}</h2>
       <div className="flex items-center justify-center mb-6">
         <img
           src={profilePicture}

@@ -8,14 +8,14 @@ const transporter = nodemailer.createTransport({
   auth: {
     user: process.env.MAIL_USER,
     pass: process.env.MAIL_PASSWORD,
-    verifyUrl: process.env.CLIENT_URL,
   },
+  verifyUrl: process.env.CLIENT_URL,
 });
 
 function generateVerificationCode() {
   return (code = Math.floor(1000 + Math.random() * 90000).toString());
 }
-async function mailVerificationCode(email, verification_code) {
+async function mailVerificationCode(email, verification_code, userType) {
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: email,
@@ -24,7 +24,7 @@ async function mailVerificationCode(email, verification_code) {
     <h1>Hello, thanks for signing up</h1>
     <img src="https://i.pinimg.com/564x/00/bc/64/00bc646eba01f2004c4a4f8c40881fdf.jpg" alt="Your Image" />
     <br />
-      <a href="${process.env.CLIENT_URL}/user/verify/">Verify Your Account</a>
+      <a href="${process.env.CLIENT_URL}/${userType}/verify/">Verify Your Account</a>
     <br />
     Your verification code is: ${verification_code}
 
@@ -43,7 +43,7 @@ function generateResetToken() {
   return crypto.randomBytes(20).toString('hex');
 }
 
-const mailResetPasswordLink = async (email, reset_password_token) => {
+const mailResetPasswordLink = async (email, reset_password_token, userType) => {
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: email,
@@ -51,7 +51,7 @@ const mailResetPasswordLink = async (email, reset_password_token) => {
     html: `
     <h1>Password Reset Request</h1>
     <p>You've requested to reset your password. Click the link below to reset:</p>
-    <a href="${process.env.CLIENT_URL}/user/reset-password/${reset_password_token}">Reset Password</a>
+    <a href="${process.env.CLIENT_URL}/${userType}/reset-password/${reset_password_token}">Reset Password</a>
     `,
   };
 

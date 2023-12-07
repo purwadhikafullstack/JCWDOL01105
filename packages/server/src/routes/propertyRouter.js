@@ -9,7 +9,7 @@ router.post(
   propertyController.createOrUpdateProperty,
 );
 
-router.get('/property/properties', propertyController.getProperties);
+router.get('/properties', propertyController.getProperties);
 router.get('/search', propertyController.searchProperties);
 router.delete('/delete/:id', propertyController.deleteProperty);
 router.put('/property/:id', propertyController.createOrUpdateProperty);

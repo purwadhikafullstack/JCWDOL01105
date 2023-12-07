@@ -7,14 +7,10 @@ const session = require('express-session');
 const passport = require('passport');
 const router = require('./routes');
 const path = require('path');
-const propertyRouter = require('./routes/propertyRouter');
-const cookieParser = require('cookie-parser');
 
 const PORT = process.env.CUSTOM_PORT;
 const app = express();
 dotenv.config();
-
-app.use(cookieParser());
 
 app.use(
   session({
@@ -33,7 +29,6 @@ app.use('/src/public', express.static(path.join('./src/public')));
 
 app.use(express.json());
 app.use('/api', router);
-app.use('/api', propertyRouter);
 
 app.get('/api', (req, res) => {
   res.send(`Hello, this is my API`);

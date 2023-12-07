@@ -3,7 +3,7 @@ const router = express.Router();
 const profileController = require('../controllers/profileController');
 const authMiddleware = require('../middleware/authMiddleware');
 const { userProfileValidation } = require('../middleware/userValidation');
-const { uploadOptions, uploadOptionsProfile } = require('../utils/uploadFile');
+const { uploadOptionsProfile } = require('../utils/uploadFile');
 
 router.post(
   '/',

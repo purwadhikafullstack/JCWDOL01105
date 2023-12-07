@@ -21,7 +21,7 @@ const storageFile = (path) => {
     filename: function (req, file, cb) {
       const extension = FILE_TYPES[file.mimetype];
 
-      const uniqueFileImage = `${file.fieldname}${Date.now()}.${extension}`;
+      const uniqueFileImage = `${file.fieldname}_${Date.now()}.${extension}`;
 
       cb(null, uniqueFileImage);
     },

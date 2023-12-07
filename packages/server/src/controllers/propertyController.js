@@ -127,7 +127,6 @@ exports.searchProperties = async (req, res, next) => {
     console.log('Search request', req.query);
 
     const where = {};
-
     if (location) {
       where.location = location;
     }
@@ -143,6 +142,6 @@ exports.searchProperties = async (req, res, next) => {
     res.json({ success: true, data: searchResult });
   } catch (error) {
     console.error('Error searching properties', error);
-    res.status(500).json({ success: false, message: 'Internal server error' });
+    res.status(500).json({ success: false, message: error.message });
   }
 };

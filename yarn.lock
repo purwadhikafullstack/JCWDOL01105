@@ -151,6 +151,28 @@
 "@floating-ui/utils@^0.1.3":
   version "0.1.6"
 
+"@fullcalendar/core@^6.1.10", "@fullcalendar/core@~6.1.10":
+  version "6.1.10"
+  resolved "https://registry.npmjs.org/@fullcalendar/core/-/core-6.1.10.tgz"
+  integrity sha512-oTXGJSAGpCf1oY+CKp5qYjMHkJCPBkJ3SHitl63n8Q6xKeiwQ4EF6Au451euUovREwJpLmD1AyZrCnWmtB9AVg==
+  dependencies:
+    preact "~10.12.1"
+
+"@fullcalendar/daygrid@^6.1.10":
+  version "6.1.10"
+  resolved "https://registry.npmjs.org/@fullcalendar/daygrid/-/daygrid-6.1.10.tgz"
+  integrity sha512-Z4GRm1IyHKgxXFTWGcEI0nTsvYOIkpE0aMt3/o3ER2SZkF+hfwcDFhtj0c9+WhMjXFIWYeoTnA9rUOY7Zl/nxA==
+
+"@fullcalendar/interaction@^6.1.10":
+  version "6.1.10"
+  resolved "https://registry.npmjs.org/@fullcalendar/interaction/-/interaction-6.1.10.tgz"
+  integrity sha512-aZRlwCpmDasq2RNeWV0ub20Uevare9Cb6iMlxCacx0fhOC14H28G9d1FsduJIecInL84SPGwt5ItqAYMsWv7zw==
+
+"@fullcalendar/react@^6.1.10":
+  version "6.1.10"
+  resolved "https://registry.npmjs.org/@fullcalendar/react/-/react-6.1.10.tgz"
+  integrity sha512-RVYevo5T4RUZzR8omlbnBwRCqVNJWKryzI0ZrFULyqIYggN6uPmMuB9GvbrTjDfKhsm438KQwwhJerg2lGh3xA==
+
 "@gar/promisify@^1.1.3":
   version "1.1.3"
   resolved "https://registry.npmjs.org/@gar/promisify/-/promisify-1.1.3.tgz"
@@ -228,6 +250,11 @@
   dependencies:
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
+
+"@kurkle/color@^0.3.0":
+  version "0.3.2"
+  resolved "https://registry.npmmirror.com/@kurkle/color/-/color-0.3.2.tgz"
+  integrity sha512-fuscdXJ9G1qb7W8VdHi+IwRqij3lBkosAm4ydQtEmbY58OzHXqQhvlxqEkoz0yssNVn38bcpRWgA9PP+OGoisw==
 
 "@lerna/add@5.4.3":
   version "5.4.3"
@@ -1947,6 +1974,13 @@ chardet@^0.7.0:
   resolved "https://registry.npmjs.org/chardet/-/chardet-0.7.0.tgz"
   integrity sha512-mT8iDcrh03qDGRRmoA2hmBJnxpllMR+0/0qlzjqZES6NdiWDcZkCNAk4rPFZ9Q85r27unkiNNg8ZOiwZXBHwcA==
 
+chart.js@^4.1.1, chart.js@^4.4.0:
+  version "4.4.0"
+  resolved "https://registry.npmmirror.com/chart.js/-/chart.js-4.4.0.tgz"
+  integrity sha512-vQEj6d+z0dcsKLlQvbKIMYFHd3t8W/7L2vfJIbYcfyPcRx92CsHqECpueN8qVGNlKyDcr5wBrYAYKnfu/9Q1hQ==
+  dependencies:
+    "@kurkle/color" "^0.3.0"
+
 chokidar@^3.5.1, chokidar@^3.5.2, chokidar@^3.5.3:
   version "3.5.3"
   resolved "https://registry.npmjs.org/chokidar/-/chokidar-3.5.3.tgz"
@@ -2019,13 +2053,20 @@ cli-width@^3.0.0:
   version "0.1.0"
   resolved "file:packages/client"
   dependencies:
+    "@fullcalendar/core" "^6.1.10"
+    "@fullcalendar/daygrid" "^6.1.10"
+    "@fullcalendar/interaction" "^6.1.10"
+    "@fullcalendar/react" "^6.1.10"
     "@phosphor-icons/react" "^2.0.14"
     axios "^0.27.2"
+    chart.js "^4.4.0"
     formik "^2.4.5"
     next "12.2.5"
     phosphor-icons "^1.4.2"
     query-string "^8.1.0"
     react "18.2.0"
+    react-chartjs-2 "^5.2.0"
+    react-date-range "^1.4.0"
     react-datepicker "^4.23.0"
     react-dom "18.2.0"
     react-fast-marquee "^1.6.2"
@@ -2273,14 +2314,6 @@ conventional-recommended-bump@^6.1.0:
 
 convert-source-map@^1.5.0:
   version "1.9.0"
-
-cookie-parser@^1.4.6:
-  version "1.4.6"
-  resolved "https://registry.npmjs.org/cookie-parser/-/cookie-parser-1.4.6.tgz"
-  integrity sha512-z3IzaNjdwUC2olLIB5/ITd0/setiaFMLYiZJle7xg5Fe9KWAceil7xszYfHHBtDFYLSgJduS2Ty0P1uJdPDJeA==
-  dependencies:
-    cookie "0.4.1"
-    cookie-signature "1.0.6"
 
 cookie-session@^2.0.0:
   version "2.0.0"
@@ -5969,6 +6002,11 @@ postcss@^8.4.31:
     picocolors "^1.0.0"
     source-map-js "^1.0.2"
 
+preact@~10.12.1:
+  version "10.12.1"
+  resolved "https://registry.npmjs.org/preact/-/preact-10.12.1.tgz"
+  integrity sha512-l8386ixSsBdbreOAkqtrwqHwdvR35ID8c3rKPa8lCWuO86dBi32QWHV4vfsZK1utLLFMvw+Z5Ad4XLkZzchscg==
+
 prelude-ls@^1.2.1:
   version "1.2.1"
   resolved "https://registry.npmjs.org/prelude-ls/-/prelude-ls-1.2.1.tgz"
@@ -6112,6 +6150,11 @@ raw-body@2.5.1:
     iconv-lite "0.4.24"
     unpipe "1.0.0"
 
+react-chartjs-2@^5.2.0:
+  version "5.2.0"
+  resolved "https://registry.npmmirror.com/react-chartjs-2/-/react-chartjs-2-5.2.0.tgz"
+  integrity sha512-98iN5aguJyVSxp5U3CblRLH67J8gkfyGNbiK3c+l1QI/G4irHMPQw44aEPmjVag+YKTyQ260NcF82GTQ3bdscA==
+
 react-date-range@^1.4.0:
   version "1.4.0"
   resolved "https://registry.npmjs.org/react-date-range/-/react-date-range-1.4.0.tgz"
@@ -6134,7 +6177,7 @@ react-datepicker@^4.23.0:
     react-onclickoutside "^6.13.0"
     react-popper "^2.3.0"
 
-"react-dom@^15.5.x || ^16.x || ^17.x || ^18.x", "react-dom@^16.8 || ^17.0 || ^18.0", "react-dom@^16.8.0 || ^17 || ^18", "react-dom@^16.8.0 || ^17.0.0 || ^18.0.0", "react-dom@^16.9.0 || ^17 || ^18", "react-dom@^17.0.2 || ^18.0.0-0", "react-dom@>= 16.8", "react-dom@>= 16.8.0 || 18.0.0", react-dom@>=16, react-dom@>=16.6.0, react-dom@18.2.0:
+"react-dom@^15.5.x || ^16.x || ^17.x || ^18.x", "react-dom@^16.7.0 || ^17 || ^18", "react-dom@^16.8 || ^17.0 || ^18.0", "react-dom@^16.8.0 || ^17 || ^18", "react-dom@^16.8.0 || ^17.0.0 || ^18.0.0", "react-dom@^16.9.0 || ^17 || ^18", "react-dom@^17.0.2 || ^18.0.0-0", "react-dom@>= 16.8", "react-dom@>= 16.8.0 || 18.0.0", react-dom@>=16, react-dom@>=16.6.0, react-dom@18.2.0:
   version "18.2.0"
   resolved "https://registry.npmjs.org/react-dom/-/react-dom-18.2.0.tgz"
   integrity sha512-6IMTriUmvsjHUjNtEDudZfuDQUoWXVxKHhlEGSk81n4YFS+r/Kl99wXiwlVXtPBtJenozv2P+hxDsw9eA7Xo6g==
@@ -6214,7 +6257,7 @@ react-transition-group@^4.3.0:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
-"react@^0.14 || ^15.0.0-rc || >=15.0", "react@^15.5.x || ^16.x || ^17.x || ^18.x", "react@^16.8 || ^17.0 || ^18.0", "react@^16.8.0 || ^17 || ^18", "react@^16.8.0 || ^17.0.0 || ^18.0.0", "react@^16.9.0 || ^17 || ^18", "react@^17.0.2 || ^18.0.0-0", react@^18.2.0, "react@>= 16.8", "react@>= 16.8.0 || 17.x.x || ^18.0.0-0", "react@>= 16.8.0 || 18.0.0", react@>=16, react@>=16.6.0, react@>=16.8.0, "react@0.14 || 15 - 18", react@18.2.0:
+"react@^0.14 || ^15.0.0-rc || >=15.0", "react@^15.5.x || ^16.x || ^17.x || ^18.x", "react@^16.7.0 || ^17 || ^18", "react@^16.8 || ^17.0 || ^18.0", "react@^16.8.0 || ^17 || ^18", "react@^16.8.0 || ^17.0.0 || ^18.0.0", "react@^16.9.0 || ^17 || ^18", "react@^17.0.2 || ^18.0.0-0", react@^18.2.0, "react@>= 16.8", "react@>= 16.8.0 || 17.x.x || ^18.0.0-0", "react@>= 16.8.0 || 18.0.0", react@>=16, react@>=16.6.0, react@>=16.8.0, "react@0.14 || 15 - 18", react@18.2.0:
   version "18.2.0"
   resolved "https://registry.npmjs.org/react/-/react-18.2.0.tgz"
   integrity sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==
@@ -6612,7 +6655,6 @@ serve-static@1.15.0:
   resolved "file:packages/server"
   dependencies:
     bcrypt "^5.1.1"
-    cookie-parser "^1.4.6"
     cookie-session "^2.0.0"
     cors "^2.8.5"
     dotenv "^16.0.1"

@@ -51,7 +51,7 @@ const PropertyList = () => {
         <Link href={`/listing/${property.id}`} passHref>
           <a>
             <img
-              src={property.pictures} // Gunakan langsung string URL
+              src={property.pictures}
               alt="property cover"
               className="h-16 w-16 object-contain"
             />
