@@ -3,7 +3,7 @@ const router = express.Router();
 const profileController = require('../controllers/profileController');
 const authMiddleware = require('../middleware/authMiddleware');
 const { userProfileValidation } = require('../middleware/userValidation');
-const { uploadOptions } = require('../utils/uploadProfilePicture');
+const { uploadOptions, uploadOptionsProfile } = require('../utils/uploadFile');
 
 router.post(
   '/',
@@ -19,7 +19,7 @@ router.get('/picture', authMiddleware, profileController.getProfilePicture);
 router.post(
   '/upload',
   authMiddleware,
-  uploadOptions.single('profilePicture'),
+  uploadOptionsProfile.single('profilePicture'),
   profileController.uploadProfile,
 );
 

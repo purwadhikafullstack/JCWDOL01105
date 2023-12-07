@@ -1,6 +1,6 @@
 const { User, User_Profile } = require('../models');
 const { sequelize } = require('../models');
-const uploadProfilePicture = require('../utils/uploadProfilePicture');
+const uploadProfilePicture = require('../utils/uploadFile');
 
 const updateOrCreateProfile = async (req, res) => {
   try {

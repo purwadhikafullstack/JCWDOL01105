@@ -2,10 +2,13 @@
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { API_URL } from '../../config/api';
+import PropertyList from './PropertyList';
 import axios from 'axios';
 
 const Property = () => {
   const router = useRouter();
+  const [newProperty, setNewProperty] = useState([]);
+  const [propertyCreated, setPropertyCreated] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [files, setFiles] = useState([]);
@@ -88,12 +91,12 @@ const Property = () => {
     }
 
     files.forEach((file) => {
-      formData.append('images', file);
+      formData.append('propertyPicture', file);
     });
 
     try {
       setLoading(true);
-      const response = await axios.post(`${API_URL}/property`, formData);
+      const response = await axios.post(`${API_URL}/property/upload`, formData);
       const responseData = response.data;
       console.log('Response Data :', responseData);
 
@@ -106,10 +109,12 @@ const Property = () => {
       setName('');
       setDescription('');
       setAddress('');
+      setPropertyCreated(true);
+      setNewProperty(responseData.data);
 
       setTimeout(() => {
         setLoading('');
-        router.push(`/property`);
+        router.push(`/`);
       }, 3000);
     } catch (error) {
       console.error('Error', error);
@@ -295,7 +300,7 @@ const Property = () => {
               />
               <div className="flex flex-col items-center">
                 <p>Regular Price</p>
-                <span className="text-xs">(Rp / Month)</span>
+                <span className="text-xs">(Rp / Night)</span>
               </div>
             </div>
             {offer && (
@@ -312,7 +317,7 @@ const Property = () => {
                 />
                 <div className="flex flex-col items-center">
                   <p>Discounted price</p>
-                  <span className="text-xs">(Rp / Month)</span>
+                  <span className="text-xs">(Rp / Night)</span>
                 </div>
               </div>
             )}
@@ -331,7 +336,7 @@ const Property = () => {
               className="p-3 border border-color-neutral rounded w-full"
               type="file"
               id="images"
-              accept="image/*"
+              accept="image/png, image/jpeg, image/jpg"
               multiple
             />
           </div>
@@ -353,6 +358,7 @@ const Property = () => {
           )}
         </div>
       </form>
+      <PropertyList propertyCreated={propertyCreated} />
     </main>
   );
 };

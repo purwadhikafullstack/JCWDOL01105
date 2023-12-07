@@ -1,15 +1,33 @@
 import { useState, useEffect } from 'react';
 import { MagnifyingGlass } from '@phosphor-icons/react';
+import { API_URL } from '../../config/api';
+import axios from 'axios';
+import { DateRangePicker } from 'react-date-range';
 
 const Search = () => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState('');
-  const [selectedDate, setSelectedDate] = useState('');
   const [selectedGuests, setSelectedGuests] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [selectedDate, setSelectedDate] = useState([]);
+
+  const cities = [
+    'Bali',
+    'Makassar',
+    'Palu',
+    'Manado',
+    'Jakarta',
+    'Tangerang',
+    'Bogor',
+    'Depok',
+    'Bekasi',
+    'Semarang',
+  ];
 
   const toggleSearch = () => {
     setSearchOpen((prevState) => !prevState);
   };
+
   useEffect(() => {
     const handleOutsideClick = (event) => {
       if (searchOpen && !event.target.closest('.search-container')) {
@@ -36,12 +54,47 @@ const Search = () => {
     setSelectedGuests(event.target.value);
   };
 
-  const handleSearch = () => {
-    console.log(
-      'Search for :',
-      `${selectedLocation}, ${selectedDate}, ${selectedGuests} Guest`,
-    );
+  const handleSearch = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/property/search`, {
+        params: {
+          location: selectedLocation,
+          date: selectedDate,
+          guests: selectedGuests,
+        },
+      });
+
+      const searchData = response.data;
+
+      if (searchData.success) {
+        console.log('Search result: ', searchData.data);
+        setSearchResults(searchData.data);
+      } else {
+        console.error('Search failed', searchData.message);
+      }
+    } catch (error) {
+      console.error('Error searching', error.response);
+    }
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/property/search`);
+        const searchData = response.data;
+
+        if (searchData.success) {
+          console.log('Initial search result', searchData.data);
+          setSearchResults(searchData.data);
+        } else {
+          console.error('Initial search failed', searchData.message);
+        }
+      } catch (error) {
+        console.error('Error fetching', error.response);
+      }
+    };
+    fetchData();
+  }, []);
 
   return (
     <div className="relative">
@@ -57,9 +110,11 @@ const Search = () => {
               className="outline-none"
             >
               <option value="">Destination</option>
-              <option value="city1">City 1</option>
-              <option value="city2">City 2</option>
-              <option value="city3">City 3</option>
+              {cities.map((city) => (
+                <option key={city} value={city}>
+                  {city}
+                </option>
+              ))}
             </select>
           </div>
           <div className="hidden sm:block text-sm font-semibold px-6 flex-1 text-center">

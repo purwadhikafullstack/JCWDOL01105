@@ -8,7 +8,10 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      this.belongsTo(models.Tenant, {
+        foreignKey: 'tenant_id',
+        as: 'tenant',
+      });
     }
   }
   Property.init(
@@ -17,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
       category_id: DataTypes.UUID,
       name: DataTypes.STRING,
       address: DataTypes.STRING,
-      pictures: DataTypes.ARRAY(DataTypes.STRING),
+      pictures: DataTypes.STRING,
       description: DataTypes.TEXT,
       avg_rating: DataTypes.FLOAT,
     },

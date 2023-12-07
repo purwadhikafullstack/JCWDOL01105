@@ -1,14 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const propertyController = require('../controllers/propertyController');
-const upload = require('../middleware/multer');
+const { uploadOptionsProperty } = require('../utils/uploadFile');
 
 router.post(
-  '/property',
-  upload.array('images', 6),
-  propertyController.createProperty,
+  '/upload',
+  uploadOptionsProperty.single('propertyPicture'),
+  propertyController.createOrUpdateProperty,
 );
 
-router.get('/property', propertyController.getProperties);
+router.get('/property/properties', propertyController.getProperties);
+router.get('/search', propertyController.searchProperties);
+router.delete('/delete/:id', propertyController.deleteProperty);
+router.put('/property/:id', propertyController.createOrUpdateProperty);
 
 module.exports = router;
