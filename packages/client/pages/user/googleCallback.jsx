@@ -33,7 +33,13 @@ const GoogleCallbackPage = () => {
   }, [router]);
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
+    <div
+      className="flex flex-col items-center justify-center h-screen"
+      style={{
+        background:
+          'linear-gradient(to bottom right, #4a785e, #b4daa7, #f9f9f9)',
+      }}
+    >
       <div className="text-xl font-semibold mb-4">{loadingText}</div>
       {/* Animasi atau elemen lain untuk menampilkan loading */}
       <div className="loader"></div>

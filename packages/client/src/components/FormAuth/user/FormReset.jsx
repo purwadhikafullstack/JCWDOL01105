@@ -36,15 +36,12 @@ const FormForgotPassword = ({ showToast }) => {
     },
     validationSchema: validationLogin,
     onSubmit: async (values) => {
-      console.log('values', values);
       try {
         const response = await api.post('/auth/reset-password', {
           token,
           newPassword: values.password,
         });
-        console.log('Success create new password', response.data);
         if (response && response.status === 200) {
-          console.log('Success create new password', response.data);
           showToast('Success create new password', 'success');
           setTimeout(() => {
             router.push('/user/login');

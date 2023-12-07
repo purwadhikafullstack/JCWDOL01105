@@ -24,7 +24,6 @@ const FormResendOtp = ({ showToast }) => {
         const response = await api.post('/auth/verify', {
           verification_code: values.verification_code.toString(),
         });
-
         if (response && response.status === 200) {
           showToast('Activation Success', 'success');
           setTimeout(() => {

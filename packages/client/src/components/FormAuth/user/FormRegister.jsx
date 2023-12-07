@@ -54,7 +54,7 @@ const FormRegister = ({ showToast }) => {
           router.push('/user/login');
         }, 3500);
       } catch (error) {
-        console.error('Register Failed', error);
+        console.error('Register Failed', error.message);
         showToast(error.response);
       } finally {
         setLoading(false);
@@ -73,10 +73,10 @@ const FormRegister = ({ showToast }) => {
         onSubmit={formik.handleSubmit}
       >
         <h2 className="text-2xl font-bold text-gray-900 text-center">
-          Create New User
+          User Register
         </h2>
         <div>
-          <label htmlFor="name" className="block text-sm  text-color-pallete3">
+          <label htmlFor="name" className="block text-sm  text-color-pallete1">
             Name
           </label>
           <input
@@ -96,7 +96,7 @@ const FormRegister = ({ showToast }) => {
           ) : null}
         </div>
         <div>
-          <label htmlFor="email" className="block text-sm  text-color-pallete3">
+          <label htmlFor="email" className="block text-sm  text-color-pallete1">
             Email address
           </label>
           <input
@@ -118,7 +118,7 @@ const FormRegister = ({ showToast }) => {
         <div>
           <label
             htmlFor="password"
-            className="block text-sm  text-color-pallete3"
+            className="block text-sm  text-color-pallete1"
           >
             Password
           </label>
@@ -141,7 +141,7 @@ const FormRegister = ({ showToast }) => {
         <div>
           <label
             htmlFor="confirm-password"
-            className="block text-sm  text-color-pallete3"
+            className="block text-sm  text-color-pallete1"
           >
             Confirm Password
           </label>
@@ -162,7 +162,7 @@ const FormRegister = ({ showToast }) => {
           ) : null}
         </div>
         <div>
-          <label htmlFor="phone" className="block text-sm text-color-pallete3">
+          <label htmlFor="phone" className="block text-sm text-color-pallete1">
             Phone Number
           </label>
           <input
@@ -186,10 +186,18 @@ const FormRegister = ({ showToast }) => {
             <div className="text-red-500">{formik.errors.phone_number}</div>
           ) : null}
         </div>
+        <div className="text-sm text-color-dark mt-2">
+          <span
+            onClick={() => router.push('/user/forgot')}
+            className=" font-semibold hover:underline cursor-pointer"
+          >
+            Forgot Password?
+          </span>
+        </div>
         <div>
           <button
             type="submit"
-            className="w-full rounded-md bg-indigo-600 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 focus:outline-none  text-color-pallete3"
+            className="w-full rounded-md bg-indigo-600 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 focus:outline-none  text-color-pallete1"
             disabled={loading}
           >
             {loading ? 'Loading...' : 'Register'}
@@ -228,7 +236,7 @@ const FormRegister = ({ showToast }) => {
               Already have an account?
               <span
                 onClick={() => router.push('/user/login')}
-                className="ml-2 text-green-500 font-semibold hover:underline cursor-pointer text-color-pallete3"
+                className="ml-2 text-green-500 font-semibold hover:underline cursor-pointer text-color-pallete1"
               >
                 Login here
               </span>

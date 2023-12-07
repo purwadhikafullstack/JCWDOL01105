@@ -15,7 +15,7 @@ const Navbar = () => {
         <Search />
         <Menu />
       </div>
-      <Categories />
+      {/* <Categories /> */}
     </div>
   );
 };

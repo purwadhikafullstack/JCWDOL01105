@@ -44,21 +44,19 @@ const ProfilePage = () => {
     return (
       <div>
         <Navbar />
-        <div className="bg-gray-100 h-screen flex justify-center items-center">
-          <div className="bg-white p-8 rounded-md shadow-md">
-            <h1 className="text-3xl font-bold mb-4 text-center">
-              No Authorization <br />
-              <span className="text-color-danger">Error 404</span>
-            </h1>
-            <p className="text-lg text-gray-600 text-center">
-              Please log in to access this page.
+        <div className="min-h-screen flex flex-grow items-center justify-center bg-gray-50">
+          <div className="rounded-lg bg-white p-8 text-center shadow-xl">
+            <h1 className="mb-4 text-4xl font-bold">404</h1>
+            <p className="text-gray-600">
+              Oops! The page you are looking for could not be found.
             </p>
-            <button
-              className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded mt-4"
-              onClick={() => router.push('/user/login')}
+            <a
+              href="/"
+              className="mt-4 inline-block rounded bg-blue-500 px-4 py-2 font-semibold text-white hover:bg-blue-600"
             >
-              Log In
-            </button>
+              {' '}
+              Go back to Home{' '}
+            </a>
           </div>
         </div>
       </div>
@@ -69,12 +67,13 @@ const ProfilePage = () => {
       <Navbar />
       <div>
         <div
-          className="mt-8  bg-color-pallete1 container mx-auto border border-gray-300 p-4 rounded-md mb-5"
-          //   style={{ backgroundImage: `url(${bg.src})` }}
+          className="mt-8 container mx-auto border border-gray-300 p-4 rounded-md mb-5"
+          style={{
+            background:
+              'linear-gradient(to bottom right, #4a785e, #f9f9f9, #b4daa7)',
+          }}
         >
-          <h1 className="text-2xl font-bold mb-4">Profile Page</h1>
           <ProfilePicture showToast={showToast} />
-
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
               <UserProfile showToast={showToast} />
