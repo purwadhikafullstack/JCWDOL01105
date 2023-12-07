@@ -1,4 +1,4 @@
-const { User } = require('../models');
+const { Tenant } = require('../models');
 const {
   generateVerificationCode,
   mailVerificationCode,
@@ -10,20 +10,20 @@ const verifyEmail = async (req, res) => {
 
     console.log('Kode verifikasi yang diterima:', verification_code);
 
-    const user = await User.findOne({ where: { verification_code } });
-    if (!user) {
+    const tenant = await Tenant.findOne({ where: { verification_code } });
+    if (!tenant) {
       return res.status(404).json({
         status: 'fail',
         message: 'Verifikasi Gagal, Cek Kembali Kode Verifikasi',
       });
     }
-    if (user.is_verified) {
+    if (tenant.is_verified) {
       return res.status(400).json({
         status: 'fail',
         message: 'Akun sudah terverifikasi',
       });
     }
-    if (user.verification_code !== verification_code) {
+    if (tenant.verification_code !== verification_code) {
       return res.status(400).json({
         status: 'fail',
         message: 'Kode verifikasi tidak cocok',
@@ -31,13 +31,13 @@ const verifyEmail = async (req, res) => {
     }
 
     const currentDate = new Date();
-    if (currentDate > user.verification_expires) {
+    if (currentDate > tenant.verification_expires) {
       return res.status(400).json({
         status: 'fail',
         message: 'Kode verifikasi sudah kedaluwarsa',
       });
     }
-    await user.update({ is_verified: true });
+    await tenant.update({ is_verified: true });
     return res.status(200).json({
       status: 'success',
       message: 'Akun berhasil diverifikasi',
@@ -54,31 +54,37 @@ const verifyEmail = async (req, res) => {
 const sendVerificationCode = async (req, res) => {
   try {
     const { email } = req.body;
-    const user = await User.findOne({ where: { email } });
-    if (!user) {
+    const tenant = await Tenant.findOne({ where: { email } });
+    if (!tenant) {
       return res.status(404).json({
         status: 'fail',
-        message: 'User tidak ditemukan',
+        message: 'Tenant tidak ditemukan',
       });
     }
-    if (user.is_verified) {
+    if (tenant.is_verified) {
       return res.status(400).json({
         status: 'fail',
         message: 'Akun sudah terverifikasi',
       });
     }
-    if (user.verification_attempts >= 5) {
+    if (tenant.verification_attempts >= 5) {
       return res.status(400).json({
         status: 'fail',
         message: 'Maksimal percobaan kirim kode verifikasi telah habis',
       });
     }
-    await user.increment('verification_attempts');
-    user.verification_code = generateVerificationCode();
-    user.verification_expires = new Date(new Date().getTime() + 5 * 60 * 1000);
+    await tenant.increment('verification_attempts');
+    tenant.verification_code = generateVerificationCode();
+    tenant.verification_expires = new Date(
+      new Date().getTime() + 5 * 60 * 1000,
+    );
 
-    await user.save();
-    await mailVerificationCode(user.email, user.verification_code);
+    await tenant.save();
+    await mailVerificationCode(
+      tenant.email,
+      tenant.verification_code,
+      'tenant',
+    );
 
     return res.status(200).json({
       status: 'success',

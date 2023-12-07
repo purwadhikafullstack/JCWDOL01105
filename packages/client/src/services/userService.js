@@ -13,6 +13,8 @@ const AuthService = {
         const { token } = response.data;
         if (token) {
           localStorage.setItem('token', token);
+          localStorage.setItem('role', response.data.data.role);
+          localStorage.setItem('name', response.data.data.name);
           return { success: true };
         } else {
           return { success: false, message: 'No token found in response' };

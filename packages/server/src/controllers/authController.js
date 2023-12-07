@@ -3,7 +3,10 @@ const { User, User_Profile } = require('../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { createSendToken } = require('../utils/tokenUtils');
-const { verifyEmail, sendVerificationCode } = require('../utils/verification');
+const {
+  verifyEmail,
+  sendVerificationCode,
+} = require('../utils/verificationUser');
 const {
   mailVerificationCode,
   mailResetPasswordLink,
@@ -30,8 +33,8 @@ const registerUser = async (req, res) => {
       user_id: newUser.id,
     });
 
-    await mailVerificationCode(email, newUser.verification_code);
-    createSendToken(newUser, 201, res);
+    await mailVerificationCode(email, newUser.verification_code, 'user');
+    createSendToken(newUser, 201, res, 'user', 'user_role');
   } catch (error) {
     return res.status(500).json({
       status: error.message,
@@ -81,7 +84,7 @@ const loginUser = async (req, res) => {
     }
 
     // Autentikasi berhasil, kirim token atau lakukan sesuai kebutuhan aplikasi
-    createSendToken(user, 200, res); // Fungsi untuk membuat dan mengirim token kepada user
+    createSendToken(user, 200, res, 'user', 'user_role'); // Fungsi untuk membuat dan mengirim token kepada user
   } catch (error) {
     return res.status(400).json({
       status: 'error',
@@ -112,59 +115,6 @@ const resendVerificationCodeUSer = async (req, res) => {
   }
 };
 
-const forgotPassword = async (req, res) => {
-  try {
-    const { newPassword, confirmNewPassword, resetToken } = req.body;
-
-    if (!newPassword || !confirmNewPassword || !resetToken) {
-      return res.status(400).json({
-        status: 'fail',
-        message: 'Semua kolom harus diisi',
-      });
-    }
-
-    if (newPassword !== confirmNewPassword) {
-      return res.status(400).json({
-        status: 'fail',
-        message: 'Password baru dan konfirmasi password baru tidak cocok',
-      });
-    }
-
-    const user = await User.findOne({
-      where: {
-        reset_password_token: resetToken,
-        reset_password_expires: { [Op.gt]: Date.now() },
-      },
-    });
-
-    if (!user) {
-      return res.status(400).json({
-        status: 'fail',
-        message: 'Token reset password tidak valid atau telah kadaluarsa',
-      });
-    }
-
-    const salt = await bcrypt.genSalt(10);
-    const hashedNewPassword = bcrypt.hashSync(newPassword, salt);
-
-    user.password = hashedNewPassword;
-    user.reset_password_token = null;
-    user.reset_password_expires = null;
-    await user.save();
-
-    return res.status(200).json({
-      status: 'success',
-      message: 'Password berhasil direset',
-    });
-  } catch (error) {
-    console.log('Error resetting password:', error);
-    return res.status(500).json({
-      status: 'fail',
-      message: 'Terjadi kesalahan saat mereset password',
-    });
-  }
-};
-
 const requestResetPassword = async (req, res) => {
   try {
     const { email } = req.body;
@@ -175,7 +125,7 @@ const requestResetPassword = async (req, res) => {
     }
 
     const resetToken = await user.generateResetPasswordToken();
-    await mailResetPasswordLink(email, resetToken);
+    await mailResetPasswordLink(email, resetToken, 'user');
 
     return res
       .status(200)

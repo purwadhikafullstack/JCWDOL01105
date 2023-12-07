@@ -25,11 +25,7 @@ app.use(passport.session());
 
 app.use(cors());
 
-
-app.use(
-  '/src/public/profile',
-  express.static(path.join('./src/public/profile')),
-);
+app.use('/src/public', express.static(path.join('./src/public')));
 
 app.use(express.json());
 app.use('/api', router);

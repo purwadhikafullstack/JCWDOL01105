@@ -101,10 +101,10 @@ const FormLogin = ({ showToast }) => {
         onSubmit={formik.handleSubmit}
       >
         <h2 className="text-2xl font-bold text-gray-900 text-center">
-          Create New User
+          User Login
         </h2>
         <div>
-          <label htmlFor="email" className="block text-sm  text-color-pallete3">
+          <label htmlFor="email" className="block text-sm  text-color-pallete1">
             Email address
           </label>
           <input
@@ -126,7 +126,7 @@ const FormLogin = ({ showToast }) => {
         <div>
           <label
             htmlFor="password"
-            className="block text-sm  text-color-pallete3"
+            className="block text-sm  text-color-pallete1"
           >
             Password
           </label>
@@ -145,6 +145,14 @@ const FormLogin = ({ showToast }) => {
           {formik.touched.password && formik.errors.password ? (
             <div className="text-red-500">{formik.errors.password}</div>
           ) : null}
+        </div>
+        <div className="text-sm text-color-black mt-2">
+          <span
+            onClick={() => router.push('/user/forgot')}
+            className="text-blue-500 font-semibold hover:underline cursor-pointer"
+          >
+            Forgot Password?
+          </span>
         </div>
         <div>
           <button
@@ -183,23 +191,23 @@ const FormLogin = ({ showToast }) => {
               Sign in and Sign up with Google<div></div>
             </button>
           </div>
-          <div className="flex justify-center items-center mt-6 text-sm text-color-primary">
+          <div className="flex justify-center items-center mt-6 text-sm text-color-black">
             <span className="ml-2">
               Not a member?
               <span
                 onClick={() => router.push('/user/register')}
-                className="ml-2 text-green-500 font-semibold hover:underline cursor-pointer text-color-pallete3"
+                className="ml-2 text-green-500 font-semibold hover:underline cursor-pointer text-color-pallete1"
               >
                 Register here
               </span>
             </span>
           </div>
-          <div className="flex justify-center items-center mt-6 text-sm text-color-primary">
+          <div className="flex justify-center items-center mt-6 text-sm text-color-black">
             <span className="ml-2">
               If Your Account is not activated
               <span
                 onClick={() => router.push('/user/resend')}
-                className="ml-2 text-green-500 font-semibold hover:underline cursor-pointer text-color-pallete3"
+                className="ml-2 text-green-500 font-semibold hover:underline cursor-pointer text-color-pallete1"
               >
                 Resend OTP
               </span>
