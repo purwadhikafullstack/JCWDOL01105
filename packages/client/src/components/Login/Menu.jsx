@@ -55,11 +55,15 @@ const Menu = () => {
     }
   }, []);
 
+  const onRent = useCallback(() => {
+    router.push('/PropertyListing');
+  }, [router]);
+
   return (
     <div className="relative z-20">
       <div className="side-btn flex flex-row items-center gap-3">
         <div
-          onClick={() => {}}
+          onClick={onRent}
           className="hidden md:block text-sm font-semibold py-3 px-4 rounded-full  transition cursor-pointer"
         >
           <House size={32} />
@@ -89,6 +93,7 @@ const Menu = () => {
               </>
             ) : (
               <>
+                <MenuItem onClick={() => handleClick('Login')} label="Login" />
                 <MenuItem onClick={handleModalOpen} label="Login" />
                 <MenuItem
                   onClick={() => handleClick('Sign up')}

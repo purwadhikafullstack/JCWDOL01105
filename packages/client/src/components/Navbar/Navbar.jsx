@@ -1,8 +1,6 @@
 'use client';
-
 import Link from 'next/link';
 import Search from './Search';
-import Categories from './Categories';
 import Menu from '../Login/Menu';
 
 const Navbar = () => {

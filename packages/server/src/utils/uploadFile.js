@@ -30,8 +30,10 @@ const storageFile = (path) => {
 
 const uploadOptionsProfile = multer({ storage: storageFile('profile') });
 const uploadOptionsIdCard = multer({ storage: storageFile('id_card') });
+const uploadOptionsProperty = multer({ storage: storageFile('property') });
 
 module.exports = {
   uploadOptionsProfile,
   uploadOptionsIdCard,
+  uploadOptionsProperty,
 };
