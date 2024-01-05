@@ -52,12 +52,27 @@ const Menu = () => {
   useEffect(() => {
     if (localStorage.getItem('token')) {
       setIsLoggedIn(true);
+
+      const isTenant = localStorage.getItem('isTenant');
+      if (isTenant) {
+        router.push('/PropertyListing');
+      }
     }
-  }, []);
+  }, [router]);
 
   const onRent = useCallback(() => {
-    router.push('/PropertyListing');
-  }, [router]);
+    if (isLoggedIn) {
+      const isTenant = localStorage.getItem('isTenant');
+
+      if (isTenant) {
+        router.push('/PropertyListing');
+      } else {
+        router.push('/tenant/login');
+      }
+    } else {
+      router.push('/tenant/login');
+    }
+  }, [isLoggedIn, router]);
 
   return (
     <div className="relative z-20">
@@ -93,7 +108,6 @@ const Menu = () => {
               </>
             ) : (
               <>
-                <MenuItem onClick={() => handleClick('Login')} label="Login" />
                 <MenuItem onClick={handleModalOpen} label="Login" />
                 <MenuItem
                   onClick={() => handleClick('Sign up')}

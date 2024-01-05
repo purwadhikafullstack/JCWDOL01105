@@ -8,6 +8,7 @@ import PropertyList from '../src/components/Property/PropertyList';
 
 const Home = () => {
   const [role, setRole] = useState('');
+  const [searchCriteria, setSearchCriteria] = useState(null);
 
   useEffect(() => {
     const userRole = localStorage.getItem('role');
@@ -15,6 +16,10 @@ const Home = () => {
       setRole(userRole);
     }
   }, []);
+
+  const handleSearch = (criteria) => {
+    setSearchCriteria(criteria);
+  };
 
   return (
     <div>
@@ -24,7 +29,7 @@ const Home = () => {
       ) : (
         <div>
           <Categories />
-          <PropertyList />
+          <PropertyList searchCriteria={searchCriteria} />
           <Slider />
           <Footer />
         </div>

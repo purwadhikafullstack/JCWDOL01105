@@ -27,6 +27,11 @@ const Navbar = () => {
             </Link>
           </li>
           <li>
+            <Link href="/PropertyListing">
+              <a className="text-white hover:text-gray-300">Create Property</a>
+            </Link>
+          </li>
+          <li>
             <Link href="/profile">
               <a className="text-white hover:text-gray-300">Profile</a>
             </Link>

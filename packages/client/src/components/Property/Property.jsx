@@ -1,4 +1,3 @@
-'use client';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { API_URL } from '../../config/api';
@@ -7,7 +6,7 @@ import axios from 'axios';
 
 const Property = () => {
   const router = useRouter();
-  const [newProperty, setNewProperty] = useState([]);
+  const [newProperty, setNewProperty] = useState();
   const [propertyCreated, setPropertyCreated] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
@@ -24,6 +23,8 @@ const Property = () => {
   const [offer, setOffer] = useState(false);
   const [furnished, setFurnished] = useState(false);
   const [parking, setParking] = useState(false);
+  const [roomType, setRoomType] = useState('Regular Room');
+  const [type, setType] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -49,7 +50,7 @@ const Property = () => {
 
     if (regularPrice < discountPrice) {
       return setErrorMessage(
-        'Discount price must be lower than regular price.',
+        'Discount price must be higher than regular price.',
         setTimeout(() => {
           setErrorMessage('');
         }, 3000),
@@ -77,26 +78,38 @@ const Property = () => {
     formData.append('name', name);
     formData.append('description', description);
     formData.append('address', address);
-    formData.append('type', rent);
+    formData.append('type', type);
     formData.append('bedrooms', bedrooms);
     formData.append('bathrooms', bathrooms);
     formData.append('regularPrice', regularPrice);
-    formData.append('disc', discountPrice);
+    formData.append('discountPrice', discountPrice);
     formData.append('parking', parking);
     formData.append('furnished', furnished);
+    formData.append('type_room', roomType);
 
     if (offer === true) {
       formData.append('offer', offer);
       formData.append('discountPrice', discountPrice);
     }
 
-    files.forEach((file) => {
-      formData.append('propertyPicture', file);
+    files.forEach((file, index) => {
+      formData.append('files', file);
     });
 
     try {
       setLoading(true);
-      const response = await axios.post(`${API_URL}/property/upload`, formData);
+      const token = localStorage.getItem('token');
+      console.log('Token', token);
+      const response = await axios.post(
+        `${API_URL}/property/upload`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data',
+          },
+        },
+      );
       const responseData = response.data;
       console.log('Response Data :', responseData);
 
@@ -114,7 +127,7 @@ const Property = () => {
 
       setTimeout(() => {
         setLoading('');
-        router.push(`/`);
+        router.push(`/tenant-dashboard`);
       }, 3000);
     } catch (error) {
       console.error('Error', error);
@@ -135,7 +148,7 @@ const Property = () => {
     return files.map((file, index) => (
       <div key={index} className="flex gap-4">
         <img
-          src={URL.createObjectURL(file)}
+          src={`/property/${file.name}`}
           alt={`Selected Image ${index + 1}`}
           className="w-20 h-20 rounded-lg "
         />
@@ -157,9 +170,11 @@ const Property = () => {
     const checkboxId = e.target.id;
 
     if (checkboxId === 'sell') {
+      setType('Property For Sale');
       setSell(true);
       setRent(false);
     } else if (checkboxId === 'rent') {
+      setType('Property For Rent');
       setSell(false);
       setRent(true);
     } else if (checkboxId === 'parking') {
@@ -169,6 +184,10 @@ const Property = () => {
     } else if (checkboxId === 'offer') {
       setDiscountPrice(0);
       setOffer((prevOffer) => !prevOffer);
+    } else if (checkboxId === 'roomTypeRegular') {
+      setRoomType('Regular room');
+    } else if (checkboxId === 'roomTypeSuperior') {
+      setRoomType('Superior room');
     }
   };
 
@@ -259,6 +278,28 @@ const Property = () => {
               />
               <span>Offer</span>
             </div>
+            <div className="flex gap-2">
+              <input
+                type="radio"
+                id="roomTypeRegular"
+                value="Regular room"
+                checked={roomType === 'Regular room'}
+                onChange={handleChange}
+                className="w-5"
+              />
+              <label htmlFor="roomTypeRegular">Regular Room</label>
+            </div>
+            <div className="flex gap-2">
+              <input
+                type="radio"
+                id="roomTypeSuperior"
+                value="Superior room"
+                checked={roomType === 'Superior room'}
+                onChange={handleChange}
+                className="w-5"
+              />
+              <label htmlFor="roomTypeSuperior">Superior Room</label>
+            </div>
           </div>
           <div className="flex flex-wrap gap-6">
             <div className="flex items-center gap-2">
@@ -316,7 +357,7 @@ const Property = () => {
                   onChange={(e) => setDiscountPrice(e.target.value)}
                 />
                 <div className="flex flex-col items-center">
-                  <p>Discounted price</p>
+                  <p>Discount Price</p>
                   <span className="text-xs">(Rp / Night)</span>
                 </div>
               </div>

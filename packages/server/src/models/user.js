@@ -40,6 +40,7 @@ module.exports = (sequelize, DataTypes) => {
       name: DataTypes.STRING,
       email: DataTypes.STRING,
       password: DataTypes.STRING,
+      confirm_password: DataTypes.STRING,
       phone_number: DataTypes.STRING,
       is_verified: {
         type: DataTypes.BOOLEAN,

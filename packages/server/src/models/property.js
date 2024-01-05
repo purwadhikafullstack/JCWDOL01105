@@ -12,6 +12,14 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'tenant_id',
         as: 'tenant',
       });
+      this.hasMany(models.Room, {
+        foreignKey: 'property_id',
+        as: 'rooms',
+      });
+      this.hasMany(models.property_picture, {
+        foreignKey: 'property_id',
+        as: 'propertyPictures',
+      });
     }
   }
   Property.init(
@@ -20,8 +28,10 @@ module.exports = (sequelize, DataTypes) => {
       category_id: DataTypes.UUID,
       name: DataTypes.STRING,
       address: DataTypes.STRING,
-      pictures: DataTypes.STRING,
       description: DataTypes.TEXT,
+      sell: DataTypes.BOOLEAN,
+      rent: DataTypes.BOOLEAN,
+      type: DataTypes.STRING,
       avg_rating: DataTypes.FLOAT,
     },
     {

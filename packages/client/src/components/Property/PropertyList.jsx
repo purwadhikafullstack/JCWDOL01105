@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import api from '../../config/api';
 
-const PropertyList = () => {
+const PropertyList = ({ searchCriteria }) => {
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -11,14 +11,11 @@ const PropertyList = () => {
     const fetchProperties = async () => {
       try {
         setLoading(true);
-        const response = await api.get(`/property/properties`);
+
+        const response = await api.get('/property/properties');
         const propertiesData = response.data.data.properties;
 
-        const parsedProperties = Array.isArray(propertiesData)
-          ? propertiesData
-          : JSON.parse(propertiesData);
-
-        setProperties(parsedProperties);
+        setProperties(propertiesData);
       } catch (error) {
         console.error('Error fetching properties:', error);
         setError(true);
@@ -28,9 +25,10 @@ const PropertyList = () => {
     };
 
     fetchProperties();
-  }, []);
+  }, [searchCriteria]);
 
   const renderProperties = () => {
+    console.log(properties);
     if (loading) {
       return <p>Loading...</p>;
     }
@@ -43,35 +41,52 @@ const PropertyList = () => {
       return <p>Sorry, there is no property available.</p>;
     }
 
-    return properties.map((property) => (
-      <div
-        key={property.id}
-        className="border w-6/12 max-h-64 rounded-lg p-3 flex justify-between items-center gap-10"
-      >
-        <Link href={`/listing/${property.id}`} passHref>
-          <a>
-            <img
-              src={property.pictures}
-              alt="property cover"
-              className="h-16 w-16 object-contain"
-            />
-          </a>
-        </Link>
-        <Link href={`/listing/${property.id}`} passHref>
-          <a className="text-slate-700 font-semibold hover:underline truncate flex-1">
-            <h4>{property.name}</h4>
-            <p>{property.description}</p>
-            <p>{property.address}</p>
-          </a>
-        </Link>
-      </div>
-    ));
+    return properties.map((property) => {
+      let imageUrls = '';
+
+      if (property.propertyPictures && property.propertyPictures.length > 0) {
+        const firstImageUrl = property.propertyPictures[0].property_pictures;
+        imageUrls = firstImageUrl.split(',').map((url) => url.trim());
+      }
+
+      const imageUrl = imageUrls.length > 0 ? imageUrls[0] : null;
+
+      return (
+        <div key={property.id} className="card shadow-xl">
+          <Link href={`/property/${property.id}`} passHref>
+            <a>
+              <div className="">
+                {imageUrl ? (
+                  <img
+                    src={imageUrl}
+                    alt={`property cover`}
+                    className="w-full object-contain"
+                  />
+                ) : (
+                  <p>No pictures available</p>
+                )}
+              </div>
+            </a>
+          </Link>
+          <Link href={`/property/${property.id}`} passHref>
+            <a className="text-slate-700 font-semibold truncate flex-1">
+              <div className="landing-text">
+                <h4 className="card-title">{property.name}</h4>
+                <p className="hover:underline">{property.description}</p>
+                <p>{property.address}</p>
+              </div>
+            </a>
+          </Link>
+        </div>
+      );
+    });
   };
 
   return (
     <div>
-      <h2>Available Properties</h2>
-      {renderProperties()}
+      <div className="landing-page grid md:grid-cols-5 sm:grid-cols-3 grid-cols-2 gap-4">
+        {renderProperties()}
+      </div>
     </div>
   );
 };

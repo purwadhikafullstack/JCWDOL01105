@@ -1,5 +1,6 @@
 const multer = require('multer');
 const { v4: uuidv4 } = require('uuid');
+const { property_picture } = require('../models');
 
 const FILE_TYPES = {
   'image/png': 'png',
@@ -14,15 +15,13 @@ const storageFile = (path) => {
       let uploadPath = `./src/public/${path}`;
       if (!validFileType) {
         const error = new Error('Invalid file format type.');
-        return cb(error, u);
+        return cb(error, uploadPath);
       }
       cb(null, uploadPath);
     },
     filename: function (req, file, cb) {
       const extension = FILE_TYPES[file.mimetype];
-
       const uniqueFileImage = `${file.fieldname}_${Date.now()}.${extension}`;
-
       cb(null, uniqueFileImage);
     },
   });
@@ -30,7 +29,9 @@ const storageFile = (path) => {
 
 const uploadOptionsProfile = multer({ storage: storageFile('profile') });
 const uploadOptionsIdCard = multer({ storage: storageFile('id_card') });
-const uploadOptionsProperty = multer({ storage: storageFile('property') });
+const uploadOptionsProperty = multer({
+  storage: storageFile('property'),
+}).array('files', 6);
 
 module.exports = {
   uploadOptionsProfile,

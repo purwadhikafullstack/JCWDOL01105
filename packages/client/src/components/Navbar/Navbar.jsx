@@ -6,8 +6,8 @@ import Menu from '../Login/Menu';
 const Navbar = () => {
   return (
     <div>
-      <div className="nav-container flex bg-color-pallete1 md:flex-row flex-col gap-2 justify-between md:items-center p-4  text-color-primary shadow-xl">
-        <div className="font-bold p-2">
+      <div className="nav-container flex bg-color-grey md:flex-row flex-col gap-2 justify-between md:items-center p-4  text-color-primary shadow-xl">
+        <div className="font-bold text-color-pallete1 p-2">
           <Link href="/">RENAFIN</Link>
         </div>
         <Search />

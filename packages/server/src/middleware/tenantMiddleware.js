@@ -19,7 +19,10 @@ const authenticateTenant = async (req, res, next) => {
     }
 
     // Tambahkan informasi tenant ke request
-    req.tenant = tenant;
+    req.user = {
+      id: tenant.id,
+      role: decoded.role,
+    };
 
     next(); // Lanjutkan ke endpoint
   } catch (error) {

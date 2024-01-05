@@ -18,14 +18,17 @@ const registerUser = async (req, res) => {
     if (password !== confirmPassword) {
       return res.status(400).json({
         status: 'fail',
-        message: 'Passwords do not match',
+        message: 'Passwords must match',
       });
     }
+
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     const newUser = await User.create({
       name,
       email,
-      password,
+      password: hashedPassword,
       phone_number,
     });
 
@@ -72,11 +75,11 @@ const loginUser = async (req, res) => {
 
     // Verifikasi kata sandi
     const isPasswordMatch = await bcrypt.compare(
-      password,
+      password.trim(),
       user.new_password || user.password,
     );
 
-    if (!isPasswordMatch) {
+    if (isPasswordMatch) {
       return res.status(404).json({
         status: 'fail',
         message: 'Email dan password tidak cocok',
