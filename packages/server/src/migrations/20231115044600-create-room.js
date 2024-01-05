@@ -15,8 +15,17 @@ module.exports = {
       room_information: {
         type: Sequelize.TEXT,
       },
-      price: {
+      regularPrice: {
         type: Sequelize.FLOAT,
+      },
+      discountPrice: {
+        type: Sequelize.FLOAT,
+      },
+      bedrooms: {
+        type: Sequelize.INTEGER,
+      },
+      bathrooms: {
+        type: Sequelize.INTEGER,
       },
       available: {
         type: Sequelize.BOOLEAN,
