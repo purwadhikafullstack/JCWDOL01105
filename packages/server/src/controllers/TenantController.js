@@ -1,4 +1,4 @@
-const { Tenant } = require('../models');
+const { Tenants } = require('../models');
 const { createSendToken } = require('../utils/tokenUtils');
 const {
   verifyEmail,
@@ -24,7 +24,7 @@ const registerTenant = async (req, res) => {
       'host',
     )}/src/public/id_card/${fileNewImage}`;
 
-    const newTenant = await Tenant.create({
+    const newTenant = await Tenants.create({
       name,
       email,
       password,
@@ -46,7 +46,7 @@ const registerTenant = async (req, res) => {
 const loginTenant = async (req, res) => {
   try {
     const { email, password } = req.body;
-    let tenant = await Tenant.findOne({ where: { email } });
+    let tenant = await Tenants.findOne({ where: { email } });
     if (!tenant) {
       return res.status(400).json({
         status: 'fail',
@@ -104,7 +104,7 @@ const requestResetPassword = async (req, res) => {
   try {
     const { email } = req.body;
 
-    const tenant = await Tenant.findOne({ where: { email } });
+    const tenant = await Tenants.findOne({ where: { email } });
     if (!tenant) {
       return res.status(404).json({ message: 'Tenant not found' });
     }
@@ -126,7 +126,7 @@ const resetPassword = async (req, res) => {
     const { token, newPassword: plainNewPassword } = req.body;
 
     // Temukan pengguna berdasarkan token
-    const user = await Tenant.findOne({
+    const user = await Tenants.findOne({
       where: { reset_password_token: token },
     });
 

@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { Tenant } = require('../models');
+const { Tenants } = require('../models');
 
 const authenticateTenant = async (req, res, next) => {
   try {
@@ -10,7 +10,7 @@ const authenticateTenant = async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     // Cari tenant berdasarkan ID dalam token
-    const tenant = await Tenant.findOne({
+    const tenant = await Tenants.findOne({
       where: { id: decoded.id, new_password: null },
     });
 
@@ -19,7 +19,7 @@ const authenticateTenant = async (req, res, next) => {
     }
 
     // Tambahkan informasi tenant ke request
-    req.tenant = tenant;
+    req.user = tenant;
 
     next(); // Lanjutkan ke endpoint
   } catch (error) {

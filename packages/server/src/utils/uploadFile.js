@@ -14,15 +14,13 @@ const storageFile = (path) => {
       let uploadPath = `./src/public/${path}`;
       if (!validFileType) {
         const error = new Error('Invalid file format type.');
-        return cb(error, u);
+        return cb(error);
       }
       cb(null, uploadPath);
     },
     filename: function (req, file, cb) {
       const extension = FILE_TYPES[file.mimetype];
-
       const uniqueFileImage = `${file.fieldname}_${Date.now()}.${extension}`;
-
       cb(null, uniqueFileImage);
     },
   });
@@ -30,8 +28,14 @@ const storageFile = (path) => {
 
 const uploadOptionsProfile = multer({ storage: storageFile('profile') });
 const uploadOptionsIdCard = multer({ storage: storageFile('id_card') });
+const uploadOptionsProperty = multer({ storage: storageFile('property') });
+const uploadOptionPaymentProof = multer({
+  storage: storageFile('payment_proof'),
+});
 
 module.exports = {
   uploadOptionsProfile,
   uploadOptionsIdCard,
+  uploadOptionsProperty,
+  uploadOptionPaymentProof,
 };

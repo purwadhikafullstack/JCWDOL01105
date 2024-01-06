@@ -12,7 +12,7 @@ module.exports = {
       user_id: {
         type: Sequelize.UUID,
       },
-      property_id: {
+      order_id: {
         type: Sequelize.INTEGER,
       },
       rating: {
