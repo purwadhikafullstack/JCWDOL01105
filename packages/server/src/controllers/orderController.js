@@ -58,10 +58,13 @@ const createOrder = async (req, res) => {
 
 const getOrder = async (req, res) => {
   const userId = req.user.id;
-  const { sortBy, page = 1, limit = 4 } = req.query;
+  const { sortBy, page = 1, limit = 4, booking_status } = req.query;
 
   try {
     let whereClause = { user_id: userId };
+    if (booking_status) {
+      whereClause = { ...whereClause, booking_status };
+    }
     let includeClause = [
       {
         model: Room,
@@ -131,6 +134,24 @@ const getOrder = async (req, res) => {
       limit: parseInt(limit),
       offset: (parseInt(page) - 1) * parseInt(limit),
     });
+
+    const currentDate = new Date();
+    for (const order of orders) {
+      try {
+        if (
+          order.booking_status === 'WAITING_FOR_PAYMENT' &&
+          new Date(order.check_in_date) < currentDate &&
+          new Date(order.check_out_date) === currentDate
+        ) {
+          order.booking_status = 'CANCELED';
+          await order.save(); // Simpan perubahan booking_status ke dalam database
+        }
+      } catch (error) {
+        console.error('Error saving booking status:', error);
+        // Handle error saat menyimpan perubahan ke database
+        // Misalnya, dapat dilakukan roll-back perubahan atau tindakan lain yang diperlukan
+      }
+    }
 
     const totalCount = await Orders.count({ where: whereClause });
 
