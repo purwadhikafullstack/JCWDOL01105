@@ -54,14 +54,33 @@ const Menu = () => {
   useEffect(() => {
     if (localStorage.getItem('token')) {
       setIsLoggedIn(true);
+
+      const isTenant = localStorage.getItem('isTenant');
+      if (isTenant) {
+        router.push('/PropertyListing');
+      }
     }
-  }, []);
+  }, [router]);
+
+  const onRent = useCallback(() => {
+    if (isLoggedIn) {
+      const isTenant = localStorage.getItem('isTenant');
+
+      if (isTenant) {
+        router.push('/PropertyListing');
+      } else {
+        router.push('/tenant/login');
+      }
+    } else {
+      router.push('/tenant/login');
+    }
+  }, [isLoggedIn, router]);
 
   return (
     <div className="relative z-20">
       <div className="side-btn flex flex-row items-center gap-3">
         <div
-          onClick={() => {}}
+          onClick={onRent}
           className="hidden md:block text-sm font-semibold py-3 px-4 rounded-full  transition cursor-pointer"
         >
           <House size={32} />

@@ -33,9 +33,6 @@ module.exports = {
       rent: {
         type: Sequelize.FLOAT,
       },
-      type: {
-        type: Sequelize.STRING,
-      },
       avg_rating: {
         type: Sequelize.FLOAT,
       },

@@ -106,7 +106,6 @@ exports.createOrUpdateProperty = async (req, res, next) => {
         const newPropertyPicture = await property_picture.create({
           property_pictures: propertyPicturesString,
         });
-
         await property.addPropertyPictures(newPropertyPicture);
         await property.save();
       }

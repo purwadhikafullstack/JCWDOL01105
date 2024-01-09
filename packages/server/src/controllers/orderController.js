@@ -179,7 +179,6 @@ const getOrder = async (req, res) => {
   }
 };
 
-// const getOrder = async (req, res) => {
 //   try {
 //     let { sortBy, page } = req.query;
 //     const userId = req.user.id;
