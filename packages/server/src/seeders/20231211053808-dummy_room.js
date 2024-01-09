@@ -9,20 +9,22 @@ module.exports = {
         {
           property_id: 1, // Ganti dengan ID properti yang sesuai
           room_information: 'Informasi Kamar 1',
-          price: 100.0,
+          regularPrice: 100.0,
           available: true,
           type_room: 'Single', // Ganti dengan tipe kamar yang sesuai
           createdAt: new Date(),
           updatedAt: new Date(),
+          guests: 1,
         },
         {
           property_id: 2, // Ganti dengan ID properti yang sesuai
           room_information: 'Informasi Kamar 2',
-          price: 150.0,
+          regularPrice: 150.0,
           available: false,
           type_room: 'Double', // Ganti dengan tipe kamar yang sesuai
           createdAt: new Date(),
           updatedAt: new Date(),
+          guests: 2,
         },
         // Tambahkan entri lain jika diperlukan
       ],

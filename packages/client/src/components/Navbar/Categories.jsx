@@ -70,7 +70,7 @@ const Categories = () => {
 
   return (
     <Marquee pauseOnHover={true} direction="right" speed={50}>
-      <div className=" pt-10 flex flex-row items-center gap-3 overflow-x-auto">
+      <div className="pt-10 flex flex-row items-center gap-3 overflow-x-auto">
         {categories.map((item) => (
           <CategoryBox
             key={item.label}

@@ -1,48 +1,191 @@
-const { Properties, Room, Orders, sequelize } = require('../models');
+const { Op } = require('sequelize');
+const { Orders, Room, Properties, User, User_Profile } = require('../models');
 
-const getSalesReport = async (req, res) => {
-  try {
-    const { propertyId, sortBy } = req.query;
+const OrdersController = {
+  async getOrdersByTenantId(req, res) {
+    try {
+      const tenantId = req.user.id;
+      const {
+        propertyId,
+        status,
+        user,
+        page = 1,
+        limit = 10,
+        check_in,
+      } = req.query;
 
-    const salesReport = await Properties.findAll({
-      attributes: [
-        'id',
-        'name',
-        [
-          sequelize.fn('SUM', sequelize.col('Rooms.Orders.price')),
-          'total_sales',
+      let whereClause = {
+        '$rooms.properties.tenant_id$': tenantId,
+        '$rooms->properties.tenant_id$': tenantId,
+      };
+
+      if (propertyId) {
+        whereClause['$rooms.property_id$'] = propertyId;
+      }
+
+      if (status) {
+        whereClause.payment_status = status;
+      }
+
+      if (check_in) {
+        whereClause.check_in_date = check_in;
+      }
+
+      let includeClause = [
+        {
+          model: Room,
+          as: 'rooms',
+          include: [
+            {
+              model: Properties,
+              as: 'properties',
+              where: { tenant_id: tenantId },
+            },
+          ],
+        },
+        {
+          model: User,
+          attributes: ['id', 'name', 'email'],
+          include: [
+            {
+              model: User_Profile,
+              attributes: ['profile_picture'],
+            },
+          ],
+        },
+      ];
+
+      if (user) {
+        includeClause[1].where = {
+          name: user,
+        };
+      }
+
+      const orders = await Orders.findAll({
+        where: {
+          [Op.and]: [
+            whereClause,
+            { payment_status: { [Op.not]: null } }, // payment_status tidak boleh null
+          ],
+        },
+        include: includeClause,
+        attributes: [
+          'id',
+          'user_id',
+          'room_id',
+          'check_in_date',
+          'check_out_date',
+          'guests',
+          'booking_code',
+          'price',
+          'total_invoice',
+          'payment_proof',
+          'payment_status',
+          'payment_date',
+          'booking_status',
+          'cancel_reason',
+          'reject_reason',
+          'createdAt',
+          'updatedAt',
         ],
-      ],
+        limit: parseInt(limit),
+        offset: (parseInt(page) - 1) * parseInt(limit),
+      });
+
+      let totalData = 0;
+      if (orders.length > 0) {
+        totalData = orders.reduce((total, order) => {
+          if (order.payment_status === 'ACCEPTED') {
+            return total + order.total_invoice;
+          }
+          return total;
+        }, 0);
+      }
+
+      return res.status(200).json({
+        orders,
+        totalInvoiceAccepted: totalData,
+      });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({
+        message: error.message || 'Terjadi kesalahan saat mengambil data.',
+      });
+    }
+  },
+};
+
+const getProperty = async (req, res) => {
+  try {
+    const tenantId = req.user.id;
+
+    const properties = await Properties.findAll({
+      where: { tenant_id: tenantId },
+      attributes: ['id', 'name'],
+    });
+
+    return res.status(200).json({ properties });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: error.message || 'Terjadi kesalahan saat mengambil data.',
+    });
+  }
+};
+
+const getUserByTenantId = async (req, res) => {
+  try {
+    const tenantId = req.user.id;
+
+    const users = await Orders.findAll({
+      attributes: ['user_id'],
       include: [
         {
           model: Room,
-          attributes: [],
+          as: 'rooms',
+          attributes: ['property_id'],
           include: [
             {
-              model: Orders,
-              attributes: [],
-              where: {
-                booking_status: 'DONE',
-              },
+              model: Properties,
+              as: 'properties',
+              attributes: ['name'],
+              where: { tenant_id: tenantId },
+            },
+          ],
+        },
+        {
+          model: User,
+          attributes: ['id', 'name', 'email'],
+          include: [
+            {
+              model: User_Profile,
+              attributes: ['profile_picture'],
             },
           ],
         },
       ],
-      where: {
-        id: propertyId,
-      },
-      group: ['Properties.id'],
-      order:
-        sortBy === 'total_sales' ? sequelize.literal('total_sales DESC') : [],
     });
 
-    res.status(200).json({ success: true, data: salesReport });
+    const userIds = users.map((user) => user.user_id);
+
+    const userName = await User.findAll({
+      attributes: ['id', 'name'],
+      where: {
+        id: { [Op.in]: userIds },
+      },
+    });
+
+    return res.status(200).json({ userName });
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .json({ success: false, message: 'Failed to fetch sales report' });
+    return res.status(500).json({
+      message: error.message || 'Terjadi kesalahan saat mengambil data.',
+    });
   }
 };
 
-module.exports = { getSalesReport };
+module.exports = {
+  getOrdersByTenantId: OrdersController.getOrdersByTenantId,
+  getProperty: getProperty,
+  getUserByTenantId: getUserByTenantId,
+};

@@ -23,7 +23,7 @@ const updateOrCreateProfile = async (req, res) => {
         await userProfile.save({ transaction: t });
         message = 'Profile updated successfully';
       } else {
-        userProfile = await User_Profiles.create(
+        userProfile = await User_Profile.create(
           {
             user_id: userId,
             name,
@@ -114,7 +114,7 @@ const getProfile = async (req, res) => {
 const uploadProfile = async (req, res) => {
   try {
     const idUser = req.user.id;
-    let ProfileData = await User_Profiles.findOne({
+    let ProfileData = await User_Profile.findOne({
       where: { user_id: idUser },
     });
     if (!ProfileData) {

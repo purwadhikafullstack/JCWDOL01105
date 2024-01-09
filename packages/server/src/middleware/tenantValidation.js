@@ -1,4 +1,4 @@
-const { Tenants } = require('../models');
+const { Tenant } = require('../models');
 const { body, check, validationResult } = require('express-validator');
 
 const validate = (validations) => {

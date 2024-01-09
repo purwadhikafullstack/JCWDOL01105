@@ -1,18 +1,76 @@
 const { Orders, Room, User, Properties, Reviews } = require('../models');
 
+const createOrder = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const {
+      room_id,
+      check_in_date,
+      check_out_date,
+      guests,
+      booking_code,
+      price,
+      total_invoice,
+      payment_proof,
+      payment_status,
+      payment_date,
+      booking_status,
+      cancel_reason,
+      reject_reason,
+    } = req.body;
+
+    const order = await Orders.create({
+      user_id: userId,
+      room_id,
+      check_in_date,
+      check_out_date,
+      guests,
+      booking_code,
+      price,
+      total_invoice,
+      payment_proof,
+      payment_status,
+      payment_date,
+      booking_status,
+      cancel_reason,
+      reject_reason,
+    });
+
+    if (!res.headersSent) {
+      res.status(201).json({
+        status: 'success',
+        data: {
+          order,
+        },
+      });
+    }
+  } catch (error) {
+    console.error('Error creating order:', error);
+
+    if (!res.headersSent) {
+      res.status(500).json({
+        status: 'error',
+        message: 'An error occurred while creating an order',
+      });
+    }
+  }
+};
+
 const getOrder = async (req, res) => {
   const userId = req.user.id;
-  const { sortBy, page = 1, limit = 5 } = req.query;
+  const { sortBy, page = 1, limit = 4 } = req.query;
 
   try {
     let whereClause = { user_id: userId };
     let includeClause = [
       {
         model: Room,
-        attributes: ['room_information', 'price', 'type_room'],
+        as: 'rooms',
+        attributes: ['room_information', 'regularPrice', 'type_room'],
         include: [
           {
             model: Properties,
+            as: 'properties',
             attributes: ['name', 'address'],
           },
         ],
@@ -34,10 +92,10 @@ const getOrder = async (req, res) => {
         let orderArray = [];
         switch (sortBy) {
           case 'highestPrice':
-            orderArray = [['price', 'DESC']];
+            orderArray = [['regularPrice', 'DESC']];
             break;
           case 'lowestPrice':
-            orderArray = [['price', 'ASC']];
+            orderArray = [['regularPrice', 'ASC']];
             break;
           case 'alphabet':
             orderArray = [
@@ -99,6 +157,53 @@ const getOrder = async (req, res) => {
     });
   }
 };
+
+// const getOrder = async (req, res) => {
+//   try {
+//     let { sortBy, page } = req.query;
+//     const userId = req.user.id;
+
+//     page = parseInt(page);
+//     if (isNaN(page) || page < 1) {
+//       page = 1;
+//     }
+
+//     const limit = 4;
+//     const offset = (page - 1) * limit;
+
+//     const orderOptions = {
+//       where: { user_id: userId },
+//       include: [
+//         {
+//           model: Room,
+//           include: [
+//             {
+//               model: Properties,
+//               where: { name: 'asd' }, // Ganti 'asd' dengan nama property yang diinginkan
+//             },
+//           ],
+//         },
+//       ],
+//       order: [['price', sortBy === 'desc' ? 'DESC' : 'ASC']],
+//       limit,
+//       offset,
+//     };
+
+//     const orders = await Orders.findAll(orderOptions);
+
+//     res.status(200).json({
+//       success: true,
+//       data: orders,
+//     });
+//   } catch (error) {
+//     console.error('Failed to fetch user orders:', error);
+//     res.status(500).json({
+//       success: false,
+//       message: 'Gagal mengambil pesanan pengguna.',
+//       error: error.message,
+//     });
+//   }
+// };
 
 const payment_proof = async (req, res) => {
   const { order_id } = req.body;
@@ -307,6 +412,7 @@ const cancelOrder = async (req, res) => {
 
 module.exports = {
   getOrder,
+  createOrder,
   payment_proof,
   confirmPayment,
   getPaymentProof,

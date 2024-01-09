@@ -28,6 +28,15 @@ module.exports = (sequelize, DataTypes) => {
       await this.save();
       return this.reset_password_token;
     }
+    async generateResetPasswordToken() {
+      this.reset_password_token = generateResetToken();
+      this.reset_password_expires = new Date();
+      this.reset_password_expires.setMinutes(
+        this.reset_password_expires.getMinutes() + 30,
+      ); // Token berlaku selama 30 menit
+      await this.save();
+      return this.reset_password_token;
+    }
   }
   Tenants.init(
     {

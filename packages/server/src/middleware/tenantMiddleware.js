@@ -20,7 +20,6 @@ const authenticateTenant = async (req, res, next) => {
 
     // Tambahkan informasi tenant ke request
     req.user = tenant;
-
     next(); // Lanjutkan ke endpoint
   } catch (error) {
     res.status(401).json({

@@ -11,7 +11,14 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Properties.belongsTo(models.Tenants, { foreignKey: 'tenant_id' });
       Properties.belongsTo(models.Categories, { foreignKey: 'category_id' });
-      Properties.hasMany(models.Room, { foreignKey: 'property_id' });
+      Properties.hasMany(models.Room, {
+        foreignKey: 'property_id',
+        as: 'rooms',
+      });
+      Properties.hasMany(models.property_picture, {
+        foreignKey: 'property_id',
+        as: 'propertyPictures',
+      });
     }
   }
   Properties.init(
@@ -20,8 +27,10 @@ module.exports = (sequelize, DataTypes) => {
       category_id: DataTypes.INTEGER,
       name: DataTypes.STRING,
       address: DataTypes.STRING,
-      pictures: DataTypes.TEXT,
       description: DataTypes.TEXT,
+      sell: DataTypes.BOOLEAN,
+      rent: DataTypes.BOOLEAN,
+      type: DataTypes.STRING,
       avg_rating: DataTypes.FLOAT,
     },
     {

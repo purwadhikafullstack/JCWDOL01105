@@ -6,7 +6,7 @@ const authMiddleware = require('../middleware/authMiddleware');
 const { uploadOptionPaymentProof } = require('../utils/uploadFile');
 const paymentController = require('../controllers/paymentGatewayController');
 
-// router.post('/', authMiddleware, OrderController.createOrder);
+router.post('/', authMiddleware, OrderController.createOrder);
 
 router.get('/', authMiddleware, OrderController.getOrder);
 
@@ -30,7 +30,6 @@ router.post(
 );
 
 router.post('/payment', paymentController.paymentGateway);
-router.post('/midtrans/notification', paymentController.trxNotif);
 
 router.post(
   '/cancel_order/:order_id',

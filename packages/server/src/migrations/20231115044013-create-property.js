@@ -27,6 +27,15 @@ module.exports = {
       description: {
         type: Sequelize.TEXT,
       },
+      sell: {
+        type: Sequelize.FLOAT,
+      },
+      rent: {
+        type: Sequelize.FLOAT,
+      },
+      type: {
+        type: Sequelize.STRING,
+      },
       avg_rating: {
         type: Sequelize.FLOAT,
       },
