@@ -1,7 +1,7 @@
 // PaymentProcessor.jsx
 import React, { useEffect, useState } from 'react';
 import { RiBankCardLine } from 'react-icons/ri';
-import Router, { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 
 import axios from 'axios';
 

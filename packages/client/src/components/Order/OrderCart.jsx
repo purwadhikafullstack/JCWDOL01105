@@ -73,7 +73,7 @@ const OrderCart = ({
     <div>
       <div className="flex flex-col w-full md:flex-row mb-4">
         <div>
-          <div className="flex justify-start w-full gap-2 md:order-2 px-4 md:px-0 mr-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {filterOrders.map((singleOrder) => (
               <div key={singleOrder.id}>
                 <div className="ml-5 relative flex w-full max-w-[26rem] flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-lg">
@@ -110,8 +110,8 @@ const OrderCart = ({
                   <div className="p-6">
                     <div className="mb-3 flex items-center justify-between">
                       <h5 className="block font-sans text-xl font-medium leading-snug tracking-normal text-blue-gray-900 antialiased">
-                        {singleOrder.Room.Property.name},{' '}
-                        {singleOrder.Room.Property.address}
+                        {singleOrder.rooms.properties.name}, <br />
+                        {singleOrder.rooms.properties.address}
                       </h5>
                       <p className="flex items-center gap-1.5 font-sans text-base font-normal leading-relaxed text-blue-gray-900 antialiased">
                         <svg
@@ -179,10 +179,13 @@ const OrderCart = ({
                       </span>
                     </p>
                     {singleOrder.booking_status === 'WAITING_FOR_PAYMENT' &&
-                      moment(singleOrder.check_in_date).isAfter(
-                        moment(),
+                      (moment().isBefore(
+                        moment(singleOrder.check_in_date, 'YYYY-MM-DD'),
                         'day',
-                      ) && (
+                      ) ||
+                        moment().isSame(
+                          moment(singleOrder.check_in_date, 'YYYY-MM-DD'),
+                        )) && (
                         <div className="flex gap-2">
                           <button
                             className="block w-full select-none rounded-lg bg-color-blue py-3.5 px-7 text-center align-middle font-sans text-sm font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
@@ -213,11 +216,14 @@ const OrderCart = ({
                       </button>
                     )}
                     {singleOrder.booking_status === 'DONE' &&
-                      moment(singleOrder.check_out_date, 'YYYY-MM-DD').isBefore(
-                        moment(),
+                      ((moment().isAfter(
+                        moment(singleOrder.check_out_date, 'YYYY-MM-DD'),
                         'day',
-                      ) &&
-                      (singleOrder.Reviews.length === 0 ? (
+                      ) ||
+                        moment().isSame(
+                          moment(singleOrder.check_out_date, 'YYYY-MM-DD'),
+                        )) &&
+                      singleOrder.Reviews.length === 0 ? (
                         <button
                           className="block w-full select-none rounded-lg bg-color-pallete3 py-3.5 px-7 text-center align-middle font-sans text-sm font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                           type="button"
@@ -231,27 +237,11 @@ const OrderCart = ({
                           className="block w-full select-none rounded-lg bg-color-pallete3 py-3.5 px-7 text-center align-middle font-sans text-sm font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                           type="button"
                           data-ripple-light="true"
-                          onClick={() =>
-                            handleShowRoomDetails(singleOrder.Room.id)
-                          } // Fungsi untuk menampilkan detail kamar
-                        >
-                          Detail Room
-                        </button>
-                      ))}
-                    {singleOrder.booking_status === 'WAITING_FOR_PAYMENT' &&
-                      moment(singleOrder.check_out_date, 'YYYY-MM-DD').isBefore(
-                        moment(),
-                        'day',
-                      ) && (
-                        <button
-                          className="block w-full select-none rounded-lg bg-color-red py-3.5 px-7 text-center align-middle font-sans text-sm font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                          type="button"
-                          data-ripple-light="true"
                           disabled
                         >
-                          Cancelled
+                          DONE
                         </button>
-                      )}
+                      ))}
                     {singleOrder.booking_status === 'CANCELED' && (
                       <button
                         className="block w-full select-none rounded-lg bg-color-red py-3.5 px-7 text-center align-middle font-sans text-sm font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"

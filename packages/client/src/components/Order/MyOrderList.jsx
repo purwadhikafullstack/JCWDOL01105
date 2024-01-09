@@ -14,15 +14,14 @@ const OrderComponent = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [isOpenSort, setIsOpenSort] = useState(false);
   const [filterOrders, setFilterOrders] = useState(0);
-
-  const [status, setStatus] = useState('ALL');
+  const [status, setStatus] = useState('WAITING_FOR_PAYMENT');
 
   useEffect(() => {
     const fetchOrders = async () => {
       setLoading(true);
       try {
         const response = await api.get(
-          `/order?sortBy=${sortBy}&page=${currentPage}`,
+          `/order?sortBy=${sortBy}&page=${currentPage}&booking_status=${status}`,
         );
         const { data, totalPages } = response.data;
         setOrders(data);
@@ -36,7 +35,7 @@ const OrderComponent = () => {
     setLoading(true);
     // delayedFetchOrders();
     fetchOrders();
-  }, [sortBy, currentPage]);
+  }, [sortBy, currentPage, status]);
 
   const updateFetching = async () => {
     try {
@@ -140,7 +139,6 @@ const OrderComponent = () => {
                 className="py-2 text-sm text-gray-700 dark:text-gray-200"
                 aria-labelledby="dropdownHoverButton"
               >
-                {/* Menambahkan value untuk menentukan pengurutan */}
                 <li>
                   <button
                     className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white w-full text-left"

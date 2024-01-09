@@ -1,11 +1,11 @@
-import React from 'react';
+import Property from '../src/components/Property/Property';
 
-const propertyListing = () => {
+const Rent = () => {
   return (
     <div>
-      <h1>Property Listing</h1>
+      <Property />
     </div>
   );
 };
 
-export default propertyListing;
+export default Rent;
