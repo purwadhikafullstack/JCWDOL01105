@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
   Property.init(
     {
       tenant_id: DataTypes.UUID,
-      category_id: DataTypes.UUID,
+      categories: DataTypes.STRING,
       name: DataTypes.STRING,
       address: DataTypes.STRING,
       description: DataTypes.TEXT,

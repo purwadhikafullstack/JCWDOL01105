@@ -75,7 +75,7 @@ const Menu = () => {
   }, [isLoggedIn, router]);
 
   return (
-    <div className="relative z-20">
+    <div className="relative z-20 text-color-primary">
       <div className="side-btn flex flex-row items-center gap-3">
         <div
           onClick={onRent}

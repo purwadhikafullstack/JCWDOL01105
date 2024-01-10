@@ -1,8 +1,22 @@
 const express = require('express');
 const router = express.Router();
 const orderController = require('../controllers/orderController');
-const authenticateUser = require('../middleware/userMiddleware');
+const authenticate = require('../middleware/authMiddleware');
+const authMiddleware = require('../middleware/tenantMiddleware');
 
-router.post('/', authenticateUser, orderController.createOrder);
+router.post('/', authenticate, orderController.createOrder);
+router.get('/transactions', authMiddleware, orderController.getAllOrders);
+router.put(
+  '/confirm-payment/:id',
+  authMiddleware,
+  orderController.confirmPayment,
+);
+router.put(
+  '/reject-payment/:id',
+  authMiddleware,
+  orderController.rejectPayment,
+);
+
+router.put('/cancel-order/:id', authMiddleware, orderController.cancelOrder);
 
 module.exports = router;

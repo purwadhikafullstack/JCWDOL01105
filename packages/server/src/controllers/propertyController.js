@@ -9,16 +9,18 @@ exports.createOrUpdateProperty = async (req, res, next) => {
       name,
       address,
       description,
+      categories,
       bedrooms,
       bathrooms,
       regularPrice,
-      discountPrice,
+      specialPrice,
       offer,
       furnished,
       parking,
       type_room,
       available,
       type,
+      room_information,
     } = req.body;
 
     const isForSale = type === 'Property For Sale';
@@ -47,6 +49,9 @@ exports.createOrUpdateProperty = async (req, res, next) => {
 
       property.sell = isForSale;
       property.rent = isForRent;
+      property.categories = categories;
+      property.address = address;
+      property.description = description;
 
       if (isForSale) {
         console.log('Setting type to Property For Sale');
@@ -64,12 +69,12 @@ exports.createOrUpdateProperty = async (req, res, next) => {
         room.bedrooms = bedrooms || room.bedrooms;
         room.bathrooms = bathrooms || room.bathrooms;
         room.regularPrice = regularPrice || room.regularPrice;
-        room.discountPrice = discountPrice || room.discountPrice;
-        room.offer = offer || room.offer;
+        room.specialPrice = specialPrice || room.specialPrice;
         room.furnished = furnished || room.furnished;
         room.parking = parking || room.parking;
         room.available = available || room.available;
         room.type_room = type_room || room.type_room;
+        room.room_information = room_information || room.room_information;
 
         await room.save();
       } else {
@@ -78,13 +83,14 @@ exports.createOrUpdateProperty = async (req, res, next) => {
           bedrooms,
           bathrooms,
           regularPrice,
-          discountPrice,
+          specialPrice,
           offer,
           furnished,
           parking,
           available,
           guests: 0,
           type_room: defaultType ? 'Regular room' : type_room,
+          room_information,
         });
 
         property.addRoom(room);
@@ -131,6 +137,7 @@ exports.createOrUpdateProperty = async (req, res, next) => {
         name,
         address,
         description,
+        categories,
         sell: isForSale,
         rent: isForRent,
         type: isForSale
@@ -145,13 +152,14 @@ exports.createOrUpdateProperty = async (req, res, next) => {
         bedrooms,
         bathrooms,
         regularPrice,
-        discountPrice,
+        specialPrice,
         offer,
         furnished,
         parking,
         available,
         guests: 0,
         type_room: type_room || 'Regular room',
+        room_information,
       });
       property.addRoom(room);
 
@@ -271,7 +279,7 @@ exports.deleteProperty = async (req, res, next) => {
 
 exports.searchProperties = async (req, res, next) => {
   try {
-    const { location, date, guests } = req.query;
+    const { location, date, guests, category, sort } = req.query;
     console.log('Search request', req.query);
 
     const where = {};
@@ -296,6 +304,24 @@ exports.searchProperties = async (req, res, next) => {
       };
     }
 
+    if (category) {
+      where.categories = {
+        [Op.like]: `%${category}%`,
+      };
+    }
+
+    const order = [];
+
+    if (sort === 'priceAsc') {
+      order.push([{ model: Room, as: 'rooms' }, 'regularPrice', 'ASC']);
+    } else if (sort === 'priceDesc') {
+      order.push([{ model: Room, as: 'rooms' }, 'regularPrice', 'DESC']);
+    } else if (sort === 'az') {
+      order.push(['name', 'ASC']);
+    } else if (sort === 'za') {
+      order.push(['name', 'DESC']);
+    }
+
     console.log('Where clause:', where);
 
     const searchResult = await Property.findAll({
@@ -311,7 +337,6 @@ exports.searchProperties = async (req, res, next) => {
           as: 'propertyPictures',
         },
       ],
-      logging: console.log,
     });
 
     res.json({ success: true, data: searchResult });

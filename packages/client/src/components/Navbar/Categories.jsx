@@ -14,7 +14,7 @@ import {
 } from '@phosphor-icons/react';
 import CategoryBox from './CategoryBox';
 
-const Categories = () => {
+const Categories = ({ onCategoryClick }) => {
   const categories = [
     {
       label: 'Beach',
@@ -69,18 +69,21 @@ const Categories = () => {
   ];
 
   return (
-    <Marquee pauseOnHover={true} direction="right" speed={50}>
-      <div className="pt-10 flex flex-row items-center gap-3 overflow-x-auto">
-        {categories.map((item) => (
-          <CategoryBox
-            key={item.label}
-            label={item.label}
-            description={item.label}
-            icon={item.icon}
-          />
-        ))}
-      </div>
-    </Marquee>
+    <div>
+      <Marquee pauseOnHover={true} direction="right" speed={50}>
+        <div className="pt-10 flex flex-row items-center gap-3 overflow-x-auto">
+          {categories.map((item) => (
+            <CategoryBox
+              key={item.label}
+              label={item.label}
+              description={item.label}
+              icon={item.icon}
+              onCategoryClick={onCategoryClick}
+            />
+          ))}
+        </div>
+      </Marquee>
+    </div>
   );
 };
 

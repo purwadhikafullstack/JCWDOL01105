@@ -4,9 +4,8 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     return queryInterface.addColumn('Rooms', 'furnished', {
-      type: Sequelize.BOOLEAN,
+      type: Sequelize.STRING,
       allowNull: false,
-      defaultValue: false,
     });
   },
 

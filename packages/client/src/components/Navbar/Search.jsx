@@ -5,7 +5,6 @@ import 'react-calendar/dist/Calendar.css';
 import { useRouter } from 'next/router';
 
 import api from '../../config/api';
-import PropertyList from '../Property/PropertyList';
 
 const Search = () => {
   const router = useRouter();
@@ -17,6 +16,7 @@ const Search = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedDateRange, setSelectedDateRange] = useState(null);
   const [showCalendar, setShowCalendar] = useState(false);
+  const [numberOfNights, setNumberOfNights] = useState(0);
 
   const cities = [
     'Bali',
@@ -33,10 +33,12 @@ const Search = () => {
 
   const toggleSearch = () => {
     setSearchOpen((prevState) => !prevState);
+    setSearchResults([]);
+    setSearchAction(false);
   };
 
   const handleCalendarButtonClick = () => {
-    setShowCalendar(true);
+    setShowCalendar((prevShowCalendar) => !prevShowCalendar);
   };
 
   const tileDisabled = ({ date }) => {
@@ -77,9 +79,22 @@ const Search = () => {
   const handleDateChange = (date) => {
     if (date.length === 1) {
       setSelectedDate(date[0]);
+      setNumberOfNights(0);
     } else if (date.length === 2) {
-      setSelectedDate(date);
+      setSelectedDateRange(date);
+      setNumberOfNights(calculateNumberOfNights(date[0], date[1]));
     }
+  };
+
+  const formatDate = (date) => {
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    return new Date(date).toLocaleDateString(undefined, options);
+  };
+
+  const calculateNumberOfNights = (startDate, endDate) => {
+    const oneDay = 24 * 60 * 60 * 1000;
+    const nights = Math.round(Math.abs((endDate - startDate) / oneDay));
+    return nights;
   };
 
   const handleGuestChange = (event) => {
@@ -113,6 +128,9 @@ const Search = () => {
         setSearchResults(searchData.data);
         setSearchAction(true);
         console.log('Search results:', searchData.data);
+
+        const searchUrl = `?location=${selectedLocation}`;
+        router.push(searchUrl);
       } else {
         console.error('Search failed', searchData.message);
       }
@@ -146,7 +164,9 @@ const Search = () => {
   return (
     <div className="relative">
       <div
-        className="search-container border-[1px] w-full md:w-auto py-2 rounded-full shadow-sm hover:shadow-md transition cursor-pointer relative z-20"
+        className={`search-container ${
+          searchOpen ? 'search-open' : ''
+        } w-full md:w-auto py-2 rounded-full shadow-sm hover:shadow-md transition cursor-pointer relative z-20`}
         onClick={toggleSearch}
       >
         <div className="search-body flex flex-row items-center justify-between">
@@ -156,7 +176,9 @@ const Search = () => {
               onChange={handleLocationChange}
               className="outline-none"
             >
-              <option value="">Destination</option>
+              <option value="" className="hidden sm:block ">
+                Destination
+              </option>
               {cities.map((city) => (
                 <option key={city} value={city}>
                   {city}
@@ -169,7 +191,11 @@ const Search = () => {
               className="outline-none"
               onClick={handleCalendarButtonClick}
             >
-              Select date
+              {selectedDateRange
+                ? `${formatDate(selectedDateRange[0])} to ${formatDate(
+                    selectedDateRange[1],
+                  )}`
+                : 'Select date'}
             </button>
             {showCalendar && (
               <div className="calendar-dropdown rounded-xl absolute top-full left-10 bg-color-primary z-30">
@@ -196,7 +222,7 @@ const Search = () => {
               />
             </div>
             <div
-              className="p-2 bg-color-primary rounded-full text-white"
+              className="p-2 bg-color-primary rounded-full hover:bg-color-pallete1"
               onClick={handleSearch}
             >
               <MagnifyingGlass size={32} />
