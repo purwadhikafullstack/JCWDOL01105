@@ -18,6 +18,8 @@
     "axios": "^0.27.2",
     "chart.js": "^4.4.0",
     "formik": "^2.4.5",
+    "json2mq": "^0.2.0",
+    "lodash.debounce": "^4.0.8",
     "next": "12.2.5",
     "phosphor-icons": "^1.4.2",
     "query-string": "^8.1.0",

@@ -1,5 +1,5 @@
 const { Op } = require('sequelize');
-const { Property, Room, sequelize, property_picture } = require('../models');
+const { Properties, Room, sequelize, property_picture } = require('../models');
 const { errorHandler } = require('../utils/errorHandle');
 
 exports.createOrUpdateProperty = async (req, res, next) => {
@@ -32,7 +32,7 @@ exports.createOrUpdateProperty = async (req, res, next) => {
     let property;
 
     if (id) {
-      property = await Property.findByPk(id, {
+      property = await Properties.findByPk(id, {
         include: [
           {
             model: Room,
@@ -132,7 +132,7 @@ exports.createOrUpdateProperty = async (req, res, next) => {
 
       const propertyPicturesString = basePaths.join(',');
 
-      property = await Property.create({
+      property = await Properties.create({
         tenant_id,
         name,
         address,
@@ -189,7 +189,7 @@ exports.createOrUpdateProperty = async (req, res, next) => {
 
 exports.getProperties = async (req, res, next) => {
   try {
-    const properties = await Property.findAll({
+    const properties = await Properties.findAll({
       include: [
         {
           model: Room,
@@ -218,7 +218,7 @@ exports.getProperties = async (req, res, next) => {
 
 exports.getProperty = async (req, res, next) => {
   try {
-    const property = await Property.findByPk(req.params.id, {
+    const property = await Properties.findByPk(req.params.id, {
       include: [
         {
           model: Room,
@@ -247,7 +247,7 @@ exports.getProperty = async (req, res, next) => {
 
 exports.deleteProperty = async (req, res, next) => {
   try {
-    const property = await Property.findByPk(req.params.id, {
+    const property = await Properties.findByPk(req.params.id, {
       include: [
         {
           model: property_picture,
@@ -324,7 +324,7 @@ exports.searchProperties = async (req, res, next) => {
 
     console.log('Where clause:', where);
 
-    const searchResult = await Property.findAll({
+    const searchResult = await Properties.findAll({
       where,
       include: [
         {
