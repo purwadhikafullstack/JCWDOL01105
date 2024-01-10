@@ -1,4 +1,4 @@
-const { Tenant } = require('../models');
+const { Tenants } = require('../models');
 const {
   generateVerificationCode,
   mailVerificationCode,
@@ -10,7 +10,7 @@ const verifyEmail = async (req, res) => {
 
     console.log('Kode verifikasi yang diterima:', verification_code);
 
-    const tenant = await Tenant.findOne({ where: { verification_code } });
+    const tenant = await Tenants.findOne({ where: { verification_code } });
     if (!tenant) {
       return res.status(404).json({
         status: 'fail',
@@ -54,7 +54,7 @@ const verifyEmail = async (req, res) => {
 const sendVerificationCode = async (req, res) => {
   try {
     const { email } = req.body;
-    const tenant = await Tenant.findOne({ where: { email } });
+    const tenant = await Tenants.findOne({ where: { email } });
     if (!tenant) {
       return res.status(404).json({
         status: 'fail',

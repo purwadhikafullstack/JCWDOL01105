@@ -7,7 +7,7 @@ const {
 } = require('../utils/sendMail');
 
 module.exports = (sequelize, DataTypes) => {
-  class Tenant extends Model {
+  class Tenants extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -15,6 +15,27 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Tenants.hasMany(models.Properties, {
+        foreignKey: 'tenant_id',
+      });
+    }
+    async generateResetPasswordToken() {
+      this.reset_password_token = generateResetToken();
+      this.reset_password_expires = new Date();
+      this.reset_password_expires.setMinutes(
+        this.reset_password_expires.getMinutes() + 30,
+      ); // Token berlaku selama 30 menit
+      await this.save();
+      return this.reset_password_token;
+    }
+    async generateResetPasswordToken() {
+      this.reset_password_token = generateResetToken();
+      this.reset_password_expires = new Date();
+      this.reset_password_expires.setMinutes(
+        this.reset_password_expires.getMinutes() + 30,
+      ); // Token berlaku selama 30 menit
+      await this.save();
+      return this.reset_password_token;
     }
     async generateResetPasswordToken() {
       this.reset_password_token = generateResetToken();
@@ -26,7 +47,7 @@ module.exports = (sequelize, DataTypes) => {
       return this.reset_password_token;
     }
   }
-  Tenant.init(
+  Tenants.init(
     {
       id: {
         allowNull: false,
@@ -80,8 +101,8 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       sequelize,
-      modelName: 'Tenant',
+      modelName: 'Tenants',
     },
   );
-  return Tenant;
+  return Tenants;
 };

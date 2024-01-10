@@ -109,31 +109,22 @@ const PropertyDetails = () => {
         price: property.rooms[0].regularPrice * totalNights,
         total_invoice: 0,
         payment_proof: 'default',
-        payment_status: 'ACCEPTED',
+        payment_status: null,
         payment_date: null,
-        booking_status: 'DONE',
+        booking_status: 'WAITING_FOR_PAYMENT',
         cancel_reason: '',
         reject_reason: '',
       };
 
-      const token = localStorage.getItem('token');
+      const response = await api.post('/orders', orderData);
 
-      if (!token) {
-        router.push('/user/login');
-        return;
-      }
-
-      const response = await api.post('/orders', orderData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-
-      if (response.ok || response.status === 200) {
-        router.push('/orders');
+      if (response.ok || response.status === 201) {
+        alert('Success! Your order has been created.');
       } else {
-        console.error('Error creating order:', error);
+        console.error(
+          'Error creating order:',
+          response.data.message || 'Unknown error',
+        );
       }
     } catch (err) {
       console.error('Error creating order:', err);

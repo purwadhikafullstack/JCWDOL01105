@@ -1,7 +1,6 @@
 require('dotenv').config();
 const { User, User_Profile } = require('../models');
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 const { createSendToken } = require('../utils/tokenUtils');
 const {
   verifyEmail,
@@ -49,7 +48,7 @@ const registerUser = async (req, res) => {
 const loginUser = async (req, res) => {
   try {
     const { email_or_phone, password } = req.body;
-    const type = req.body.email_or_phone_type; // Mengambil tipe email/phone_number yang telah disimpan di middleware
+    const type = req.body.email_or_phone_type;
 
     let user;
 

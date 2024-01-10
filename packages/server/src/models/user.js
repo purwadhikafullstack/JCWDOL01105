@@ -18,6 +18,9 @@ module.exports = (sequelize, DataTypes) => {
       User.hasOne(models.User_Profile, {
         foreignKey: 'user_id',
       });
+      User.hasMany(models.Orders, {
+        foreignKey: 'user_id',
+      });
     }
     async generateResetPasswordToken() {
       this.reset_password_token = generateResetToken();
@@ -40,7 +43,6 @@ module.exports = (sequelize, DataTypes) => {
       name: DataTypes.STRING,
       email: DataTypes.STRING,
       password: DataTypes.STRING,
-      confirm_password: DataTypes.STRING,
       phone_number: DataTypes.STRING,
       is_verified: {
         type: DataTypes.BOOLEAN,

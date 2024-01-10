@@ -34,7 +34,7 @@ const tenantValidationRegister = () => {
       .notEmpty()
       .withMessage('Email is required')
       .custom(async (value) => {
-        const tenant = await Tenant.findOne({ where: { email: value } });
+        const tenant = await Tenants.findOne({ where: { email: value } });
         if (tenant) {
           throw new Error('Email already in use');
         }
