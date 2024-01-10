@@ -1,4 +1,11 @@
-const { Orders, Room, User, Properties, Reviews } = require('../models');
+const {
+  Orders,
+  Room,
+  User,
+  Properties,
+  Reviews,
+  property_picture,
+} = require('../models');
 
 const createOrder = async (req, res) => {
   try {
@@ -75,6 +82,13 @@ const getOrder = async (req, res) => {
             model: Properties,
             as: 'properties',
             attributes: ['name', 'address'],
+            include: [
+              {
+                model: property_picture,
+                as: 'propertyPictures',
+                attributes: ['property_pictures'],
+              },
+            ],
           },
         ],
       },
@@ -144,12 +158,10 @@ const getOrder = async (req, res) => {
           new Date(order.check_out_date) === currentDate
         ) {
           order.booking_status = 'CANCELED';
-          await order.save(); // Simpan perubahan booking_status ke dalam database
+          await order.save();
         }
       } catch (error) {
         console.error('Error saving booking status:', error);
-        // Handle error saat menyimpan perubahan ke database
-        // Misalnya, dapat dilakukan roll-back perubahan atau tindakan lain yang diperlukan
       }
     }
 
@@ -178,52 +190,6 @@ const getOrder = async (req, res) => {
     });
   }
 };
-
-//   try {
-//     let { sortBy, page } = req.query;
-//     const userId = req.user.id;
-
-//     page = parseInt(page);
-//     if (isNaN(page) || page < 1) {
-//       page = 1;
-//     }
-
-//     const limit = 4;
-//     const offset = (page - 1) * limit;
-
-//     const orderOptions = {
-//       where: { user_id: userId },
-//       include: [
-//         {
-//           model: Room,
-//           include: [
-//             {
-//               model: Properties,
-//               where: { name: 'asd' }, // Ganti 'asd' dengan nama property yang diinginkan
-//             },
-//           ],
-//         },
-//       ],
-//       order: [['price', sortBy === 'desc' ? 'DESC' : 'ASC']],
-//       limit,
-//       offset,
-//     };
-
-//     const orders = await Orders.findAll(orderOptions);
-
-//     res.status(200).json({
-//       success: true,
-//       data: orders,
-//     });
-//   } catch (error) {
-//     console.error('Failed to fetch user orders:', error);
-//     res.status(500).json({
-//       success: false,
-//       message: 'Gagal mengambil pesanan pengguna.',
-//       error: error.message,
-//     });
-//   }
-// };
 
 const payment_proof = async (req, res) => {
   const { order_id } = req.body;

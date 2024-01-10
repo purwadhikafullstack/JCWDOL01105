@@ -1,4 +1,4 @@
-const { User, User_Profiles } = require('../models');
+const { User, User_Profile } = require('../models');
 const { sequelize } = require('../models');
 const fs = require('fs');
 const path = require('path');
@@ -9,7 +9,7 @@ const updateOrCreateProfile = async (req, res) => {
     const userId = req.user.id;
 
     await sequelize.transaction(async (t) => {
-      let userProfile = await User_Profiles.findOne({
+      let userProfile = await User_Profile.findOne({
         where: { user_id: userId },
         transaction: t,
       });
@@ -81,7 +81,7 @@ const getProfile = async (req, res) => {
   try {
     const userId = req.user.id;
 
-    const userProfile = await User_Profiles.findOne({
+    const userProfile = await User_Profile.findOne({
       where: { user_id: userId },
       include: { model: User, attributes: ['id', 'name', 'email'] },
     });
@@ -118,7 +118,7 @@ const uploadProfile = async (req, res) => {
       where: { user_id: idUser },
     });
     if (!ProfileData) {
-      ProfileData = await User_Profiles.create({
+      ProfileData = await User_Profile.create({
         user_id: idUser,
       });
     }
@@ -180,7 +180,7 @@ const getProfilePicture = async (req, res) => {
   try {
     const userId = req.user.id;
 
-    const userProfile = await User_Profiles.findOne({
+    const userProfile = await User_Profile.findOne({
       where: { user_id: userId },
       attributes: ['profile_picture'],
     });

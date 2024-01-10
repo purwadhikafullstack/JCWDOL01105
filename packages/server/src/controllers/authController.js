@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { User, User_Profiles } = require('../models');
+const { User, User_Profile } = require('../models');
 const bcrypt = require('bcrypt');
 const { createSendToken } = require('../utils/tokenUtils');
 const {
@@ -31,7 +31,7 @@ const registerUser = async (req, res) => {
       phone_number,
     });
 
-    await User_Profiles.create({
+    await User_Profile.create({
       user_id: newUser.id,
     });
 
