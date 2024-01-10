@@ -147,6 +147,15 @@
   flex-grow: 1;
 }
 
+.search-body {
+  color: black;
+  width: 100%;
+}
+
+.search-body:hover {
+  color: #4a785e;
+}
+
 .side-btn:hover {
   transition: 0.2s;
   background-color: white;

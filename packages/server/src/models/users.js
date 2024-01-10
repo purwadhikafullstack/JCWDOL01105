@@ -18,6 +18,9 @@ module.exports = (sequelize, DataTypes) => {
       User.hasOne(models.User_Profile, {
         foreignKey: 'user_id',
       });
+      User.hasMany(models.Orders, {
+        foreignKey: 'user_id',
+      });
     }
     async generateResetPasswordToken() {
       this.reset_password_token = generateResetToken();

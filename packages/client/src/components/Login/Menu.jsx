@@ -19,12 +19,14 @@ const Menu = () => {
       setIsModalOpen(true);
     } else if (label === 'Register') {
       router.push('/user/register');
-    } else if (label === 'AboutUs') {
-      router.push('/about-us');
+    } else if (label === 'My Orders') {
+      router.push('/order');
     } else if (label === 'ContactUs') {
       router.push('/contact-us');
     } else if (label === 'Profile') {
       router.push('profile');
+    } else if (label === 'Bookings') {
+      router.push('/orders');
     }
   };
 
@@ -38,7 +40,7 @@ const Menu = () => {
   const handleLogout = () => {
     localStorage.clear();
     setIsLoggedIn(false);
-    window.location.reload();
+    router.push('/');
   };
 
   const handleUserLogin = () => {
@@ -101,8 +103,8 @@ const Menu = () => {
                   label="Profile"
                 />
                 <MenuItem
-                  onClick={() => handleClick('About us')}
-                  label="About us"
+                  onClick={() => handleClick('Bookings')}
+                  label="Bookings"
                 />
                 <MenuItem onClick={handleLogout} label="Logout" />
               </>

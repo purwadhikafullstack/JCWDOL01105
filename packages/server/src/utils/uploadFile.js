@@ -29,6 +29,9 @@ const storageFile = (path) => {
 
 const uploadOptionsProfile = multer({ storage: storageFile('profile') });
 const uploadOptionsIdCard = multer({ storage: storageFile('id_card') });
+const uploadOptionPaymentProof = multer({
+  storage: storageFile('payment_proof'),
+});
 const uploadOptionsProperty = multer({
   storage: storageFile('property'),
 }).array('files', 6);
@@ -36,5 +39,6 @@ const uploadOptionsProperty = multer({
 module.exports = {
   uploadOptionsProfile,
   uploadOptionsIdCard,
+  uploadOptionPaymentProof,
   uploadOptionsProperty,
 };
