@@ -1,25 +1,32 @@
 'use strict';
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Reviews extends Model {
+  class Review extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      this.belongsTo(models.User, { foreignKey: 'user_id', as: 'user' });
-      this.belongsTo(models.Property, {
-        foreignKey: 'property_id',
-        as: 'property',
+      // define association here
+      Review.belongsTo(models.Orders, { foreignKey: 'order_id' });
+      Review.belongsTo(models.User, {
+        foreignKey: 'user_id',
       });
     }
   }
-  Reviews.init(
+  Review.init(
     {
       user_id: DataTypes.UUID,
-      property_id: DataTypes.UUID,
-      rating: DataTypes.INTEGER,
+      order_id: DataTypes.UUID,
+      rating: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+          min: 1,
+          max: 5,
+        },
+      },
       comment: DataTypes.TEXT,
     },
     {
@@ -27,5 +34,5 @@ module.exports = (sequelize, DataTypes) => {
       modelName: 'Reviews',
     },
   );
-  return Reviews;
+  return Review;
 };
