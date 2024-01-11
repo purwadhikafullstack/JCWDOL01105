@@ -3,6 +3,7 @@ import api from '../../../../config/api';
 
 const TransactionOrderComponent = () => {
   const [orders, setOrders] = useState([]);
+  const [canceledOrders, setCanceledOrders] = useState([]);
 
   const formatPrice = (price) => {
     const formatter = new Intl.NumberFormat('id-ID', {
@@ -62,22 +63,19 @@ const TransactionOrderComponent = () => {
       await api.put(`/orders/cancel-order/${id}`);
 
       const updatedOrders = orders.map((order) =>
-        order.id === id ? { ...order, booking_status: 'CANCELED' } : order,
+        order.id === id
+          ? {
+              ...order,
+              booking_status: 'CANCELED',
+              payment_status: 'DECLINED',
+            }
+          : order,
       );
+
       setOrders(updatedOrders);
+      setCanceledOrders((prevCanceledOrders) => [...prevCanceledOrders, id]);
     } catch (error) {
       console.error('Error canceling order:', error);
-    }
-  };
-
-  const getBookingStatus = (paymentStatus) => {
-    switch (paymentStatus) {
-      case 'ACCEPTED':
-        return 'DONE';
-      case 'DECLINED':
-        return 'CANCELED';
-      default:
-        return '-';
     }
   };
 
@@ -109,17 +107,19 @@ const TransactionOrderComponent = () => {
             <p className="mb-2">Total Price: {formatPrice(order.price)}</p>
             <p className="mb-2">Booking Code: {order.booking_code}</p>
             <p className="mb-2">Payment Status: {order.payment_status}</p>
-            {!order.paymentConfirmed && (
+            {!order.paymentConfirmed && !canceledOrders.includes(order.id) && (
               <div className="flex space-x-2 mt-4">
                 <button
                   onClick={() => confirmPayment(order.id)}
                   className="btn btn-success bg-color-pallete3 rounded"
+                  disabled={order.booking_status === 'DONE'}
                 >
                   Confirm Payment
                 </button>
                 <button
                   onClick={() => rejectPayment(order.id)}
                   className="btn btn-danger bg-color-lightred rounded"
+                  disabled={order.booking_status === 'DONE'}
                 >
                   Reject Payment
                 </button>

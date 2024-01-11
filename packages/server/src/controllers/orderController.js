@@ -57,7 +57,6 @@ const getAllOrders = async (req, res) => {
       include: [
         {
           model: User,
-          as: 'user',
         },
       ],
     });

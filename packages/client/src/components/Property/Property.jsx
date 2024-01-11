@@ -1,8 +1,7 @@
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
-import { API_URL } from '../../config/api';
+import api from '../../config/api';
 import PropertyList from './PropertyList';
-import axios from 'axios';
 import FurnishOptions from '../utils/Furnish';
 
 const Property = () => {
@@ -23,7 +22,7 @@ const Property = () => {
   const [specialPrice, setSpecialPrice] = useState(0);
   const [furnished, setFurnished] = useState('');
 
-  const [roomType, setRoomType] = useState('Regular Room');
+  const [roomType, setRoomType] = useState('');
   const [type, setType] = useState('');
   const [categories, setCategories] = useState('');
   const [available, setAvailable] = useState('');
@@ -47,6 +46,7 @@ const Property = () => {
     if (
       !name ||
       !description ||
+      !categories ||
       !address ||
       !bedrooms ||
       !bathrooms ||
@@ -101,16 +101,12 @@ const Property = () => {
       setLoading(true);
       const token = localStorage.getItem('token');
       console.log('Token', token);
-      const response = await axios.post(
-        `${API_URL}/property/upload`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data',
-          },
+      const response = await api.post('/property/upload', formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
         },
-      );
+      });
       const responseData = response.data;
       console.log('Response Data :', responseData);
 
@@ -120,9 +116,6 @@ const Property = () => {
       }
 
       setFiles([]);
-      setName('');
-      setDescription('');
-      setAddress('');
       setPropertyCreated(true);
       setNewProperty(responseData.data);
 
@@ -194,9 +187,9 @@ const Property = () => {
       setSell(false);
       setRent(true);
     } else if (checkboxId === 'roomTypeRegular') {
-      setRoomType('Regular room');
+      setRoomType('Twin Bed Bedroom');
     } else if (checkboxId === 'roomTypeSuperior') {
-      setRoomType('Superior room');
+      setRoomType('Kingsize Bed Bedroom');
     }
   };
 
@@ -261,23 +254,23 @@ const Property = () => {
               <input
                 type="radio"
                 id="roomTypeRegular"
-                value="Regular room"
-                checked={roomType === 'Regular room'}
+                value="Twin Bed"
+                checked={roomType === 'Twin Bed Bedroom'}
                 onChange={handleChange}
                 className="w-5"
               />
-              <label htmlFor="roomTypeRegular">Twin Bedroom</label>
+              <label htmlFor="roomTypeRegular">Twin Bed Bedroom</label>
             </div>
             <div className="flex gap-2">
               <input
                 type="radio"
                 id="roomTypeSuperior"
-                value="Superior room"
-                checked={roomType === 'Superior room'}
+                value="Kingsize Bed Bedroom"
+                checked={roomType === 'Kingsize Bed Bedroom'}
                 onChange={handleChange}
                 className="w-5"
               />
-              <label htmlFor="roomTypeSuperior">Kingsize Bedroom</label>
+              <label htmlFor="roomTypeSuperior">Kingsize Bed Bedroom</label>
             </div>
           </div>
           <div className="flex flex-wrap gap-6">

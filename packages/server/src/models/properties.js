@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
   Properties.init(
     {
       tenant_id: DataTypes.UUID,
-      category_id: DataTypes.INTEGER,
+      categories: DataTypes.STRING,
       name: DataTypes.STRING,
       address: DataTypes.STRING,
       description: DataTypes.TEXT,

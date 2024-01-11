@@ -200,13 +200,14 @@ const PropertyDetails = () => {
         <div className="relative">
           <div
             id="carousel"
-            className="carousel-container overflow-hidden rounded-t-md"
+            className="carousel-container overflow-hidden rounded-t-md h-[400px]"
           >
             <div
               className="carousel-wrapper transition-transform flex"
               style={{
                 transform: `translateX(-${currentIndex * 100}%)`,
                 transition: 'transform 0.5s ease',
+                height: '100%',
               }}
             >
               {imageUrls.map((imageUrl, index) => (
@@ -214,7 +215,7 @@ const PropertyDetails = () => {
                   <img
                     src={imageUrl}
                     alt={`Property Image`}
-                    className="w-full h-full object-cover rounded-t-md"
+                    className="w-full h-full rounded-t-md"
                     onError={() =>
                       console.error(`Error loading image: ${imageUrl}`)
                     }
@@ -228,16 +229,10 @@ const PropertyDetails = () => {
 
             {imageUrls.length > 1 && (
               <div className="absolute flex justify-between w-full -mt-8">
-                <button
-                  className="btn btn-circle text-white"
-                  onClick={prevSlide}
-                >
+                <button className="btn btn-circle" onClick={prevSlide}>
                   <ArrowCircleLeft size={32} />
                 </button>
-                <button
-                  className="btn btn-circle text-white"
-                  onClick={nextSlide}
-                >
+                <button className="btn btn-circle" onClick={nextSlide}>
                   <ArrowCircleRight size={32} />
                 </button>
               </div>

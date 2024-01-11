@@ -14,7 +14,6 @@ const PropertyList = () => {
         const response = await api.get(`/property/upload`);
         const propertiesData = response.data.data.properties;
 
-        // Mengonversi string JSON menjadi array jika diperlukan
         const parsedProperties = Array.isArray(propertiesData)
           ? propertiesData
           : JSON.parse(propertiesData);
@@ -68,8 +67,6 @@ const PropertyList = () => {
             <p>{property.address}</p>
           </a>
         </Link>
-
-        {/* Komponen tambahan buat nanti */}
       </div>
     ));
   };

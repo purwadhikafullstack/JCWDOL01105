@@ -46,7 +46,8 @@ const PropertyComponent = () => {
       const propertyData = response.data.data.property;
 
       setEditingPropertyId(propertyId);
-      setEditFormData({
+      setEditFormData((prevData) => ({
+        ...prevData,
         name: propertyData.name,
         description: propertyData.description,
         address: propertyData.address,
@@ -64,8 +65,8 @@ const PropertyComponent = () => {
         available: propertyData.available,
         propertyPictures: propertyData.property_pictures || [],
         isForRent: propertyData.type === 'Property For Rent',
-        isForSale: propertyData.type === 'Property For Rent',
-      });
+        isForSale: propertyData.type === 'Property For Sale',
+      }));
       setIsEditingProperty(true);
     } catch (error) {
       console.error('Error updating room:', error);
@@ -135,6 +136,15 @@ const PropertyComponent = () => {
       setEditFormData((prevData) => ({
         ...prevData,
         [name]: value,
+      }));
+    }
+    if (name === 'available') {
+      setEditFormData((prevData) => ({
+        ...prevData,
+        rooms: prevData.rooms.map((room) => ({
+          ...room,
+          available: value,
+        })),
       }));
     }
   };
@@ -236,7 +246,6 @@ const PropertyComponent = () => {
                 property.categories
               )}
             </p>
-
             <p>
               Type :{' '}
               {editingPropertyId === property.id ? (
