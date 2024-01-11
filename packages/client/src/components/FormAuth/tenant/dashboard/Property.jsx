@@ -11,9 +11,10 @@ const PropertyComponent = () => {
     address: '',
     bedrooms: 0,
     bathrooms: 0,
+    categories: '',
     rooms: [],
     regularPrice: 0,
-    discountPrice: 0,
+    specialPrice: 0,
     offer: '',
     furnished: '',
     parking: '',
@@ -51,9 +52,11 @@ const PropertyComponent = () => {
         address: propertyData.address,
         bedrooms: propertyData.bedrooms,
         bathrooms: propertyData.bathrooms,
+        categories: propertyData.categories,
+        available: propertyData.available,
         rooms: propertyData.rooms || [],
         regularPrice: propertyData.regularPrice,
-        discountPrice: propertyData.discountPrice,
+        specialPrice: propertyData.specialPrice,
         offer: propertyData.offer,
         furnished: propertyData.furnished,
         parking: propertyData.parking,
@@ -71,12 +74,23 @@ const PropertyComponent = () => {
 
   const handleUpdate = async (propertyId) => {
     try {
-      const response = await api.put(`/property/${propertyId}`, {
+      const updatedFormData = {
         ...editFormData,
         rooms: editFormData.rooms.map((room) => ({
           ...room,
+          regularPrice: isNaN(room.regularPrice)
+            ? 0
+            : parseFloat(room.regularPrice),
+          specialPrice: isNaN(room.regularPrice)
+            ? 0
+            : parseFloat(room.regularPrice) * 1.2,
         })),
-      });
+      };
+
+      const response = await api.put(
+        `/property/${propertyId}`,
+        updatedFormData,
+      );
 
       if (response.data.status === 'success') {
         await fetchProperties();
@@ -210,6 +224,20 @@ const PropertyComponent = () => {
               )}
             </p>
             <p>
+              Category:{' '}
+              {editingPropertyId === property.id ? (
+                <input
+                  type="text"
+                  name="categories"
+                  value={editFormData.categories}
+                  onChange={handleInputChange}
+                />
+              ) : (
+                property.categories
+              )}
+            </p>
+
+            <p>
               Type :{' '}
               {editingPropertyId === property.id ? (
                 <input
@@ -274,27 +302,12 @@ const PropertyComponent = () => {
                   {editingPropertyId === property.id ? (
                     <input
                       type="text"
-                      name="discountPrice"
-                      value={editFormData.rooms[0]?.discountPrice}
+                      name="specialPrice"
+                      value={editFormData.rooms[0]?.specialPrice}
                       onChange={handleInputChange}
                     />
                   ) : property.rooms.length > 0 ? (
-                    property.rooms[0].discountPrice
-                  ) : (
-                    ''
-                  )}
-                </p>
-                <p>
-                  Offer:{' '}
-                  {editingPropertyId === property.id ? (
-                    <input
-                      type="text"
-                      name="offer"
-                      value={editFormData.rooms[0]?.offer}
-                      onChange={handleInputChange}
-                    />
-                  ) : property.rooms.length > 0 ? (
-                    property.rooms[0].offer
+                    property.rooms[0].specialPrice
                   ) : (
                     ''
                   )}
@@ -315,21 +328,6 @@ const PropertyComponent = () => {
                   )}
                 </p>
                 <p>
-                  Parking :{' '}
-                  {editingPropertyId === property.id ? (
-                    <input
-                      type="text"
-                      name="parking"
-                      value={editFormData.parking}
-                      onChange={handleInputChange}
-                    />
-                  ) : property.rooms.length > 0 ? (
-                    property.parking
-                  ) : (
-                    ''
-                  )}
-                </p>
-                <p>
                   Room Type :{' '}
                   {editingPropertyId === property.id ? (
                     <input
@@ -345,7 +343,7 @@ const PropertyComponent = () => {
                   )}
                 </p>
                 <p>
-                  Available :{' '}
+                  Listed on :{' '}
                   {editingPropertyId === property.id ? (
                     <input
                       type="text"
@@ -363,7 +361,7 @@ const PropertyComponent = () => {
                 {editingPropertyId !== property.id && (
                   <button
                     onClick={() => updateProperty(property.id)}
-                    className="mt-4 bg-green-500 text-white py-1 px-2 rounded-md"
+                    className="mt-4 bg-color-pallete1 text-white py-1 px-2 rounded-md"
                   >
                     Update Property
                   </button>
@@ -372,7 +370,7 @@ const PropertyComponent = () => {
                 {editingPropertyId === property.id && (
                   <button
                     onClick={() => handleUpdate(property.id)}
-                    className="mt-4 bg-blue-500 text-white py-1 px-2 rounded-md"
+                    className="mt-4 text-white bg-color-pallete1 py-1 px-2 rounded-md"
                   >
                     Save Changes
                   </button>
@@ -380,7 +378,7 @@ const PropertyComponent = () => {
 
                 <button
                   onClick={() => deleteProperty(property.id)}
-                  className="mt-4 ml-4 bg-red-500 text-white py-1 px-2 rounded-md"
+                  className="mt-4 ml-4 bg-color-lightred text-white py-1 px-2 rounded-md"
                 >
                   Delete Property
                 </button>

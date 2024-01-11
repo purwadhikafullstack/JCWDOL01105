@@ -1,40 +1,22 @@
 const express = require('express');
 const router = express.Router();
-const OrderController = require('../controllers/orderController');
-const tenantMiddleware = require('../middleware/tenantMiddleware');
-const authMiddleware = require('../middleware/authMiddleware');
-const { uploadOptionPaymentProof } = require('../utils/uploadFile');
-const paymentController = require('../controllers/paymentGatewayController');
+const orderController = require('../controllers/orderController');
+const authenticate = require('../middleware/authMiddleware');
+const authMiddleware = require('../middleware/tenantMiddleware');
 
-router.post('/', authMiddleware, OrderController.createOrder);
-
-router.get('/', authMiddleware, OrderController.getOrder);
-
-router.post(
-  '/payment_proof',
+router.post('/', authenticate, orderController.createOrder);
+router.get('/transactions', authMiddleware, orderController.getAllOrders);
+router.put(
+  '/confirm-payment/:id',
   authMiddleware,
-  uploadOptionPaymentProof.single('payment_proof'),
-  OrderController.payment_proof,
+  orderController.confirmPayment,
 );
-
-router.get(
-  '/payment_proof/:order_id',
-  tenantMiddleware,
-  OrderController.getPaymentProof,
-);
-
-router.post(
-  '/confirm_payment/:order_id',
-  tenantMiddleware,
-  OrderController.confirmPayment,
-);
-
-router.post('/payment', paymentController.paymentGateway);
-
-router.post(
-  '/cancel_order/:order_id',
+router.put(
+  '/reject-payment/:id',
   authMiddleware,
-  OrderController.cancelOrder,
+  orderController.rejectPayment,
 );
+
+router.put('/cancel-order/:id', authMiddleware, orderController.cancelOrder);
 
 module.exports = router;

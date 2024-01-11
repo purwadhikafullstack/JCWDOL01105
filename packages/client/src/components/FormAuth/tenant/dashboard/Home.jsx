@@ -1,38 +1,57 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
-import interactionPlugin from '@fullcalendar/interaction'; // for selectable
+import interactionPlugin from '@fullcalendar/interaction';
+import api from '../../../../config/api';
 
 const HomeDashboard = () => {
-  // Dummy data for properties and rooms
-  const properties = [
-    { id: 1, title: 'Property A' },
-    { id: 2, title: 'Property B' },
-    // Add more properties if needed
-  ];
+  const [events, setEvents] = useState([]);
 
-  const rooms = [
-    {
-      id: 1,
-      title: 'Room 101',
-      start: '2023-12-01',
-      end: '2023-12-05',
-      propertyId: 1,
-    },
-    {
-      id: 2,
-      title: 'Room 202',
-      start: '2023-12-10',
-      end: '2023-12-15',
-      propertyId: 2,
-    },
-    // Add more rooms if needed
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const transactionsResponse = await api.get('/orders/transactions', {
+          params: { payment_status: 'ACCEPTED' },
+        });
+        const transactionsData = transactionsResponse.data.data;
 
-  // Function to handle calendar date selection
-  const handleDateSelect = (arg) => {
-    console.log('Selected dates:', arg.start, arg.end);
-    // Perform any action upon date selection if needed
+        console.log('Transactions Data:', transactionsData);
+
+        if (transactionsData && transactionsData.length > 0) {
+          const groupedEvents = groupTransactionsByDate(transactionsData);
+
+          const processedEvents = Object.values(groupedEvents).map((group) => ({
+            id: `${group[0].room_id}-${group[0].id}`,
+            title: `Booked (${group.length} reservations)`,
+            start: group[0].check_in_date,
+            end: group[0].check_out_date,
+            backgroundColor: 'grey',
+            borderColor: 'grey',
+            editable: false,
+          }));
+          setEvents(processedEvents);
+        } else {
+          console.log('No transactions data available.');
+        }
+      } catch (error) {
+        console.error('Error fetching transactions:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const groupTransactionsByDate = (transactions) => {
+    return transactions.reduce((grouped, transaction) => {
+      const key = `${transaction.check_in_date}-${transaction.check_out_date}`;
+
+      if (!grouped[key]) {
+        grouped[key] = [];
+      }
+
+      grouped[key].push(transaction);
+      return grouped;
+    }, {});
   };
 
   return (
@@ -42,8 +61,7 @@ const HomeDashboard = () => {
           plugins={[dayGridPlugin, interactionPlugin]}
           initialView="dayGridMonth"
           selectable={true}
-          events={rooms}
-          select={handleDateSelect}
+          events={events}
         />
       </div>
     </div>

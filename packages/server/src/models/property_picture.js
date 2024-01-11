@@ -8,10 +8,9 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
-      property_picture.belongsTo(models.Properties, {
+      this.belongsTo(models.Properties, {
         foreignKey: 'property_id',
-        as: 'properties',
+        as: 'property',
       });
     }
   }

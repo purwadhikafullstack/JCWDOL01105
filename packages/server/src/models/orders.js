@@ -27,14 +27,15 @@ The models/index file will call this method automatically.*/
       price: DataTypes.INTEGER,
       total_invoice: DataTypes.INTEGER,
       payment_proof: DataTypes.STRING,
-      payment_status: DataTypes.ENUM('ACCEPTED', 'DECLINED'),
+      payment_status: DataTypes.ENUM('ACCEPTED', 'DECLINED', null),
       payment_date: DataTypes.DATE,
       booking_status: DataTypes.ENUM(
         'WAITING_FOR_PAYMENT',
-        'PROCESSING_PAYMENT',
+        'IN PROGRESS',
+        'PAID',
         'DONE',
         'CANCELED',
-        'IN PROGRESS',
+        null,
       ),
       cancel_reason: {
         type: DataTypes.STRING,

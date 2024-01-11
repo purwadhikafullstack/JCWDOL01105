@@ -47,9 +47,9 @@ const Dashboard = () => {
         <CannotAccessMessage role={role} />
       ) : (
         <div>
-          <div className="flex h-screen">
+          <div className="flex h-screen shadow-lg">
             <div
-              className="bg-color-primary w-1/8 p-4 text-black rounded-lg shadow-color-pallete3  flex flex-col items-center"
+              className="bg-color-primary w-1/8 p-4 text-black shadow-lg flex flex-col items-center"
               // style={{
               //   background:
               //     'linear-gradient(to bottom right,  #f9f9f9,  #b4daa7, #4a785e)',
@@ -105,7 +105,7 @@ const Dashboard = () => {
             </div>
 
             {/* Konten Dashboard (Kanan) */}
-            <div className="bg-gray-100 w-4/5 p-4">
+            <div className="bg-gray-100 w-4/5 p-4 overflow-y-auto">
               {renderSelected()}
               {/* Isi Konten Dashboard */}
               {/* Tempatkan konten sesuai dengan kebutuhan Anda */}
