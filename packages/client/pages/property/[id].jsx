@@ -168,7 +168,7 @@ const PropertyDetails = () => {
       const response = await api.post('/orders', orderData);
 
       if (response.ok || response.status === 201) {
-        router.push('/');
+        router.push('/orders');
       } else {
         console.error(
           'Error creating order:',

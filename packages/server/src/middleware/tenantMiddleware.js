@@ -3,7 +3,6 @@ const { Tenants } = require('../models');
 
 const authenticateTenant = async (req, res, next) => {
   try {
-    // Check if the user is a tenant
     if (req.user && req.user.role === 'tenant') {
       // Dapatkan token dari header
       const token = req.header('Authorization').replace('Bearer ', '');
@@ -12,8 +11,8 @@ const authenticateTenant = async (req, res, next) => {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
       // Cari tenant berdasarkan ID dalam token
-      const tenant = await Tenant.findOne({
-        where: { id: decoded.id, new_password: null },
+      const tenant = await Tenants.findOne({
+        where: { id: decoded.id },
       });
 
       if (!tenant) {
@@ -21,10 +20,7 @@ const authenticateTenant = async (req, res, next) => {
       }
 
       // Tambahkan informasi tenant ke request
-      req.user = {
-        id: tenant.id,
-        role: decoded.role,
-      };
+      req.user = tenant;
 
       next(); // Lanjutkan ke endpoint
     } else {

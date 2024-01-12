@@ -27,7 +27,7 @@ exports.createOrUpdateProperty = async (req, res, next) => {
     const isForRent = type === 'Property For Rent';
     const defaultType = '';
 
-    const tenant_id = req.user ? req.user.id : null;
+    const tenant_id = req.user ? req.user.tenant_id : null;
 
     let property;
 
