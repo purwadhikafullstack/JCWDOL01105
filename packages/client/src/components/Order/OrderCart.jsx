@@ -81,11 +81,32 @@ const OrderCart = ({
                     <p>No. Booking: {singleOrder.booking_code}</p>
                   </div>
                   <div className="relative mx-4  overflow-hidden rounded-xl bg-blue-gray-500 bg-clip-border text-white shadow-lg shadow-blue-gray-500/40">
-                    <img
-                      src="https://media-cdn.tripadvisor.com/media/photo-s/1c/d4/42/cd/hotel-entrance.jpg"
-                      alt="ui/ux review check"
-                      className="w-full"
-                    />
+                    {singleOrder.rooms.properties.propertyPicture &&
+                    singleOrder.rooms.properties.propertyPicture.length > 0 &&
+                    singleOrder.rooms.properties.propertyPicture[0]
+                      .property_pictures ? (
+                      <img
+                        src={
+                          singleOrder.rooms.properties.propertyPicture[0]
+                            .property_pictures
+                        }
+                        alt="ui/ux review check"
+                        className="w-full"
+                      />
+                    ) : (
+                      <div
+                        className="w-full h-[300px] bg-gray-200 flex items-center justify-center"
+                        aria-label="Image not available"
+                      >
+                        <span className="text-gray-500">
+                          <img
+                            src="https://i.pinimg.com/564x/7d/a6/c2/7da6c2d5282f8dd93d711b2c61809f8f.jpg"
+                            alt=""
+                            className="w-full h-[300px] bg-gray-200 flex items-center justify-center"
+                          />
+                        </span>
+                      </div>
+                    )}
                     <div className="to-bg-black-10 absolute inset-0 h-full w-full bg-gradient-to-tr from-transparent via-transparent to-black/60">
                       <button
                         className="!absolute top-4 right-4 h-8 max-h-[32px] w-8 max-w-[32px] select-none rounded-full text-center align-middle font-sans text-xs font-medium uppercase text-red-500 transition-all hover:bg-red-500/10 active:bg-red-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"

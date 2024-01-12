@@ -185,7 +185,7 @@ const OrderComponent = () => {
           updateFetching={updateFetching}
         />
         {/* PAGINATION */}
-        <div className="w-full">
+        <div className="w-full mb-5">
           <div className="flex items-center justify-between">
             <button
               type="button"

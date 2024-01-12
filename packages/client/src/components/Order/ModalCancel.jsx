@@ -77,7 +77,7 @@ const OrderCancel = ({
               </button>
 
               <button
-                className="bg-color-blue hover:bg-color-blue text-color-primary font-bold py-2 px-4 rounded"
+                className="bg-color-pallete3 hover:bg-color-blue text-color-primary font-bold py-2 px-4 rounded"
                 onClick={handleSubmit}
               >
                 Submit
