@@ -1,47 +1,86 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import api from '../../config/api';
+import { useRouter } from 'next/router';
+import Pagination from '../utils/Pagination';
+import Skeleton from '../utils/Skeleton';
 
-const PropertyList = ({ searchCriteria }) => {
+const PropertyList = () => {
   const [properties, setProperties] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [page, setPage] = useState(1);
+  const router = useRouter();
+  const { query } = router;
+  const itemsPerPage = 10;
+
+  const formatPrice = (price) => {
+    const formatter = new Intl.NumberFormat('id-ID', {
+      style: 'currency',
+      currency: 'IDR',
+      minimumFractionDigits: 0,
+    });
+
+    return formatter.format(price);
+  };
 
   useEffect(() => {
     const fetchProperties = async () => {
       try {
         setLoading(true);
 
-        const response = await api.get('/property/properties');
-        const propertiesData = response.data.data.properties;
+        let response;
+        let endpoint = '/property/properties';
+
+        if (query.category) {
+          endpoint = `/property/search?category=${query.category}`;
+        } else if (query.location) {
+          endpoint = `/property/search?location=${query.location}`;
+        }
+
+        response = await api.get(endpoint);
+
+        const propertiesData =
+          query.category || query.location
+            ? response.data.data
+            : response.data.data.properties;
 
         setProperties(propertiesData);
       } catch (error) {
         console.error('Error fetching properties:', error);
         setError(true);
       } finally {
-        setLoading(false);
+        setTimeout(() => {
+          setLoading(false);
+        }, 2000);
       }
     };
 
     fetchProperties();
-  }, [searchCriteria]);
+  }, [query.category, query.location]);
 
   const renderProperties = () => {
+    const startIndex = (page - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+
+    const propertiesToDisplay = properties.slice(startIndex, endIndex);
+
     console.log(properties);
     if (loading) {
-      return <p>Loading...</p>;
+      return Array.from({ length: itemsPerPage }).map((_, index) => (
+        <Skeleton key={index} />
+      ));
     }
 
     if (error) {
       return <p>Sorry, there was an error fetching properties.</p>;
     }
 
-    if (properties.length === 0) {
-      return <p>Sorry, there is no property available.</p>;
+    if (!Array.isArray(properties) || properties.length === 0) {
+      return <p>No properties available.</p>;
     }
 
-    return properties.map((property) => {
+    return propertiesToDisplay.map((property) => {
       let imageUrls = '';
 
       if (property.propertyPictures && property.propertyPictures.length > 0) {
@@ -52,7 +91,10 @@ const PropertyList = ({ searchCriteria }) => {
       const imageUrl = imageUrls.length > 0 ? imageUrls[0] : null;
 
       return (
-        <div key={property.id} className="card shadow-xl">
+        <div
+          key={property.id}
+          className="card shadow-xl transition-transform transform hover:scale-110"
+        >
           <Link href={`/property/${property.id}`} passHref>
             <a>
               <div className="">
@@ -60,7 +102,7 @@ const PropertyList = ({ searchCriteria }) => {
                   <img
                     src={imageUrl}
                     alt={`property cover`}
-                    className="w-full object-contain"
+                    className="w-full h-48 object-cover rounded-t-lg"
                   />
                 ) : (
                   <p>No pictures available</p>
@@ -70,10 +112,16 @@ const PropertyList = ({ searchCriteria }) => {
           </Link>
           <Link href={`/property/${property.id}`} passHref>
             <a className="text-slate-700 font-semibold truncate flex-1">
-              <div className="landing-text">
-                <h4 className="card-title">{property.name}</h4>
-                <p className="hover:underline">{property.description}</p>
-                <p>{property.address}</p>
+              <div className="landing-text p-4">
+                <h2 className="card-title text-center text-lg">
+                  {property.name}
+                </h2>
+                <h6 className="text-center">{property.address}</h6>
+                {property.rooms && property.rooms.length > 0 && (
+                  <p className="text-center">
+                    {formatPrice(property.rooms[0].regularPrice)} night
+                  </p>
+                )}
               </div>
             </a>
           </Link>
@@ -87,6 +135,11 @@ const PropertyList = ({ searchCriteria }) => {
       <div className="landing-page grid md:grid-cols-5 sm:grid-cols-3 grid-cols-2 gap-4">
         {renderProperties()}
       </div>
+      <Pagination
+        page={page}
+        lastPage={Math.ceil(properties.length / itemsPerPage)}
+        setPage={setPage}
+      />
     </div>
   );
 };

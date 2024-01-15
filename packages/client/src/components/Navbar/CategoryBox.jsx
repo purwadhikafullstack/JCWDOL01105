@@ -3,35 +3,38 @@ import { useRouter } from 'next/router';
 import { useCallback } from 'react';
 import querystring from 'query-string';
 
-const CategoryBox = ({ icon, label }) => {
+const CategoryBox = ({ icon, label, onCategoryClick }) => {
   const router = useRouter();
 
   const handleClick = useCallback(() => {
     const currentQuery = new URLSearchParams(window.location.search);
-    const categoryParam = currentQuery.get('category');
+    const categoriesParam = currentQuery.get('category');
 
     const updatedQuery = {
       ...Object.fromEntries(currentQuery.entries()),
       category: label,
     };
 
-    if (categoryParam === label) {
+    if (categoriesParam === label) {
       delete updatedQuery.category;
     }
 
     const url = querystring.stringifyUrl(
       {
-        url: '/',
+        url: '/property/search',
         query: updatedQuery,
       },
       { skipNull: true },
     );
 
+    onCategoryClick(label);
     router.push(url);
-  }, [label, router]);
+  }, [label, onCategoryClick, router]);
+
+  const isActive = router.query.category === label;
 
   return (
-    <div className="cat-container border-b">
+    <div className={`cat-container border-b ${isActive ? 'active' : ''}`}>
       <div
         onClick={handleClick}
         className="flex flex-col items-center justify-center gap-2 p-3 cursor-pointer"

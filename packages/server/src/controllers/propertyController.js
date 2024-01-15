@@ -9,16 +9,18 @@ exports.createOrUpdateProperty = async (req, res, next) => {
       name,
       address,
       description,
+      categories,
       bedrooms,
       bathrooms,
       regularPrice,
-      discountPrice,
+      specialPrice,
       offer,
       furnished,
       parking,
       type_room,
       available,
       type,
+      room_information,
     } = req.body;
 
     const isForSale = type === 'Property For Sale';
@@ -39,14 +41,17 @@ exports.createOrUpdateProperty = async (req, res, next) => {
         ],
       });
 
-      if (!property) {
-        return res
-          .status(404)
-          .json({ status: 'error', message: 'Property not found' });
+      if (!property || property.tenant_id !== tenant_id) {
+        return res.status(403).json({
+          status: 'error',
+          message: 'You do not have permission to update this property',
+        });
       }
-
       property.sell = isForSale;
       property.rent = isForRent;
+      property.categories = categories;
+      property.address = address;
+      property.description = description;
 
       if (isForSale) {
         console.log('Setting type to Property For Sale');
@@ -64,12 +69,12 @@ exports.createOrUpdateProperty = async (req, res, next) => {
         room.bedrooms = bedrooms || room.bedrooms;
         room.bathrooms = bathrooms || room.bathrooms;
         room.regularPrice = regularPrice || room.regularPrice;
-        room.discountPrice = discountPrice || room.discountPrice;
-        room.offer = offer || room.offer;
+        room.specialPrice = specialPrice || room.specialPrice;
         room.furnished = furnished || room.furnished;
         room.parking = parking || room.parking;
         room.available = available || room.available;
         room.type_room = type_room || room.type_room;
+        room.room_information = room_information || room.room_information;
 
         await room.save();
       } else {
@@ -78,20 +83,20 @@ exports.createOrUpdateProperty = async (req, res, next) => {
           bedrooms,
           bathrooms,
           regularPrice,
-          discountPrice,
+          specialPrice,
           offer,
           furnished,
           parking,
           available,
           guests: 0,
           type_room: defaultType ? 'Regular room' : type_room,
+          room_information,
         });
 
         property.addRoom(room);
       }
 
       await property.save();
-
       if (req.files) {
         const fileNames = req.files.map((file) => file.filename);
         const basePaths = fileNames.map(
@@ -131,6 +136,7 @@ exports.createOrUpdateProperty = async (req, res, next) => {
         name,
         address,
         description,
+        categories,
         sell: isForSale,
         rent: isForRent,
         type: isForSale
@@ -145,13 +151,14 @@ exports.createOrUpdateProperty = async (req, res, next) => {
         bedrooms,
         bathrooms,
         regularPrice,
-        discountPrice,
+        specialPrice,
         offer,
         furnished,
         parking,
         available,
         guests: 0,
         type_room: type_room || 'Regular room',
+        room_information,
       });
       property.addRoom(room);
 

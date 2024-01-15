@@ -69,18 +69,20 @@ export const categories = [
 
 const Categories = () => {
   return (
-    <Marquee pauseOnHover={true} direction="right" speed={50}>
-      <div className=" pt-10 flex flex-row items-center gap-3 overflow-x-auto">
-        {categories.map((item) => (
-          <CategoryBox
-            key={item.label}
-            label={item.label}
-            description={item.label}
-            icon={item.icon}
-          />
-        ))}
-      </div>
-    </Marquee>
+    <div className="flex justify-center items-center">
+      <Marquee pauseOnHover={true} direction="right" speed={50}>
+        <div className=" pt-10 flex flex-row items-center gap-3 overflow-x-auto">
+          {categories.map((item) => (
+            <CategoryBox
+              key={item.label}
+              label={item.label}
+              description={item.label}
+              icon={item.icon}
+            />
+          ))}
+        </div>
+      </Marquee>
+    </div>
   );
 };
 

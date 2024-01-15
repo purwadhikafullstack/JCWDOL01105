@@ -1,9 +1,24 @@
 'use client';
+import Navbar from '../../src/components/Navbar/Navbar';
+import Footer from '../../src/components/Footer/Footer';
 import api from '../../src/config/api';
+
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+
+import {
+  User,
+  House,
+  ArrowCircleLeft,
+  ArrowCircleRight,
+  MapPinLine,
+  Bed,
+  Toilet,
+  CheckCircle,
+  Warning,
+} from '@phosphor-icons/react';
 
 const PropertyDetails = () => {
   const router = useRouter();
@@ -16,6 +31,16 @@ const PropertyDetails = () => {
   const [checkOutDate, setCheckOutDate] = useState(null);
   const [totalNights, setTotalNights] = useState(1);
   const [info, setInfo] = useState('');
+
+  const formatPrice = (price) => {
+    const formatter = new Intl.NumberFormat('id-ID', {
+      style: 'currency',
+      currency: 'IDR',
+      minimumFractionDigits: 0,
+    });
+
+    return formatter.format(price);
+  };
 
   useEffect(() => {
     const fetchPropertyDetails = async () => {
@@ -87,13 +112,36 @@ const PropertyDetails = () => {
     }
   };
 
+  const isWeekend = (date) => {
+    if (date && typeof date.getDay === 'function') {
+      const day = date.getDay();
+      return day === 6 || day === 0;
+    }
+    return false;
+  };
+
+  const getPrice = (room, nights, isWeekend = false) => {
+    const pricePerNight =
+      isWeekend && room.specialPrice ? room.specialPrice : room.regularPrice;
+
+    return pricePerNight * nights;
+  };
+
+  const generateRandomCode = (length) => {
+    let result = 'BOOK';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    const charactersLength = characters.length;
+    for (let i = 0; i < length - 4; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+  };
+
   const bookNow = async () => {
     try {
       updateBookNowButtonStatus(checkInDate, checkOutDate, guests);
 
-      if (!checkInDate || !checkOutDate) {
-        console.error('Please select check-in and check-out dates.');
-
+      if (!checkInDate || !checkOutDate || !guests) {
         return;
       }
 
@@ -116,6 +164,7 @@ const PropertyDetails = () => {
         guests: totalGuests,
         booking_code: bookingCode,
         price: property.rooms[0].regularPrice * totalNights,
+        specialPrice: property.rooms[0].specialPrice,
         total_invoice: 0,
         payment_proof: 'default',
         payment_status: null,
@@ -154,188 +203,222 @@ const PropertyDetails = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto mt-8 bg-white rounded-md shadow-lg">
-      <div className="relative">
-        <div
-          id="carousel"
-          className="carousel-container overflow-hidden rounded-t-md"
-        >
+    <div>
+      <Navbar />
+      <div className="max-w-4xl mx-auto mt-8 bg-color-primary rounded-md shadow-lg">
+        <div className="relative">
           <div
-            className="carousel-wrapper transition-transform flex"
-            style={{
-              transform: `translateX(-${currentIndex * 100}%)`,
-              transition: 'transform 0.5s ease',
-            }}
+            id="carousel"
+            className="carousel-container overflow-hidden rounded-t-md"
           >
-            {imageUrls.map((imageUrl, index) => (
-              <div key={index} className="w-full h-full flex-shrink-0">
-                <img
-                  src={imageUrl}
-                  alt={`Property Image`}
-                  className="w-full h-full object-cover rounded-t-md"
-                  onError={() =>
-                    console.error(`Error loading image: ${imageUrl}`)
-                  }
-                  onLoad={() =>
-                    console.log(`Image loaded successfully: ${imageUrl}`)
-                  }
-                />
-              </div>
-            ))}
-          </div>
-          {imageUrls.length > 1 && (
-            <div className="absolute flex justify-between w-full -mt-8">
-              <button
-                className="btn btn-circle text-white bg-gray-800"
-                onClick={prevSlide}
-              >
-                ❮
-              </button>
-              <button
-                className="btn btn-circle text-white bg-gray-800"
-                onClick={nextSlide}
-              >
-                ❯
-              </button>
+            <div
+              className="carousel-wrapper transition-transform flex"
+              style={{
+                transform: `translateX(-${currentIndex * 100}%)`,
+                transition: 'transform 0.5s ease',
+              }}
+            >
+              {imageUrls.map((imageUrl, index) => (
+                <div key={index} className="w-full h-full flex-shrink-0">
+                  <img
+                    src={imageUrl}
+                    alt={`Property Image`}
+                    className="w-full h-full object-cover rounded-t-md"
+                    onError={() =>
+                      console.error(`Error loading image: ${imageUrl}`)
+                    }
+                    onLoad={() =>
+                      console.log(`Image loaded successfully: ${imageUrl}`)
+                    }
+                  />
+                </div>
+              ))}
             </div>
-          )}
-        </div>
-      </div>
 
-      <div className="p-4">
-        <h1 className="text-3xl font-semibold mb-4">{property.name}</h1>
-        <p className="text-gray-600 mb-6">{property.description}</p>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <div className="flex flex-col">
-            <p className="text-xl font-semibold mb-2">Property Details</p>
-            <p>
-              <span className="font-semibold">Address:</span> {property.address}
-            </p>
-            <p>
-              <span className="font-semibold">Sell:</span>{' '}
-              {property.sell ? 'Sold' : 'Available'}
-            </p>
-            <p>
-              <span className="font-semibold">Rent:</span>{' '}
-              {property.rent ? 'Rented' : 'Available'}
-            </p>
-            <p>
-              <span className="font-semibold">Bedrooms:</span>{' '}
-              {property.rooms[0].bedrooms || 'N/A'}
-            </p>
-            <p>
-              <span className="font-semibold">Bathrooms:</span>{' '}
-              {property.rooms[0].bathrooms}
-            </p>
-            <p>
-              <span className="font-semibold">Price:</span>{' '}
-              {property.rooms[0].regularPrice} / Night
-            </p>
-            {property.rooms[0].offer && (
-              <p>
-                <span className="font-semibold">Discounted Price:</span>{' '}
-                {property.rooms[0].discountPrice} Rp / Night
-              </p>
+            {imageUrls.length > 1 && (
+              <div className="absolute flex justify-between w-full -mt-8">
+                <button
+                  className="btn btn-circle text-white"
+                  onClick={prevSlide}
+                >
+                  <ArrowCircleLeft size={32} />
+                </button>
+                <button
+                  className="btn btn-circle text-white"
+                  onClick={nextSlide}
+                >
+                  <ArrowCircleRight size={32} />
+                </button>
+              </div>
             )}
-            <p>
-              <span className="font-semibold">Furnished:</span>{' '}
-              {property.rooms[0].furnished ? 'Yes' : 'No'}
-            </p>
-            <p>
-              <span className="font-semibold">Parking:</span>{' '}
-              {property.parking ? 'Yes' : 'No'}
-            </p>
           </div>
-          <div>
-            <div className="flex">
-              <div className="mb-4">
-                <span className="font-semibold text-2xl">Price :</span> Rp{' '}
-                {property.rooms[0].regularPrice * totalNights} / {totalNights}{' '}
-                Nights
-              </div>
-              {property.rooms[0].offer && (
-                <div className="mb-4">
-                  <span className="font-semibold">Discounted Price :</span> Rp{' '}
-                  {property.rooms[0].discountPrice * totalNights} /{' '}
-                  {totalNights} Nights
-                </div>
-              )}
-            </div>
-            <div className="mb-4">
-              <div className="flex mb-4">
-                <div className="mr-4">
-                  <span className="font-semibold">Check-in :</span>
-                  <DatePicker
-                    selected={checkInDate}
-                    onChange={handleCheckInDateChange}
-                    placeholderText="Select date"
-                    selectsStart
-                    startDate={checkInDate}
-                    endDate={checkOutDate}
-                    className="ml-2 border rounded-md p-2"
-                  />
-                </div>
-                <div>
-                  <span className="font-semibold">Check-out :</span>
-                  <DatePicker
-                    selected={checkOutDate}
-                    onChange={handleCheckOutDateChange}
-                    placeholderText="Select date"
-                    selectsEnd
-                    startDate={checkInDate}
-                    endDate={checkOutDate}
-                    minDate={checkInDate}
-                    className="ml-2 border rounded-md p-2"
-                  />
-                </div>
-              </div>
-            </div>
+        </div>
 
-            {showGuestsInput && (
+        <div className="p-4">
+          <h1 className="text-3xl font-semibold mb-4">{property.name}</h1>
+          <div className="flex items-center mb-2">
+            <User size={20} />
+            <p>{property.tenants}</p>
+          </div>
+          <div className="mb-6">
+            <h5 className="text-xl font-semibold mb-2">About this rooms</h5>
+            <p className="text-gray-600">{property.description}</p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="flex flex-col">
+              <p className="text-xl font-semibold mb-2">Property Details</p>
+              <div className="flex items-center mb-2">
+                <House size={20} className="mr-2" />
+                <p>{property.rooms[0].type_room}</p>
+              </div>
+              <div className="flex items-center mb-2">
+                <MapPinLine size={20} className="mr-2" />
+                <p>{property.address}</p>
+              </div>
+              <div className="flex items-center mb-2">
+                {property.sell ? (
+                  <Warning size={20} className="text-color-lightred mr-2" />
+                ) : (
+                  <CheckCircle size={20} className="text-color-pallete4 mr-2" />
+                )}
+                {property.sell ? 'Sold' : 'Available'}
+              </div>
+              <div className="flex items-center mb-2">
+                {property.rent ? (
+                  <Warning size={20} className="text-color-lightred mr-2" />
+                ) : (
+                  <CheckCircle size={20} className="text-color-pallete4 mr-2" />
+                )}
+                {property.rent ? 'Rented' : 'Available'}
+              </div>
+              <div className="flex items-center mb-2">
+                <Bed size={20} className="mr-2" />
+                {property.rooms[0].bedrooms || 'N/A'} Bedrooms
+              </div>
+              <div className="flex items-center mb-2">
+                <Toilet size={20} className="mr-2" />
+                {property.rooms[0].bathrooms} Bathrooms
+              </div>
+              <p>
+                <span className="font-semibold">Price:</span>{' '}
+                {formatPrice(property.rooms[0].regularPrice)} / Night
+              </p>
+              {property.rooms[0].offer && (
+                <p>
+                  <span className="font-semibold">Special Price:</span>{' '}
+                  {formatPrice(property.rooms[0].specialPrice)} / Night
+                </p>
+              )}
+              <p>
+                <span className="font-semibold">Furnished :</span>{' '}
+                {property.rooms[0].furnished}
+              </p>
+            </div>
+            <div>
+              <div className="flex">
+                {isWeekend(checkInDate) &&
+                isWeekend(checkOutDate) &&
+                property.rooms[0].specialPrice ? (
+                  <div className="mb-4">
+                    <span className="font-semibold text-xl">
+                      Weekend Price :
+                    </span>{' '}
+                    {formatPrice(
+                      getPrice(property.rooms[0], totalNights, true),
+                    )}
+                    {' / '}
+                    {totalNights} Nights
+                    <p className="text-xs">(Price is updated due to Weekend)</p>
+                  </div>
+                ) : (
+                  <div className="mb-4">
+                    <span className="font-semibold">Price :</span>{' '}
+                    {formatPrice(getPrice(property.rooms[0], totalNights))}
+                    {' / '}
+                    {totalNights} Nights
+                  </div>
+                )}
+              </div>
               <div className="mb-4">
-                <span className="font-semibold">Guests :</span>
-                <div className="flex">
+                <div className="flex mb-4">
                   <div className="mr-4">
-                    <label className="block mb-1">Adults :</label>
-                    <input
-                      type="number"
-                      value={guests.adults}
-                      onChange={(e) => updateGuests('adults', e.target.value)}
-                      className="border rounded-md p-2"
-                      min="1"
-                      placeholder="0"
+                    <span className="font-semibold">Check-in :</span>
+                    <DatePicker
+                      selected={checkInDate}
+                      onChange={handleCheckInDateChange}
+                      placeholderText="Select date"
+                      selectsStart
+                      startDate={checkInDate}
+                      endDate={checkOutDate}
+                      className="ml-2 border rounded-md p-2 w-full sm:w-auto"
                     />
                   </div>
                   <div>
-                    <label className="block mb-1">Children :</label>
-                    <input
-                      type="number"
-                      value={guests.children}
-                      onChange={(e) => updateGuests('children', e.target.value)}
-                      className="border rounded-md p-2"
-                      min="0"
-                      placeholder="0"
+                    <span className="font-semibold">Check-out :</span>
+                    <DatePicker
+                      selected={checkOutDate}
+                      onChange={handleCheckOutDateChange}
+                      placeholderText="Select date"
+                      selectsEnd
+                      startDate={checkInDate}
+                      endDate={checkOutDate}
+                      minDate={checkInDate}
+                      className="ml-2 border rounded-md p-2 w-full sm:w-auto"
                     />
                   </div>
                 </div>
               </div>
-            )}
-            <div className="mb-4">
-              <button className="btn btn-secondary" onClick={addGuests}>
-                Add Guests
-              </button>
-            </div>
-            <div className="flex justify-end">
+
+              {showGuestsInput && (
+                <div className="mb-4">
+                  <span className="font-semibold">Guests :</span>
+                  <div className="flex">
+                    <div className="mr-4">
+                      <label className="block mb-1">Adults :</label>
+                      <input
+                        type="number"
+                        value={guests.adults}
+                        onChange={(e) => updateGuests('adults', e.target.value)}
+                        className="border rounded-md p-2"
+                        min="1"
+                        placeholder="0"
+                      />
+                    </div>
+                    <div>
+                      <label className="block mb-1">Children :</label>
+                      <input
+                        type="number"
+                        value={guests.children}
+                        onChange={(e) =>
+                          updateGuests('children', e.target.value)
+                        }
+                        className="border rounded-md p-2"
+                        min="0"
+                        placeholder="0"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
               <div className="mb-4">
-                {info && <p className="text-color-red mb-4">{info}</p>}
+                <button className="btn btn-secondary" onClick={addGuests}>
+                  Add Guests
+                </button>
               </div>
-              <button className="btn btn-primary" onClick={bookNow}>
-                Book Now
-              </button>
+              <div className="flex justify-end">
+                <div className="mb-4">
+                  {info && <p className="text-color-red mb-4">{info}</p>}
+                </div>
+                <button className="btn btn-primary" onClick={bookNow}>
+                  Book Now
+                </button>
+              </div>
             </div>
           </div>
         </div>
+      </div>
+      <div className="relative mt-10">
+        <Footer />
       </div>
     </div>
   );

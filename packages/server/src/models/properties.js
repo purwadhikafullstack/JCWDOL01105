@@ -10,7 +10,6 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Properties.belongsTo(models.Tenants, { foreignKey: 'tenant_id' });
-      Properties.belongsTo(models.Categories, { foreignKey: 'category_id' });
       Properties.hasMany(models.Room, {
         foreignKey: 'property_id',
         as: 'rooms',
@@ -24,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
   Properties.init(
     {
       tenant_id: DataTypes.UUID,
-      category_id: DataTypes.INTEGER,
+      categories: DataTypes.STRING,
       name: DataTypes.STRING,
       address: DataTypes.STRING,
       description: DataTypes.TEXT,

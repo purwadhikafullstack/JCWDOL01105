@@ -14,8 +14,6 @@ const OrdersController = {
         check_in,
       } = req.query;
 
-      console.log(check_in, 'check in');
-
       let whereClause = {
         '$rooms.properties.tenant_id$': tenantId,
         '$rooms->properties.tenant_id$': tenantId,
