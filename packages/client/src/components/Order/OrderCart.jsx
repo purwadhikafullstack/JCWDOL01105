@@ -4,6 +4,7 @@ import ReviewModal from './ReviewModal';
 import ModalPayment from './ModalPayment';
 import { toast } from 'react-toastify';
 import ModalCancel from './ModalCancel';
+import Image from 'next/image';
 
 const OrderCart = ({
   orders,
@@ -81,17 +82,19 @@ const OrderCart = ({
                     <p>No. Booking: {singleOrder.booking_code}</p>
                   </div>
                   <div className="relative mx-4  overflow-hidden rounded-xl bg-blue-gray-500 bg-clip-border text-white shadow-lg shadow-blue-gray-500/40">
-                    {singleOrder.rooms.properties.propertyPicture &&
-                    singleOrder.rooms.properties.propertyPicture.length > 0 &&
-                    singleOrder.rooms.properties.propertyPicture[0]
+                    {singleOrder.rooms.properties.propertyPictures &&
+                    singleOrder.rooms.properties.propertyPictures.length > 0 &&
+                    singleOrder.rooms.properties.propertyPictures[0]
                       .property_pictures ? (
-                      <img
+                      <Image
                         src={
-                          singleOrder.rooms.properties.propertyPicture[0]
+                          singleOrder.rooms.properties.propertyPictures[0]
                             .property_pictures
                         }
                         alt="ui/ux review check"
                         className="w-full"
+                        width={300}
+                        height={300}
                       />
                     ) : (
                       <div
@@ -99,10 +102,12 @@ const OrderCart = ({
                         aria-label="Image not available"
                       >
                         <span className="text-gray-500">
-                          <img
+                          <Image
                             src="https://i.pinimg.com/564x/7d/a6/c2/7da6c2d5282f8dd93d711b2c61809f8f.jpg"
                             alt=""
                             className="w-full h-[300px] bg-gray-200 flex items-center justify-center"
+                            width={300}
+                            height={300}
                           />
                         </span>
                       </div>
@@ -153,11 +158,8 @@ const OrderCart = ({
                     </div>
                     <div className="flex mt-2 text-md font-medium">
                       <p className="mr-2 text-gray-600">
-                        Rp
+                        Rp.
                         {singleOrder.total_invoice.toLocaleString('id-ID')}
-                      </p>
-                      <p className="mr-2  text-color-red line-through">
-                        Rp {'500.000'.toLocaleString('id-ID')}
                       </p>
                     </div>
                     <div className="flex items-center gap-8 my-2 justify-between">
@@ -273,33 +275,6 @@ const OrderCart = ({
                         CANCELLED
                       </button>
                     )}
-                    {singleOrder.booking_status === 'DONE' &&
-                      moment(singleOrder.check_in_date).isBefore(moment()) &&
-                      moment(singleOrder.check_out_date).isAfter(moment()) && (
-                        <button
-                          className="block w-full select-none rounded-lg bg-color-green py-3.5 px-5 text-center align-middle font-sans text-sm font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                          type="button"
-                          data-ripple-light="true"
-                          onClick={() => handleCheckOut(singleOrder)}
-                        >
-                          <span className="text-color-primary text-xs">
-                            Check Out: {singleOrder.check_out_date} 01:00 PM
-                          </span>
-                        </button>
-                      )}
-                    {singleOrder.booking_status === 'DONE' &&
-                      moment(singleOrder.check_in_date).isAfter(moment()) && (
-                        <button
-                          className="block w-full select-none rounded-lg bg-color-green py-3.5 px-7 text-center align-middle font-sans text-sm font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                          type="button"
-                          data-ripple-light="true"
-                          onClick={() => handleCheckIn(singleOrder)}
-                        >
-                          <span className="text-color-primary text-xs">
-                            Check In: {singleOrder.check_in_date} 03:00 PM
-                          </span>
-                        </button>
-                      )}
                   </div>
                 </div>
               </div>

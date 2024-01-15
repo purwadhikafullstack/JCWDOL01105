@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import api from '../../config/api';
 import ChangePic from './modal/ChangePic';
+import Image from 'next/image';
 
 const ProfilePicture = ({ showToast }) => {
   const [profilePicture, setProfilePicture] = useState('');
@@ -40,7 +41,7 @@ const ProfilePicture = ({ showToast }) => {
     <div className="bg-white shadow sm:rounded-lg p-6">
       <h2 className="text-2xl font-semibold mb-4">{name}</h2>
       <div className="flex items-center justify-center mb-6">
-        <img
+        <Image
           src={profilePicture}
           alt="Profile"
           className="rounded-full h-40 w-40 object-cover border-4 border-blue-500"

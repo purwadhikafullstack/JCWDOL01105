@@ -165,7 +165,9 @@ const PropertyDetails = () => {
         booking_code: bookingCode,
         price: property.rooms[0].regularPrice * totalNights,
         specialPrice: property.rooms[0].specialPrice,
-        total_invoice: 0,
+        total_invoice: property.rooms[0].specialPrice
+          ? property.rooms[0].specialPrice * totalNights
+          : property.rooms[0].regularPrice * totalNights,
         payment_proof: 'default',
         payment_status: null,
         payment_date: null,

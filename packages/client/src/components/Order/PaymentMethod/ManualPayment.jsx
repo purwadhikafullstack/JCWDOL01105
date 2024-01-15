@@ -21,7 +21,7 @@ const ManualPayment = ({
       formData.append('amout', total_invoice);
 
       try {
-        const response = await api.post('/order/payment_proof', formData, {
+        const response = await api.post('/orders/payment_proof', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },

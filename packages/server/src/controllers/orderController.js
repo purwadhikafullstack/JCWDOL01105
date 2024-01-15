@@ -60,7 +60,7 @@ const createOrder = async (req, res) => {
 
 const getOrder = async (req, res) => {
   const userId = req.user.id;
-  const { sortBy, page = 1, limit = 4, booking_status } = req.query;
+  const { sortBy, page = 1, limit = 10, booking_status } = req.query;
 
   try {
     let whereClause = { user_id: userId };
@@ -71,7 +71,7 @@ const getOrder = async (req, res) => {
       {
         model: Room,
         as: 'rooms',
-        attributes: ['room_information', 'regularPrice', 'type_room'],
+        attributes: ['room_information', 'type_room'],
         include: [
           {
             model: Properties,
@@ -104,20 +104,27 @@ const getOrder = async (req, res) => {
         let orderArray = [];
         switch (sortBy) {
           case 'highestPrice':
-            orderArray = [['regularPrice', 'DESC']];
+            orderArray = [['price', 'DESC']];
             break;
           case 'lowestPrice':
-            orderArray = [['regularPrice', 'ASC']];
+            orderArray = [['price', 'ASC']];
             break;
           case 'alphabet':
             orderArray = [
               [
                 {
                   model: Room,
-                  include: [{ model: Properties, attributes: [] }],
+                  as: 'rooms',
+                  attributes: [],
+                  include: [
+                    {
+                      model: Properties,
+                      as: 'properties',
+                      attributes: ['name'],
+                    },
+                  ],
                 },
-                Properties,
-                'name',
+                'type_room',
                 'ASC',
               ],
             ];
@@ -127,14 +134,22 @@ const getOrder = async (req, res) => {
               [
                 {
                   model: Room,
-                  include: [{ model: Properties, attributes: [] }],
+                  as: 'rooms',
+                  attributes: ['type_room'],
+                  include: [
+                    {
+                      model: Properties,
+                      as: 'properties',
+                      attributes: ['name'],
+                    },
+                  ],
                 },
-                Properties,
-                'name',
+                'type_room',
                 'DESC',
               ],
             ];
             break;
+
           default:
             orderArray = [];
         }
@@ -161,13 +176,6 @@ const getOrder = async (req, res) => {
     }
 
     const totalCount = await Orders.count({ where: whereClause });
-
-    if (orders.length === 0) {
-      return res.status(404).json({
-        success: false,
-        message: 'Tidak ada pesanan ditemukan',
-      });
-    }
 
     res.status(200).json({
       success: true,

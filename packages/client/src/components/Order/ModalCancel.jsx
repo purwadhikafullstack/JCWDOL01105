@@ -18,7 +18,7 @@ const OrderCancel = ({
       const finalReason =
         reasonSelected === 'other' ? cancelReason : reasonSelected;
 
-      const response = await api.post(`/order/cancel_order/${order_id}`, {
+      const response = await api.post(`/orders/cancel_order/${order_id}`, {
         cancel_reason: finalReason,
       });
       showToast('Order Cancelled', 'success');
