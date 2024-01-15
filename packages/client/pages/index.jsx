@@ -5,7 +5,6 @@ import Categories from '../src/components/Category/Categories';
 import Footer from '../src/components/Footer/Footer';
 import CannotAccessMessage from '../src/components/utils/CannotAccess';
 import PropertyList from '../src/components/Property/PropertyList';
-import FilterSection from '../src/components/Navbar/FilterSection';
 
 const Home = () => {
   const [role, setRole] = useState('');
@@ -31,7 +30,6 @@ const Home = () => {
         <div>
           <Slider />
           <Categories />
-          <FilterSection />
           <PropertyList searchCriteria={searchCriteria} />
         </div>
       )}

@@ -1,6 +1,11 @@
 const { Op } = require('sequelize');
-const { Properties, Room, sequelize, property_picture } = require('../models');
-const { errorHandler } = require('../utils/errorHandle');
+const {
+  Properties,
+  Room,
+  sequelize,
+  property_picture,
+  Tenants,
+} = require('../models');
 
 exports.createOrUpdateProperty = async (req, res, next) => {
   try {
@@ -27,7 +32,7 @@ exports.createOrUpdateProperty = async (req, res, next) => {
     const isForRent = type === 'Property For Rent';
     const defaultType = '';
 
-    const tenant_id = req.user ? req.user.tenant_id : null;
+    const tenant_id = req.user ? req.user.id : null;
 
     let property;
 
@@ -41,10 +46,11 @@ exports.createOrUpdateProperty = async (req, res, next) => {
         ],
       });
 
-      if (!property) {
-        return res
-          .status(404)
-          .json({ status: 'error', message: 'Property not found' });
+      if (!property || property.tenant_id !== tenant_id) {
+        return res.status(403).json({
+          status: 'error',
+          message: 'You do not have permission to update this property',
+        });
       }
 
       property.sell = isForSale;
@@ -199,8 +205,46 @@ exports.getProperties = async (req, res, next) => {
           model: property_picture,
           as: 'propertyPictures',
         },
+        {
+          model: Tenants,
+          attributes: ['name'],
+        },
       ],
     });
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        properties,
+      },
+    });
+  } catch (error) {
+    console.error('Error getting properties:', error);
+    return res.status(500).json({
+      status: 'error',
+      message: 'Error getting properties',
+    });
+  }
+};
+
+exports.getPropertiesTenant = async (req, res, next) => {
+  try {
+    const tenant_id = req.user.id;
+
+    const properties = await Properties.findAll({
+      where: { tenant_id: tenant_id },
+      include: [
+        {
+          model: Room,
+          as: 'rooms',
+        },
+        {
+          model: property_picture,
+          as: 'propertyPictures',
+        },
+      ],
+    });
+
     res.status(200).json({
       status: 'success',
       data: {
@@ -218,6 +262,7 @@ exports.getProperties = async (req, res, next) => {
 
 exports.getProperty = async (req, res, next) => {
   try {
+    const tenant_id = req.user ? req.user.id : null;
     const property = await Properties.findByPk(req.params.id, {
       include: [
         {
@@ -228,10 +273,17 @@ exports.getProperty = async (req, res, next) => {
           model: property_picture,
           as: 'propertyPictures',
         },
+        {
+          model: Tenants,
+          attributes: ['name'],
+        },
       ],
     });
-    if (!property) {
-      return next(errorHandler(404, 'Property not found!'));
+    if (!property || (tenant_id && property.tenant_id !== tenant_id)) {
+      return res.status(403).json({
+        status: 'error',
+        message: 'You do not have permission to view this property',
+      });
     }
 
     res.status(200).json({
@@ -255,8 +307,11 @@ exports.deleteProperty = async (req, res, next) => {
         },
       ],
     });
-    if (!property) {
-      return next(errorHandler(404, 'Property not found!'));
+    if (!property || property.tenant_id !== req.user.id) {
+      return res.status(403).json({
+        status: 'error',
+        message: 'You do not have permission to delete this property',
+      });
     }
 
     const propertyPictures = property.propertyPictures || [];
@@ -280,9 +335,9 @@ exports.deleteProperty = async (req, res, next) => {
 exports.searchProperties = async (req, res, next) => {
   try {
     const { location, date, guests, category, sort } = req.query;
-    console.log('Search request', req.query);
 
     const where = {};
+    const order = [];
 
     if (location) {
       where.address = { [Op.like]: `%${location}%` };
@@ -310,19 +365,16 @@ exports.searchProperties = async (req, res, next) => {
       };
     }
 
-    const order = [];
+    const sortOptions = {
+      priceAsc: ['rooms', 'regularPrice', 'ASC'],
+      priceDesc: ['rooms', 'regularPrice', 'DESC'],
+      az: ['name', 'ASC'],
+      za: ['name', 'DESC'],
+    };
 
-    if (sort === 'priceAsc') {
-      order.push([{ model: Room, as: 'rooms' }, 'regularPrice', 'ASC']);
-    } else if (sort === 'priceDesc') {
-      order.push([{ model: Room, as: 'rooms' }, 'regularPrice', 'DESC']);
-    } else if (sort === 'az') {
-      order.push(['name', 'ASC']);
-    } else if (sort === 'za') {
-      order.push(['name', 'DESC']);
+    if (sort) {
+      order.push(sortOptions[sort]);
     }
-
-    console.log('Where clause:', where);
 
     const searchResult = await Properties.findAll({
       where,
@@ -336,7 +388,12 @@ exports.searchProperties = async (req, res, next) => {
           model: property_picture,
           as: 'propertyPictures',
         },
+        {
+          model: Tenants,
+          attributes: ['name'],
+        },
       ],
+      order,
     });
 
     res.json({ success: true, data: searchResult });

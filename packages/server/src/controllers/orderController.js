@@ -2,8 +2,8 @@ const { Orders, User } = require('../models');
 
 const createOrder = async (req, res) => {
   try {
+    const user_id = req.user.id;
     const {
-      user_id,
       room_id,
       check_in_date,
       check_out_date,
@@ -20,7 +20,7 @@ const createOrder = async (req, res) => {
     } = req.body;
 
     const order = await Orders.create({
-      user_id: user_id,
+      user_id,
       room_id,
       check_in_date,
       check_out_date,
@@ -57,6 +57,7 @@ const getAllOrders = async (req, res) => {
       include: [
         {
           model: User,
+          attributes: ['name'],
         },
       ],
     });
@@ -82,7 +83,7 @@ const confirmPayment = async (req, res) => {
       return res.status(404).json({ message: 'Order not found' });
     }
 
-    await order.update({ payment_status: 'ACCEPTED' });
+    await order.update({ payment_status: 'ACCEPTED', booking_status: 'DONE' });
 
     res.status(200).json({ message: 'Payment confirmed successfully' });
   } catch (error) {
@@ -100,7 +101,11 @@ const rejectPayment = async (req, res) => {
       return res.status(404).json({ message: 'Order not found' });
     }
 
-    await order.update({ payment_status: 'DECLINED' });
+    await order.update({
+      payment_status: 'DECLINED',
+      booking_status: 'CANCELED',
+    });
+
     res.status(200).json({ message: 'Payment rejected' });
   } catch (error) {
     console.error('Error rejecting payment:', error);
@@ -116,7 +121,10 @@ const cancelOrder = async (req, res) => {
     if (!order) {
       return res.status(404).json({ message: 'Order not found' });
     }
-    await order.update({ booking_status: 'CANCELED' });
+    await order.update({
+      payment_status: 'DECLINED',
+      booking_status: 'CANCELED',
+    });
     res.status(200).json({ message: 'Order Canceled' });
   } catch (error) {
     console.error('Error rejecting payment:', error);

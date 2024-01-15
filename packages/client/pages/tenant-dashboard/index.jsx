@@ -13,14 +13,14 @@ const index = () => {
 const Navbar = () => {
   return (
     <nav className="bg-color-primary py-4 ">
-      <div className="container mx-auto flex items-center justify-between">
+      <div className="container mx-auto flex flex-col lg:flex-row items-center justify-between">
         <Link href="/">
           <a className="text-color-pallete1 font-bold text-xl flex items-center">
             <img src="/logo.png" alt="logo" className="w-14 h-14" /> Tenant
             Dashbord
           </a>
         </Link>
-        <ul className="flex space-x-4">
+        <ul className="flex flex-row lg:flex-row lg:space-x-4">
           <li>
             <Link href="/tenant-dashboard">
               <a className="text-white hover:text-gray-300">Dashboard</a>
@@ -42,7 +42,7 @@ const Navbar = () => {
             </Link>
           </li>
           <li>
-            <Link href="/logout">
+            <Link href="/">
               <a className="text-white hover:text-gray-300">Logout</a>
             </Link>
           </li>

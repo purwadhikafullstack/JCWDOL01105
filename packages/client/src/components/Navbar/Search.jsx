@@ -222,7 +222,7 @@ const Search = () => {
               />
             </div>
             <div
-              className="p-2 bg-color-primary rounded-full hover:bg-color-pallete1"
+              className="p-2 bg-color-primary rounded-full"
               onClick={handleSearch}
             >
               <MagnifyingGlass size={32} />

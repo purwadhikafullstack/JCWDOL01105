@@ -31,7 +31,7 @@ const PropertyComponent = () => {
 
   const fetchProperties = async () => {
     try {
-      const response = await api.get('/property/properties');
+      const response = await api.get('/tenants/property');
       const propertiesData = await response.data.data.properties;
       console.log(propertiesData);
       setProperties(propertiesData);
@@ -136,15 +136,6 @@ const PropertyComponent = () => {
       setEditFormData((prevData) => ({
         ...prevData,
         [name]: value,
-      }));
-    }
-    if (name === 'available') {
-      setEditFormData((prevData) => ({
-        ...prevData,
-        rooms: prevData.rooms.map((room) => ({
-          ...room,
-          available: value,
-        })),
       }));
     }
   };

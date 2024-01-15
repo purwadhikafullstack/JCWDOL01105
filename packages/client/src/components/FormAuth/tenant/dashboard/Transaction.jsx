@@ -3,7 +3,6 @@ import api from '../../../../config/api';
 
 const TransactionOrderComponent = () => {
   const [orders, setOrders] = useState([]);
-  const [canceledOrders, setCanceledOrders] = useState([]);
 
   const formatPrice = (price) => {
     const formatter = new Intl.NumberFormat('id-ID', {
@@ -31,13 +30,7 @@ const TransactionOrderComponent = () => {
   const confirmPayment = async (id) => {
     try {
       await api.put(`/orders/confirm-payment/${id}`);
-
-      const updatedOrders = orders.map((order) =>
-        order.id === id
-          ? { ...order, payment_status: 'ACCEPTED', booking_status: 'DONE' }
-          : order,
-      );
-      setOrders(updatedOrders);
+      updateOrderStatus(id, 'ACCEPTED');
     } catch (error) {
       console.error('Error confirming payment:', error);
     }
@@ -46,13 +39,7 @@ const TransactionOrderComponent = () => {
   const rejectPayment = async (id) => {
     try {
       await api.put(`/orders/reject-payment/${id}`);
-
-      const updatedOrders = orders.map((order) =>
-        order.id === id
-          ? { ...order, payment_status: 'DECLINED', booking_status: 'CANCELED' }
-          : order,
-      );
-      setOrders(updatedOrders);
+      updateOrderStatus(id, 'DECLINED');
     } catch (error) {
       console.error('Error rejecting payment:', error);
     }
@@ -61,37 +48,59 @@ const TransactionOrderComponent = () => {
   const cancelOrder = async (id) => {
     try {
       await api.put(`/orders/cancel-order/${id}`);
-
-      const updatedOrders = orders.map((order) =>
-        order.id === id
-          ? {
-              ...order,
-              booking_status: 'CANCELED',
-              payment_status: 'DECLINED',
-            }
-          : order,
-      );
-
-      setOrders(updatedOrders);
-      setCanceledOrders((prevCanceledOrders) => [...prevCanceledOrders, id]);
+      updateOrderStatus(id, 'DECLINED', 'CANCELED');
     } catch (error) {
       console.error('Error canceling order:', error);
     }
   };
 
+  const updateOrderStatus = (id, paymentStatus) => {
+    setOrders((prevOrders) => {
+      const updatedOrders = prevOrders.map((order) => {
+        if (order.id === id) {
+          let bookingStatus;
+
+          if (paymentStatus === 'ACCEPTED') {
+            bookingStatus = 'DONE';
+          } else if (paymentStatus === 'DECLINED') {
+            bookingStatus = 'CANCELED';
+          } else {
+            bookingStatus = '-';
+          }
+
+          return {
+            ...order,
+            payment_status: paymentStatus,
+            booking_status: bookingStatus,
+          };
+        }
+        return order;
+      });
+
+      console.log('Updated Orders:', updatedOrders);
+      return updatedOrders;
+    });
+  };
+
   return (
-    <div className="bg-color-primary rounded-lg shadow-md p-6 ">
-      <h2 className="text-2xl font-bold mb-4">Users Orders</h2>
-      <div className="space-y-4">
+    <div className="bg-color-primary min-h-screen p-8">
+      <h2 className="text-3xl font-bold mb-8">Users Orders</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {orders.map((order) => (
           <div
             key={order.id}
-            className={`p-6 border shadow-lg ${
-              order.isCancelled ? 'bg-color-lightGrey' : 'border-dark'
-            } rounded-md transition duration-300 hover:shadow-lg hover:border-pallete1`}
+            className={`bg-color-dark p-6 rounded-md shadow-md ${
+              order.isCancelled
+                ? 'bg-color-neutral'
+                : 'border border-color-grey'
+            } transition duration-300 hover:shadow-lg hover:border-color-pallete1`}
           >
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold">{order.name}'s Order</h3>
+              <h3 className="text-xl font-semibold">
+                {order.User
+                  ? `${order.User.name}'s Order`
+                  : `Order No. ${order.id}`}
+              </h3>
               <span
                 className={`text-sm font-semibold ${
                   order.isCancelled && 'text-color-lightred'
@@ -100,26 +109,38 @@ const TransactionOrderComponent = () => {
                 {order.booking_status}
               </span>
             </div>
-            <p className="mb-2">Room: {order.room_id}</p>
-            <p className="mb-2">Check-in: {order.check_in_date}</p>
-            <p className="mb-2">Check-out: {order.check_out_date}</p>
-            <p className="mb-2">Guests: {order.guests}</p>
-            <p className="mb-2">Total Price: {formatPrice(order.price)}</p>
-            <p className="mb-2">Booking Code: {order.booking_code}</p>
-            <p className="mb-2">Payment Status: {order.payment_status}</p>
-            {!order.paymentConfirmed && !canceledOrders.includes(order.id) && (
+            <p className="mb-2">
+              <strong>Room:</strong> {order.room_id}
+            </p>
+            <p className="mb-2">
+              <strong>Check-in:</strong> {order.check_in_date}
+            </p>
+            <p className="mb-2">
+              <strong>Check-out:</strong> {order.check_out_date}
+            </p>
+            <p className="mb-2">
+              <strong>Guests:</strong> {order.guests}
+            </p>
+            <p className="mb-2">
+              <strong>Total Price:</strong> {formatPrice(order.price)}
+            </p>
+            <p className="mb-2">
+              <strong>Booking Code:</strong> {order.booking_code}
+            </p>
+            <p className="mb-2">
+              <strong>Payment Status:</strong> {order.payment_status}
+            </p>
+            {!order.paymentConfirmed && order.booking_status !== 'CANCELED' && (
               <div className="flex space-x-2 mt-4">
                 <button
                   onClick={() => confirmPayment(order.id)}
-                  className="btn btn-success bg-color-pallete3 rounded"
-                  disabled={order.booking_status === 'DONE'}
+                  className="btn-order btn-success bg-color-pallete1 rounded-md"
                 >
                   Confirm Payment
                 </button>
                 <button
                   onClick={() => rejectPayment(order.id)}
-                  className="btn btn-danger bg-color-lightred rounded"
-                  disabled={order.booking_status === 'DONE'}
+                  className="btn-order btn-danger bg-color-red1 rounded-md"
                 >
                   Reject Payment
                 </button>
@@ -128,7 +149,8 @@ const TransactionOrderComponent = () => {
             <div className="mt-4">
               <button
                 onClick={() => cancelOrder(order.id)}
-                className="btn btn-outline-danger bg-color-grey rounded"
+                className="btn-order btn-outline-danger bg-color-secondary rounded-md"
+                disabled={order.booking_status === 'CANCELED'}
               >
                 Cancel Order
               </button>
@@ -139,5 +161,4 @@ const TransactionOrderComponent = () => {
     </div>
   );
 };
-
 export default TransactionOrderComponent;

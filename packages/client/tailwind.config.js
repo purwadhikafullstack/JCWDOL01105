@@ -19,7 +19,7 @@ module.exports = {
         accent: '#703eb0',
         secondary: '#9999',
         dark: '#ededed',
-        red: '#c43b3b',
+        red1: '#c43b3b',
         lightred: '#fc032c',
         neutral: '#a4a6a5',
         grey: '#8c8c8c',

@@ -63,6 +63,8 @@ const PropertyDetails = () => {
     return <p>Loading...</p>;
   }
 
+  const tenantName = property.Tenant ? property.Tenant.name : 'Unknown Tenant';
+
   const nextSlide = () => {
     console.log('Next Slide Clicked');
     setCurrentIndex((prevIndex) =>
@@ -244,7 +246,9 @@ const PropertyDetails = () => {
           <h1 className="text-3xl font-semibold mb-4">{property.name}</h1>
           <div className="flex items-center mb-2">
             <User size={20} />
-            <p>{property.tenants}</p>
+            <h2 className="font-semibold ml-2">{`${tenantName
+              .charAt(0)
+              .toUpperCase()}${tenantName.slice(1)}'s Room`}</h2>
           </div>
           <div className="mb-6">
             <h5 className="text-xl font-semibold mb-2">About this rooms</h5>

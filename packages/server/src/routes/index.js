@@ -10,6 +10,7 @@ const orderRouter = require('../routes/orderRouter');
 
 router.use('/auth', authRouter);
 router.use('/property', propertyRouter);
+router.use('/tenants', propertyRouter);
 router.use('/profile', profileRouter);
 router.use('/auth', tenantRouter);
 router.use('/orders', orderRouter);

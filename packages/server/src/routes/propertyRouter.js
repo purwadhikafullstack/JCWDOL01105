@@ -5,6 +5,12 @@ const { uploadOptionsProperty } = require('../utils/uploadFile');
 const authenticateTenant = require('../middleware/tenantMiddleware');
 
 router.get('/properties', propertyController.getProperties);
+router.get(
+  '/property',
+  authenticateTenant,
+  propertyController.getPropertiesTenant,
+);
+
 router.get('/search', propertyController.searchProperties);
 router.get('/:id', propertyController.getProperty);
 

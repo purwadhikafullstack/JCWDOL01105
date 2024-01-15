@@ -144,7 +144,7 @@ const Footer = () => {
             </div>
           </div>
           <div className="border-t border-black mt-8 pt-8 flex justify-center items-center">
-            <p className="text-color-grey text-sm">
+            <p className="text-color-secondary text-sm">
               &copy; 2023 - All rights reserved by Renafin Property
             </p>
           </div>
