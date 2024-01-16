@@ -15,6 +15,5 @@ router.use('/auth', tenantRouter);
 router.use('/orders', orderRouter);
 router.use('/review', reviewRouter);
 router.use('/sales-report', salesReportRouter);
-router.use('/review', reviewRouter);
 
 module.exports = router;

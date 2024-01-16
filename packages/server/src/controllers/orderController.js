@@ -283,7 +283,7 @@ const getPaymentProof = async (req, res) => {
         .json({ success: false, message: 'Tenant not found' });
     }
     const id = req.user.id;
-    console.log('id usr', id);
+
     if (property.tenant_id !== req.user.id) {
       return res.status(403).json({
         success: false,

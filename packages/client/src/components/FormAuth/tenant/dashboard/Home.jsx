@@ -15,8 +15,6 @@ const HomeDashboard = () => {
         });
         const transactionsData = transactionsResponse.data.data;
 
-        console.log('Transactions Data:', transactionsData);
-
         if (transactionsData && transactionsData.length > 0) {
           const groupedEvents = groupTransactionsByDate(transactionsData);
 

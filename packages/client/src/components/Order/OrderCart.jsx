@@ -66,7 +66,7 @@ const OrderCart = ({
       setSelectedSingleOrder(singleOrder);
       setShowModalCancel(true);
     } catch (error) {
-      console.log('Error handling cancel order:', error.message);
+      console.error(error.message);
     }
   };
 

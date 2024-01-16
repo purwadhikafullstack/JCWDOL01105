@@ -100,7 +100,6 @@ const Property = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
-      console.log('Token', token);
       const response = await axios.post(
         `${API_URL}/property/upload`,
         formData,
@@ -112,7 +111,6 @@ const Property = () => {
         },
       );
       const responseData = response.data;
-      console.log('Response Data :', responseData);
 
       if (responseData.success === false) {
         setErrorMessage(responseData.message);

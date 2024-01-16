@@ -278,8 +278,7 @@ exports.deleteProperty = async (req, res, next) => {
 
 exports.searchProperties = async (req, res, next) => {
   try {
-    const { location, date, guests } = req.query;
-    console.log('Search request', req.query);
+    const { location, date, guests, category, sort } = req.query;
 
     const where = {};
 
@@ -303,7 +302,23 @@ exports.searchProperties = async (req, res, next) => {
       };
     }
 
-    console.log('Where clause:', where);
+    if (category) {
+      where.categories = {
+        [Op.like]: `%${category}%`,
+      };
+    }
+
+    const order = [];
+
+    if (sort === 'priceAsc') {
+      order.push([{ model: Room, as: 'rooms' }, 'regularPrice', 'ASC']);
+    } else if (sort === 'priceDesc') {
+      order.push([{ model: Room, as: 'rooms' }, 'regularPrice', 'DESC']);
+    } else if (sort === 'az') {
+      order.push(['name', 'ASC']);
+    } else if (sort === 'za') {
+      order.push(['name', 'DESC']);
+    }
 
     const searchResult = await Properties.findAll({
       where,
@@ -318,7 +333,6 @@ exports.searchProperties = async (req, res, next) => {
           as: 'propertyPictures',
         },
       ],
-      logging: console.log,
     });
 
     res.json({ success: true, data: searchResult });

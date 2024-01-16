@@ -95,7 +95,6 @@ const FormRegister = ({ showToast }) => {
     } else if (currentStep === 2) {
       if (!formik.values.idCard_number || !formik.values.id_picture) {
         // Tampilkan pesan atau lakukan tindakan jika ada input yang kosong
-        console.log('Harap isi semua field sebelum melanjutkan.');
         return;
       }
     }

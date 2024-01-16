@@ -9,19 +9,18 @@ const snap = new midtransaction.Snap({
 
 const paymentGateway = async (req, res) => {
   try {
-    const { order_id, total, name } = req.body; // Ambil data yang diperlukan dari request body
+    const { order_id, total, name } = req.body;
 
     const transactionDetails = {
       transaction_details: {
         order_id: order_id, // Gunakan order_id dari request body
-        gross_amount: total, // Gunakan total dari request body
+        gross_amount: total,
       },
       customer_details: {
         name: name, // Gunakan name dari request body
       },
       finish_redirect_url: 'https://your-app.com/payment/complete',
     };
-    console.log(transactionDetails);
 
     const transaction = await snap.createTransaction(transactionDetails);
     const snapToken = transaction.token;
