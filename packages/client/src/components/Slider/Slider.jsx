@@ -48,7 +48,7 @@ const Promotions = () => {
               src={promotion.imageUrl}
               alt={promotion.title}
               className=" w-full h-full object-fill rounded"
-              width={1200}
+              width={2000}
               height={800}
             />
             <div className="absolute flex flex-col justify-center items-center text-white text-center left-0 right-0 top-0 bottom-0 p-5">

@@ -15,8 +15,8 @@ const OrdersController = {
       } = req.query;
 
       let whereClause = {
-        '$rooms.properties.tenant_id$': tenantId,
-        '$rooms->properties.tenant_id$': tenantId,
+        '$rooms.property.tenant_id$': tenantId,
+        '$rooms->property.tenant_id$': tenantId,
       };
 
       if (propertyId) {
@@ -38,7 +38,7 @@ const OrdersController = {
           include: [
             {
               model: Properties,
-              as: 'properties',
+              as: 'property',
               where: { tenant_id: tenantId },
             },
           ],
@@ -147,7 +147,7 @@ const getUserByTenantId = async (req, res) => {
           include: [
             {
               model: Properties,
-              as: 'properties',
+              as: 'property',
               attributes: ['name'],
               where: { tenant_id: tenantId },
             },

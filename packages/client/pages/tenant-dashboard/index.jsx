@@ -20,7 +20,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-color-primary py-4 ">
+    <nav className="bg-color-primary py-4">
       <div className="container mx-auto flex flex-col lg:flex-row items-center justify-between">
         <Link href="/">
           <a className="text-color-pallete1 font-bold text-xl flex items-center">
@@ -28,8 +28,8 @@ const Navbar = () => {
               src="/logo.png"
               alt="logo"
               className="w-14 h-14"
-              width={150}
-              height={150}
+              width={80}
+              height={100}
             />{' '}
             Tenant Dashbord
           </a>

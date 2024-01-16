@@ -29,7 +29,7 @@ const TransactionOrderComponent = () => {
 
   const confirmPayment = async (id) => {
     try {
-      await api.put(`/orders/confirm-payment/${id}`);
+      await api.put(`/orders/confirm_payment/${id}`);
       updateOrderStatus(id, 'ACCEPTED');
     } catch (error) {
       console.error('Error confirming payment:', error);
@@ -38,16 +38,16 @@ const TransactionOrderComponent = () => {
 
   const rejectPayment = async (id) => {
     try {
-      await api.put(`/orders/reject-payment/${id}`);
+      await api.put(`/orders/reject_payment/${id}`);
       updateOrderStatus(id, 'DECLINED');
     } catch (error) {
       console.error('Error rejecting payment:', error);
     }
   };
 
-  const cancelOrder = async (id) => {
+  const cancelPayment = async (id) => {
     try {
-      await api.put(`/orders/cancel-order/${id}`);
+      await api.put(`/orders/cancel_payment/${id}`);
       updateOrderStatus(id, 'DECLINED', 'CANCELED');
     } catch (error) {
       console.error('Error canceling order:', error);
@@ -130,25 +130,27 @@ const TransactionOrderComponent = () => {
             <p className="mb-2">
               <strong>Payment Status:</strong> {order.payment_status}
             </p>
-            {!order.paymentConfirmed && order.booking_status !== 'CANCELED' && (
-              <div className="flex space-x-2 mt-4">
-                <button
-                  onClick={() => confirmPayment(order.id)}
-                  className="btn-order btn-success bg-color-pallete1 rounded-md"
-                >
-                  Confirm Payment
-                </button>
-                <button
-                  onClick={() => rejectPayment(order.id)}
-                  className="btn-order btn-danger bg-color-red1 rounded-md"
-                >
-                  Reject Payment
-                </button>
-              </div>
-            )}
+            {!order.paymentConfirmed &&
+              order.booking_status !== 'CANCELED' &&
+              order.booking_status !== 'DONE' && (
+                <div className="flex space-x-2 mt-4">
+                  <button
+                    onClick={() => confirmPayment(order.id)}
+                    className="btn-order btn-success bg-color-pallete1 rounded-md"
+                  >
+                    Confirm Payment
+                  </button>
+                  <button
+                    onClick={() => rejectPayment(order.id)}
+                    className="btn-order btn-danger bg-color-red1 rounded-md"
+                  >
+                    Reject Payment
+                  </button>
+                </div>
+              )}
             <div className="mt-4">
               <button
-                onClick={() => cancelOrder(order.id)}
+                onClick={() => cancelPayment(order.id)}
                 className="btn-order btn-outline-danger bg-color-secondary rounded-md"
                 disabled={order.booking_status === 'CANCELED'}
               >

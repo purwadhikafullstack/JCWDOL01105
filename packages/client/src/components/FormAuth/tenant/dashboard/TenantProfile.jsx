@@ -1,12 +1,12 @@
 import Image from 'next/image';
 import React from 'react';
+import imgProfile from '../../../../../public/ProfilePhoto.jpg';
 
 const TenantProfile = () => {
   const tenantData = {
     name: 'John Doe',
     email: 'johndoe@example.com',
-    profileImage:
-      'https://i.pinimg.com/564x/ec/27/00/ec27003cdef6de7e3a1e3abaac9c0d26.jpg',
+    profileImage: imgProfile,
     address: '123 Main Street, City, Country',
     phoneNumber: '+1234567890',
     dateOfBirth: '1990-01-01',
@@ -46,8 +46,8 @@ const TenantProfile = () => {
               src={profileImage}
               alt="Tenant Profile"
               className="w-32 h-32 object-cover rounded-full"
-              width={300}
-              height={300}
+              width={150}
+              height={150}
             />
           </div>
         </div>

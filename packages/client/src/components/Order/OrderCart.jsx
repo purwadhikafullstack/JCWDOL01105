@@ -82,13 +82,13 @@ const OrderCart = ({
                     <p>No. Booking: {singleOrder.booking_code}</p>
                   </div>
                   <div className="relative mx-4  overflow-hidden rounded-xl bg-blue-gray-500 bg-clip-border text-white shadow-lg shadow-blue-gray-500/40">
-                    {singleOrder.rooms.properties.propertyPictures &&
-                    singleOrder.rooms.properties.propertyPictures.length > 0 &&
-                    singleOrder.rooms.properties.propertyPictures[0]
+                    {singleOrder.rooms.property.propertyPictures &&
+                    singleOrder.rooms.property.propertyPictures.length > 0 &&
+                    singleOrder.rooms.property.propertyPictures[0]
                       .property_pictures ? (
                       <Image
                         src={
-                          singleOrder.rooms.properties.propertyPictures[0]
+                          singleOrder.rooms.property.propertyPictures[0]
                             .property_pictures
                         }
                         alt="ui/ux review check"
@@ -136,8 +136,8 @@ const OrderCart = ({
                   <div className="p-6">
                     <div className="mb-3 flex items-center justify-between">
                       <h5 className="block font-sans text-xl font-medium leading-snug tracking-normal text-blue-gray-900 antialiased">
-                        {singleOrder.rooms.properties.name}, <br />
-                        {singleOrder.rooms.properties.address}
+                        {singleOrder.rooms.property.name}, <br />
+                        {singleOrder.rooms.property.address}
                       </h5>
                       <p className="flex items-center gap-1.5 font-sans text-base font-normal leading-relaxed text-blue-gray-900 antialiased">
                         <svg
