@@ -1,5 +1,5 @@
 import React from 'react';
-import FormRegister from '../../src/components/FormAuth/user/formRegister';
+import FormRegister from '../../src/components/FormAuth/user/FormRegister';
 import { toast } from 'react-toastify';
 import Image from 'next/image';
 import logo from '../../public/logo.png';
