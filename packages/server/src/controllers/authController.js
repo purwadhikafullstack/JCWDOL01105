@@ -21,13 +21,10 @@ const registerUser = async (req, res) => {
       });
     }
 
-    const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
-
     const newUser = await User.create({
       name,
       email,
-      password: hashedPassword,
+      password,
       phone_number,
     });
 
@@ -75,11 +72,11 @@ const loginUser = async (req, res) => {
     // Verifikasi kata sandi
     const isPasswordMatch = await bcrypt.compare(
       password.trim(),
-      user.new_password || user.password,
+      user.password,
     );
 
-    if (isPasswordMatch) {
-      return res.status(404).json({
+    if (!isPasswordMatch) {
+      return res.status(401).json({
         status: 'fail',
         message: 'Email dan password tidak cocok',
       });
@@ -182,8 +179,8 @@ const changePassword = async (req, res) => {
     // Ambil data pengguna dari database
     const user = await User.findByPk(userId);
 
-    // Verifikasi old password
     const isOldPasswordMatch = await bcrypt.compare(oldPassword, user.password);
+
     if (!isOldPasswordMatch) {
       return res.status(401).json({
         status: 'fail',

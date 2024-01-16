@@ -18,7 +18,10 @@ module.exports = (sequelize, DataTypes) => {
   User_Profile.init(
     {
       user_id: DataTypes.UUID,
-      profile_picture: DataTypes.STRING,
+      profile_picture: {
+        type: DataTypes.STRING,
+        defaultValue: '/profile.png',
+      },
       birthday: DataTypes.DATE,
       gender: {
         type: DataTypes.STRING, // Tipe data bisa disesuaikan dengan tipe data yang digunakan pada tabel di database Anda

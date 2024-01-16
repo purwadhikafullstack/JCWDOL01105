@@ -46,7 +46,7 @@ router.get('/transactions', tenantMiddleware, OrderController.getAllOrders);
 router.post('/payment', paymentController.paymentGateway);
 router.post('/callback', paymentController.midtransCallback);
 
-router.put(
+router.post(
   '/cancel_order/:order_id',
   authMiddleware,
   OrderController.cancelOrder,

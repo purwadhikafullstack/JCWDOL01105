@@ -6,6 +6,7 @@ import { useFormik } from 'formik';
 import api from '../../../config/api';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
+import img from '../../../../public/ID_CARD.jpeg';
 
 YupPassword(Yup);
 const validationRegister = Yup.object().shape({
@@ -105,6 +106,20 @@ const FormRegister = ({ showToast }) => {
 
   const handlePrev = () => {
     setCurrentStep(currentStep - 1);
+  };
+
+  const handleImageChange = (event) => {
+    formik.setFieldValue('id_picture', event.currentTarget.files[0]);
+
+    if (event.currentTarget.files && event.currentTarget.files[0]) {
+      let reader = new FileReader();
+      reader.onload = (e) => {
+        document
+          .getElementById('preview-image')
+          .setAttribute('src', e.target.result);
+      };
+      reader.readAsDataURL(event.currentTarget.files[0]);
+    }
   };
 
   return (
@@ -260,21 +275,7 @@ const FormRegister = ({ showToast }) => {
               type="file"
               accept="image/*"
               className="hidden"
-              onChange={(event) => {
-                formik.setFieldValue(
-                  'id_picture',
-                  event.currentTarget.files[0],
-                );
-                if (event.currentTarget.files && event.currentTarget.files[0]) {
-                  let reader = new FileReader();
-                  reader.onload = (e) => {
-                    document
-                      .getElementById('preview-image')
-                      .setAttribute('src', e.target.result);
-                  };
-                  reader.readAsDataURL(event.currentTarget.files[0]);
-                }
-              }}
+              onChange={handleImageChange}
               onBlur={formik.handleBlur}
             />
 
@@ -286,15 +287,18 @@ const FormRegister = ({ showToast }) => {
                 <h3 className="block text-sm text-color-pallete1">
                   ID Card Picture
                 </h3>
-                <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                <div className="flex flex-col items-center justify-center">
                   <Image
                     id="preview-image"
-                    src="#"
+                    src={
+                      formik.values.id_picture
+                        ? URL.createObjectURL(formik.values.id_picture)
+                        : img
+                    }
                     alt="Preview"
-                    className="mb-4 w-52 h-32 object-cover rounded-lg border" // Atur ukuran gambar sesuai yang diinginkan
-                    style={{ maxHeight: '200px', maxWidth: '200px' }} // Sesuaikan ukuran gambar yang diinginkan di sini
-                    width={200}
-                    height={200}
+                    className="mb-4 w-52 h-32 object-cover rounded-lg border mt-2" // Atur ukuran gambar sesuai yang diinginkan
+                    width={300}
+                    height={180}
                   />
                   <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
                     <span className="font-semibold">Click to upload</span>

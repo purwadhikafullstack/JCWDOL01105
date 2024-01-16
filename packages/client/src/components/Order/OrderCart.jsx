@@ -202,19 +202,16 @@ const OrderCart = ({
                       </span>
                     </p>
                     {singleOrder.booking_status === 'WAITING_FOR_PAYMENT' &&
-                      (moment().isBefore(
+                      moment().isBefore(
                         moment(singleOrder.check_in_date, 'YYYY-MM-DD'),
                         'day',
-                      ) ||
-                        moment().isSame(
-                          moment(singleOrder.check_in_date, 'YYYY-MM-DD'),
-                        )) && (
+                      ) && (
                         <div className="flex gap-2">
                           <button
                             className="block w-full select-none rounded-lg bg-color-blue py-3.5 px-7 text-center align-middle font-sans text-sm font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                             type="button"
                             data-ripple-light="true"
-                            onClick={() => handleModalPayment(singleOrder)} // Fungsi untuk menangani pembayaran
+                            onClick={() => handleModalPayment(singleOrder)}
                           >
                             Pay Now
                           </button>
@@ -222,7 +219,7 @@ const OrderCart = ({
                             className="block w-full select-none rounded-lg bg-color-red py-3.5 px-7 text-center align-middle font-sans text-sm font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                             type="button"
                             data-ripple-light="true"
-                            onClick={() => handleCancelOrder(singleOrder.id)} // Fungsi untuk membatalkan pesanan
+                            onClick={() => handleCancelOrder(singleOrder.id)}
                           >
                             Cancel
                           </button>
@@ -275,6 +272,23 @@ const OrderCart = ({
                         CANCELLED
                       </button>
                     )}
+                    {singleOrder.booking_status === 'WAITING_FOR_PAYMENT' &&
+                      (moment().isAfter(
+                        moment(singleOrder.check_in_date, 'YYYY-MM-DD'),
+                        'day',
+                      ) ||
+                        moment().isSame(
+                          moment(singleOrder.check_in_date, 'YYYY-MM-DD'),
+                        )) && (
+                        <button
+                          className="block w-full select-none rounded-lg bg-color-red py-3.5 px-7 text-center align-middle font-sans text-sm font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                          type="button"
+                          data-ripple-light="true"
+                          disabled
+                        >
+                          CANCELLED
+                        </button>
+                      )}
                   </div>
                 </div>
               </div>

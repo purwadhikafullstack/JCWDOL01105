@@ -7,8 +7,6 @@ const ProfilePicture = ({ showToast }) => {
   const [profilePicture, setProfilePicture] = useState('');
   const [showModal, setShowModal] = useState(false);
 
-  const name = localStorage.getItem('name');
-
   const handleModalToggle = () => {
     setShowModal(!showModal); // Mengubah nilai state untuk menampilkan/sembunyikan modal
   };
@@ -33,19 +31,19 @@ const ProfilePicture = ({ showToast }) => {
       showToast('Update Success', 'success');
       setProfilePicture(data.profile_picture);
     } catch (error) {
-      console.error('Failed to update profile picture', error);
+      console.error('Failed to fetch profile picture', error);
     }
   };
 
   return (
     <div className="bg-white shadow sm:rounded-lg p-6">
-      <h2 className="text-2xl font-semibold mb-4">{name}</h2>
+      <h2 className="text-2xl font-semibold mb-4">Profile Picture</h2>
       <div className="flex items-center justify-center mb-6">
         <Image
           src={profilePicture}
           alt="Profile"
           className="rounded-full h-40 w-40 object-cover border-4 border-blue-500"
-          width={300}
+          width={200}
           height={200}
         />
       </div>
