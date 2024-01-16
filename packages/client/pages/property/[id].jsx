@@ -311,7 +311,9 @@ const PropertyDetails = () => {
                 isWeekend(checkOutDate) &&
                 property.rooms[0].specialPrice ? (
                   <div className="mb-4">
-                    <span className="font-semibold">Weekend's Price :</span>{' '}
+                    <span className="font-semibold">
+                      Weekend`&apos;`s Price :
+                    </span>{' '}
                     {formatPrice(
                       getPrice(property.rooms[0], totalNights, true),
                     )}
