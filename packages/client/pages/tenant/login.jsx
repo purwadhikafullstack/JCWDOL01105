@@ -32,8 +32,8 @@ const authRegister = () => {
             src={logo}
             alt="logo"
             className="mt-5"
-            width={300}
-            height={200}
+            width={500}
+            height={500}
           />
         </div>
       </div>

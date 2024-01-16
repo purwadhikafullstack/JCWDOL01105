@@ -259,27 +259,35 @@ const SalesReport = () => {
                       <td className="px-5 py-5 border-gray-200 bg-white text-sm">
                         <div className="flex items-center">
                           <div className="flex-shrink-0 w-10 h-10">
-                            <Image
-                              className="w-full h-full rounded-full"
-                              src={order.User.User_Profile.profile_picture}
-                              alt={order.User.name}
-                              width={200}
-                              height={200}
-                            />
+                            {order.User &&
+                            order.User.User_Profile &&
+                            order.User.User_Profile.profile_picture ? (
+                              <Image
+                                className="w-full h-full rounded-full"
+                                src={order.User.User_Profile.profile_picture}
+                                alt={order.User.name}
+                                width={200}
+                                height={200}
+                              />
+                            ) : (
+                              <span>No Image</span>
+                            )}
                           </div>
                           <div className="ml-3">
                             <p className="text-gray-900 whitespace-no-wrap">
-                              {order.User.name}
+                              {order.User ? order.User.name : 'Unknown User'}
                             </p>
                             <p className="text-gray-500 text-xs">
-                              Property Id :{order.rooms.properties.id}
+                              {order.rooms && order.rooms.properties
+                                ? `Property Id: ${order.rooms.properties.id}`
+                                : 'Property Id: Unknown'}
                             </p>
                           </div>
                         </div>
                       </td>
                       <td className="px-5 py-5  border-gray-200 bg-white text-sm">
                         <p className="text-gray-900 whitespace-no-wrap">
-                          {order.rooms.properties.name}
+                          {order.rooms.property.name}
                         </p>
                       </td>
                       <td className="px-5 py-5 border-gray-200 bg-white text-sm">

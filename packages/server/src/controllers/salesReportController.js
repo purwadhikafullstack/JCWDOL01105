@@ -5,6 +5,13 @@ const OrdersController = {
   async getOrdersByTenantId(req, res) {
     try {
       const tenantId = req.user.id;
+
+      if (!req.user || !req.user.id) {
+        return res
+          .status(401)
+          .json({ message: 'User not authenticated or missing ID.' });
+      }
+
       const {
         propertyId,
         status,
