@@ -86,7 +86,7 @@ const SalesReport = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 sm:px-8">
+    <div className="container mx-auto px-4 sm:px-8 w-screen-full">
       <div className="py-8">
         <div>
           <h2 className="text-2xl font-semibold leading-tight">Sales Report</h2>
@@ -321,7 +321,7 @@ const SalesReport = () => {
                   ))}
                 </tbody>
               </table>
-              <div className="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between          ">
+              <div className="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between">
                 <div className="inline-flex mt-2 xs:mt-0">
                   <button
                     className="text-sm text-gray-500 hover:text-gray-700"

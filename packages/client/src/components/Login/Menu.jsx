@@ -112,7 +112,7 @@ const Menu = () => {
               <>
                 <MenuItem onClick={handleModalOpen} label="Login" />
                 <MenuItem
-                  onClick={() => handleClick('Sign up')}
+                  onClick={() => handleClick('Register')}
                   label="Sign up"
                 />
                 <MenuItem

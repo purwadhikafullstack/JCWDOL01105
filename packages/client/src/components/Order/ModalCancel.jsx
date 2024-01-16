@@ -18,7 +18,7 @@ const OrderCancel = ({
       const finalReason =
         reasonSelected === 'other' ? cancelReason : reasonSelected;
 
-      const response = await api.post(`/order/cancel_order/${order_id}`, {
+      const response = await api.post(`/orders/cancel_order/${order_id}`, {
         cancel_reason: finalReason,
       });
       showToast('Order Cancelled', 'success');
@@ -77,7 +77,7 @@ const OrderCancel = ({
               </button>
 
               <button
-                className="bg-color-blue hover:bg-color-blue text-color-primary font-bold py-2 px-4 rounded"
+                className="bg-color-pallete3 hover:bg-color-blue text-color-primary font-bold py-2 px-4 rounded"
                 onClick={handleSubmit}
               >
                 Submit

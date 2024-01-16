@@ -3,6 +3,7 @@ const router = express.Router();
 const propertyController = require('../controllers/propertyController');
 const { uploadOptionsProperty } = require('../utils/uploadFile');
 const authenticateTenant = require('../middleware/tenantMiddleware');
+const tenantMiddleware = require('../middleware/tenantMiddleware');
 
 router.get('/properties', propertyController.getProperties);
 router.get('/search', propertyController.searchProperties);

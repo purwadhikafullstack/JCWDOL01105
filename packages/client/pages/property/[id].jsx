@@ -147,20 +147,31 @@ const PropertyDetails = () => {
 
       const totalGuests = Number(guests.adults) + Number(guests.children);
 
+      function generateBookingCode() {
+        const prefix = 'BOOK'; // Teks awalan untuk kode booking
+        const randomNum = Math.floor(1000 + Math.random() * 9000); // Angka acak antara 1000 - 9999
+        return prefix + randomNum; // Menggabungkan teks awalan dengan angka acak
+      }
+
+      // Contoh penggunaan
+      const bookingCode = generateBookingCode();
+
       const orderData = {
         user_id: 1,
         room_id: property.rooms[0].id,
         check_in_date: checkInDate.toISOString().split('T')[0],
         check_out_date: checkOutDate.toISOString().split('T')[0],
         guests: totalGuests,
-        booking_code: generateRandomCode(10),
+        booking_code: bookingCode,
         price: property.rooms[0].regularPrice * totalNights,
         specialPrice: property.rooms[0].specialPrice,
-        total_invoice: 0,
+        total_invoice: property.rooms[0].specialPrice
+          ? property.rooms[0].specialPrice * totalNights
+          : property.rooms[0].regularPrice * totalNights,
         payment_proof: 'default',
         payment_status: null,
         payment_date: null,
-        booking_status: null,
+        booking_status: 'WAITING_FOR_PAYMENT',
         cancel_reason: '',
         reject_reason: '',
       };
@@ -168,7 +179,7 @@ const PropertyDetails = () => {
       const response = await api.post('/orders', orderData);
 
       if (response.ok || response.status === 201) {
-        router.push('/');
+        alert('Success! Your order has been created.');
       } else {
         console.error(
           'Error creating order:',
@@ -312,7 +323,7 @@ const PropertyDetails = () => {
                 property.rooms[0].specialPrice ? (
                   <div className="mb-4">
                     <span className="font-semibold text-xl">
-                      Weekend's Price :
+                      Weekend Price :
                     </span>{' '}
                     {formatPrice(
                       getPrice(property.rooms[0], totalNights, true),

@@ -1,12 +1,10 @@
-const { Tenant } = require('../models');
+const { Tenants } = require('../models');
 const { body, check, validationResult } = require('express-validator');
 
 const validate = (validations) => {
   return async (req, res, next) => {
     for (let validation of validations) {
       const result = await validation.run(req);
-      console.log('val', result);
-      console.log('req.body', req.body);
       if (result.errors.length) break;
     }
 

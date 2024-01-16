@@ -26,12 +26,7 @@ const FormForgotPassword = ({ showToast }) => {
         const response = await api.post('/auth/request-reset-password-tenant', {
           email: values.email,
         });
-        console.log(
-          'Send Reset Password Success, Cek Your Email',
-          response.data,
-        );
         if (response && response.status === 200) {
-          console.log('Send Reset Password Success, Cek Your Email');
           showToast('Send Reset Password Success, Cek Your Email', 'success');
         } else {
           console.error('Send Reset Password Failed', response.data.message);

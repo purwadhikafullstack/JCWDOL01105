@@ -100,7 +100,6 @@ const Property = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
-      console.log('Token', token);
       const response = await axios.post(
         `${API_URL}/property/upload`,
         formData,
@@ -112,7 +111,6 @@ const Property = () => {
         },
       );
       const responseData = response.data;
-      console.log('Response Data :', responseData);
 
       if (responseData.success === false) {
         setErrorMessage(responseData.message);
@@ -198,6 +196,12 @@ const Property = () => {
     } else if (checkboxId === 'roomTypeSuperior') {
       setRoomType('Superior room');
     }
+  };
+
+  const handleDateChange = (e) => {
+    // Format the date as "YYYY-MM-DD"
+    const formattedDate = new Date(e.target.value).toISOString().split('T')[0];
+    setAvailable(formattedDate);
   };
 
   return (
@@ -360,7 +364,7 @@ const Property = () => {
                 onChange={(e) => setSpecialPrice(e.target.value)}
               />
               <div className="flex flex-col items-center">
-                <p>Weekend's Price</p>
+                <p>Weekend Price</p>
                 <p className="text-xs">20% Higher</p>
                 <span className="text-xs">(Rp / Night)</span>
               </div>

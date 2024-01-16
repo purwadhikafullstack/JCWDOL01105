@@ -1,5 +1,6 @@
 import Dashboard from '../../src/components/FormAuth/tenant/dashboard/index';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 const index = () => {
   return (
@@ -11,8 +12,14 @@ const index = () => {
 };
 
 const Navbar = () => {
+  const router = useRouter();
+  const handleLogout = () => {
+    localStorage.clear();
+    router.push('/');
+  };
+
   return (
-    <nav className="bg-color-primary py-4 ">
+    <nav className="bg-color-primary py-4">
       <div className="container mx-auto flex items-center justify-between">
         <Link href="/">
           <a className="text-color-pallete1 font-bold text-xl flex items-center">
@@ -22,29 +29,14 @@ const Navbar = () => {
         </Link>
         <ul className="flex space-x-4">
           <li>
-            <Link href="/tenant-dashboard">
-              <a className="text-white hover:text-gray-300">Dashboard</a>
-            </Link>
-          </li>
-          <li>
             <Link href="/PropertyListing">
               <a className="text-white hover:text-gray-300">Create Property</a>
             </Link>
           </li>
           <li>
-            <Link href="/profile">
-              <a className="text-white hover:text-gray-300">Profile</a>
-            </Link>
-          </li>
-          <li>
-            <Link href="/settings">
-              <a className="text-white hover:text-gray-300">Settings</a>
-            </Link>
-          </li>
-          <li>
-            <Link href="/logout">
+            <button onClick={handleLogout}>
               <a className="text-white hover:text-gray-300">Logout</a>
-            </Link>
+            </button>
           </li>
         </ul>
       </div>

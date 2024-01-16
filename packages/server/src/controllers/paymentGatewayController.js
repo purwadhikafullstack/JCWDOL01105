@@ -19,8 +19,6 @@ const paymentGateway = async (req, res) => {
       },
     };
 
-    console.log(transactionDetails);
-
     const transaction = await snap.createTransaction(transactionDetails);
     const snapToken = transaction.token;
 

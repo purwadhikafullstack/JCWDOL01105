@@ -1,5 +1,5 @@
 const { Op } = require('sequelize');
-const { Properties, Room, sequelize, property_picture } = require('../models');
+const { Properties, Room, property_picture } = require('../models');
 const { errorHandler } = require('../utils/errorHandle');
 
 exports.createOrUpdateProperty = async (req, res, next) => {
@@ -41,12 +41,12 @@ exports.createOrUpdateProperty = async (req, res, next) => {
         ],
       });
 
-      if (!property) {
-        return res
-          .status(404)
-          .json({ status: 'error', message: 'Property not found' });
+      if (!property || property.tenant_id !== tenant_id) {
+        return res.status(403).json({
+          status: 'error',
+          message: 'You do not have permission to update this property',
+        });
       }
-
       property.sell = isForSale;
       property.rent = isForRent;
       property.categories = categories;
@@ -97,7 +97,6 @@ exports.createOrUpdateProperty = async (req, res, next) => {
       }
 
       await property.save();
-
       if (req.files) {
         const fileNames = req.files.map((file) => file.filename);
         const basePaths = fileNames.map(
@@ -280,7 +279,6 @@ exports.deleteProperty = async (req, res, next) => {
 exports.searchProperties = async (req, res, next) => {
   try {
     const { location, date, guests, category, sort } = req.query;
-    console.log('Search request', req.query);
 
     const where = {};
 
@@ -321,8 +319,6 @@ exports.searchProperties = async (req, res, next) => {
     } else if (sort === 'za') {
       order.push(['name', 'DESC']);
     }
-
-    console.log('Where clause:', where);
 
     const searchResult = await Properties.findAll({
       where,

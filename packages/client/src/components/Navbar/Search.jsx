@@ -118,7 +118,6 @@ const Search = () => {
       const response = await api.get('/property/search', {
         params,
       });
-      console.log('search params', params);
 
       setShowCalendar(false);
 
@@ -127,7 +126,6 @@ const Search = () => {
       if (searchData.success) {
         setSearchResults(searchData.data);
         setSearchAction(true);
-        console.log('Search results:', searchData.data);
 
         const searchUrl = `?location=${selectedLocation}`;
         router.push(searchUrl);
@@ -148,7 +146,6 @@ const Search = () => {
         const searchData = response.data;
 
         if (searchData.success) {
-          console.log('Initial search result', searchData.data);
           setSearchResults(searchData.data);
           setSearchAction(true);
         } else {

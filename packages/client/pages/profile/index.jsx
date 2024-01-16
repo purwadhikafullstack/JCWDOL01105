@@ -4,10 +4,8 @@ import ChangePassword from '../../src/components/Profile/ChangePassword';
 import UserProfile from '../../src/components/Profile/UserProfile';
 import Navbar from '../../src/components/Navbar/Navbar';
 import { toast } from 'react-toastify';
-import { useRouter } from 'next/router';
 
 const ProfilePage = () => {
-  const router = useRouter();
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [isGoogleLogin, setIsGoogleLogin] = useState(false);
 
