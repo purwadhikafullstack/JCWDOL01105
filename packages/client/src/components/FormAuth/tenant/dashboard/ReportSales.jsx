@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import api from '../../../../config/api';
 import moment from 'moment';
 import DatePicker from 'react-datepicker';
@@ -19,7 +19,7 @@ const SalesReport = () => {
   const [isEmpty, setIsEmpty] = useState(false);
   const [total_Income, setTotal_Income] = useState(0);
 
-  const fetchUserDate = async () => {
+  const fetchUserDate = useCallback(async () => {
     try {
       const formatedDate = selectedDate
         ? moment(selectedDate).format('YYYY-MM-DD')
@@ -34,7 +34,7 @@ const SalesReport = () => {
     } catch (error) {
       console.error('Error fetching user data:', error);
     }
-  };
+  }, [propertyName, user, status, selectedDate, page, limit]);
 
   const property = async () => {
     try {
@@ -60,7 +60,7 @@ const SalesReport = () => {
     fetchUserDate();
     property();
     users();
-  }, [propertyName, user, status, selectedDate, page, limit]);
+  }, [propertyName, user, status, selectedDate, page, limit, fetchUserDate]);
 
   const handlePropertyChange = (event) => {
     setPropertyName(event.target.value);

@@ -2,7 +2,6 @@
 import Navbar from '../../src/components/Navbar/Navbar';
 import Footer from '../../src/components/Footer/Footer';
 import api from '../../src/config/api';
-
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';

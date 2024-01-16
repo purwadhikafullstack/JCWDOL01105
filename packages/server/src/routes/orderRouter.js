@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const OrderController = require('../controllers/orderController');
+const orderController = require('../controllers/orderController');
+const authenticate = require('../middleware/authMiddleware');
+const authMiddleware = require('../middleware/tenantMiddleware');
 const tenantMiddleware = require('../middleware/tenantMiddleware');
-const authMiddleware = require('../middleware/authMiddleware');
 const { uploadOptionPaymentProof } = require('../utils/uploadFile');
 // const paymentController = require('../controllers/paymentGatewayController');
 const { paymentGateway, midtransCallback } = require('../controllers/payment');
@@ -15,18 +16,18 @@ router.put(
   orderController.confirmPayment,
 );
 
-router.get('/transactions', authMiddleware, OrderController.getAllOrders);
+router.get('/transactions', authMiddleware, orderController.getAllOrders);
 
 router.get(
   '/payment_proof/:order_id',
   tenantMiddleware,
-  OrderController.getPaymentProof,
+  orderController.getPaymentProof,
 );
 
 router.post(
   '/confirm_payment/:order_id',
   tenantMiddleware,
-  OrderController.confirmPayment,
+  orderController.confirmPayment,
 );
 
 router.post('/payment', paymentGateway);
@@ -38,18 +39,19 @@ router.post(
   orderController.rejectPayment,
 );
 
+router.put('/cancel-order/:id', authMiddleware, orderController.cancelOrder);
 router.put(
   '/confirm-payment/:id',
   authMiddleware,
-  OrderController.confirmPayment,
+  orderController.confirmPayment,
 );
 
 router.put(
   '/reject-payment/:id',
   authMiddleware,
-  OrderController.rejectPayment,
+  orderController.rejectPayment,
 );
 
-router.put('/cancel-order/:id', authMiddleware, OrderController.cancelOrder);
+router.put('/cancel-order/:id', authMiddleware, orderController.cancelOrder);
 
 module.exports = router;

@@ -1,5 +1,5 @@
 // PaymentProcessor.jsx
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { RiBankCardLine } from 'react-icons/ri';
 import { useRouter } from 'next/router';
 import axios from 'axios';
@@ -102,7 +102,7 @@ const PaymentProcessor = ({ singleOrder, onPaymentProcessed, showToast }) => {
         },
       });
     }
-  }, [token]);
+  }, [token, name, onPaymentProcessed, orderId, router, showToast, total]);
 
   return (
     <button
