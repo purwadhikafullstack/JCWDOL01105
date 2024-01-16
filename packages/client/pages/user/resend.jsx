@@ -2,7 +2,7 @@ import React from 'react';
 import bg from '../../public/bg-auth.jpg';
 import { toast } from 'react-toastify';
 import VerifyOTP from '../../src/components/FormAuth/user/FormSendOtp';
-import SwitchButton from '../../src/components/FormAuth/switchAuth';
+import SwitchButton from '../../src/components/FormAuth/SwitchAuth';
 
 const authRegister = () => {
   const showToast = (message, type) => {
