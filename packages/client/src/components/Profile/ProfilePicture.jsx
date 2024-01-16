@@ -45,6 +45,8 @@ const ProfilePicture = ({ showToast }) => {
           src={profilePicture}
           alt="Profile"
           className="rounded-full h-40 w-40 object-cover border-4 border-blue-500"
+          width={300}
+          height={200}
         />
       </div>
       <div className="flex justify-center">

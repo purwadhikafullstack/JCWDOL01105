@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import React from 'react';
 
 const UserLoginModal = ({ isOpen, onClose, onUserLogin, onTenantLogin }) => {
@@ -29,10 +30,12 @@ const UserLoginModal = ({ isOpen, onClose, onUserLogin, onTenantLogin }) => {
                 className="flex items-center border border-gray-300 p-2 rounded-lg cursor-pointer bg-color-pallete1"
                 onClick={handleUserLogin}
               >
-                <img
+                <Image
                   src="/user.png"
                   alt="login-tenant"
                   className="w-12 h-12 mr-4"
+                  width={15}
+                  height={15}
                 />
                 <p className="text-sm font-semibold">User</p>
               </div>
@@ -40,10 +43,12 @@ const UserLoginModal = ({ isOpen, onClose, onUserLogin, onTenantLogin }) => {
                 className="flex items-center border border-gray-300 p-2 rounded-lg cursor-pointer bg-color-pallete3"
                 onClick={handleTenantLogin}
               >
-                <img
+                <Image
                   src="/user.png"
                   alt="login-owner"
                   className="w-12 h-12 mr-4"
+                  width={150}
+                  height={100}
                 />
                 <p className="text-sm font-semibold">Tenant</p>
               </div>

@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import api from '../../../../config/api';
 import moment from 'moment';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { AiOutlineDollarCircle } from 'react-icons/ai';
+import Image from 'next/image';
 
 const SalesReport = () => {
   const [propertyName, setPropertyName] = useState('');
@@ -18,7 +19,7 @@ const SalesReport = () => {
   const [isEmpty, setIsEmpty] = useState(false);
   const [total_Income, setTotal_Income] = useState(0);
 
-  const fetchUserDate = async () => {
+  const fetchUserDate = useCallback(async () => {
     try {
       const formatedDate = selectedDate
         ? moment(selectedDate).format('YYYY-MM-DD')
@@ -33,7 +34,7 @@ const SalesReport = () => {
     } catch (error) {
       console.error('Error fetching user data:', error);
     }
-  };
+  }, [propertyName, user, status, selectedDate, page, limit]);
 
   const property = async () => {
     try {
@@ -59,7 +60,7 @@ const SalesReport = () => {
     fetchUserDate();
     property();
     users();
-  }, [propertyName, user, status, selectedDate, page, limit]);
+  }, [propertyName, user, status, selectedDate, page, limit, fetchUserDate]);
 
   const handlePropertyChange = (event) => {
     setPropertyName(event.target.value);
@@ -258,10 +259,12 @@ const SalesReport = () => {
                       <td className="px-5 py-5 border-gray-200 bg-white text-sm">
                         <div className="flex items-center">
                           <div className="flex-shrink-0 w-10 h-10">
-                            <img
+                            <Image
                               className="w-full h-full rounded-full"
                               src={order.User.User_Profile.profile_picture}
                               alt={order.User.name}
+                              width={200}
+                              height={200}
                             />
                           </div>
                           <div className="ml-3">

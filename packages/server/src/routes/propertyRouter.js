@@ -6,6 +6,12 @@ const authenticateTenant = require('../middleware/tenantMiddleware');
 const tenantMiddleware = require('../middleware/tenantMiddleware');
 
 router.get('/properties', propertyController.getProperties);
+router.get(
+  '/property',
+  authenticateTenant,
+  propertyController.getPropertiesTenant,
+);
+
 router.get('/search', propertyController.searchProperties);
 router.get('/:id', propertyController.getProperty);
 

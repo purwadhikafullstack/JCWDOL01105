@@ -2,7 +2,6 @@
 import Navbar from '../../src/components/Navbar/Navbar';
 import Footer from '../../src/components/Footer/Footer';
 import api from '../../src/config/api';
-
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
@@ -19,6 +18,7 @@ import {
   CheckCircle,
   Warning,
 } from '@phosphor-icons/react';
+import Image from 'next/image';
 
 const PropertyDetails = () => {
   const router = useRouter();
@@ -62,6 +62,8 @@ const PropertyDetails = () => {
   if (!property) {
     return <p>Loading...</p>;
   }
+
+  const tenantName = property.Tenant ? property.Tenant.name : 'Unknown Tenant';
 
   const nextSlide = () => {
     console.log('Next Slide Clicked');
@@ -162,7 +164,7 @@ const PropertyDetails = () => {
         check_in_date: checkInDate.toISOString().split('T')[0],
         check_out_date: checkOutDate.toISOString().split('T')[0],
         guests: totalGuests,
-        booking_code: bookingCode,
+        booking_code: generateRandomCode(10),
         price: property.rooms[0].regularPrice * totalNights,
         specialPrice: property.rooms[0].specialPrice,
         total_invoice: property.rooms[0].specialPrice
@@ -171,7 +173,7 @@ const PropertyDetails = () => {
         payment_proof: 'default',
         payment_status: null,
         payment_date: null,
-        booking_status: 'WAITING_FOR_PAYMENT',
+        booking_status: null,
         cancel_reason: '',
         reject_reason: '',
       };
@@ -179,7 +181,7 @@ const PropertyDetails = () => {
       const response = await api.post('/orders', orderData);
 
       if (response.ok || response.status === 201) {
-        alert('Success! Your order has been created.');
+        router.push('/orders');
       } else {
         console.error(
           'Error creating order:',
@@ -211,21 +213,24 @@ const PropertyDetails = () => {
         <div className="relative">
           <div
             id="carousel"
-            className="carousel-container overflow-hidden rounded-t-md"
+            className="carousel-container overflow-hidden rounded-t-md h-[400px]"
           >
             <div
               className="carousel-wrapper transition-transform flex"
               style={{
                 transform: `translateX(-${currentIndex * 100}%)`,
                 transition: 'transform 0.5s ease',
+                height: '100%',
               }}
             >
               {imageUrls.map((imageUrl, index) => (
                 <div key={index} className="w-full h-full flex-shrink-0">
-                  <img
+                  <Image
                     src={imageUrl}
                     alt={`Property Image`}
-                    className="w-full h-full object-cover rounded-t-md"
+                    className="w-full h-full rounded-t-md object-cover"
+                    width={1200}
+                    height={700}
                     onError={() =>
                       console.error(`Error loading image: ${imageUrl}`)
                     }
@@ -239,16 +244,10 @@ const PropertyDetails = () => {
 
             {imageUrls.length > 1 && (
               <div className="absolute flex justify-between w-full -mt-8">
-                <button
-                  className="btn btn-circle text-white"
-                  onClick={prevSlide}
-                >
+                <button className="btn btn-circle" onClick={prevSlide}>
                   <ArrowCircleLeft size={32} />
                 </button>
-                <button
-                  className="btn btn-circle text-white"
-                  onClick={nextSlide}
-                >
+                <button className="btn btn-circle" onClick={nextSlide}>
                   <ArrowCircleRight size={32} />
                 </button>
               </div>
@@ -260,7 +259,9 @@ const PropertyDetails = () => {
           <h1 className="text-3xl font-semibold mb-4">{property.name}</h1>
           <div className="flex items-center mb-2">
             <User size={20} />
-            <p>{property.tenants}</p>
+            <h2 className="font-semibold ml-2">{`${tenantName
+              .charAt(0)
+              .toUpperCase()}${tenantName.slice(1)}'s Room`}</h2>
           </div>
           <div className="mb-6">
             <h5 className="text-xl font-semibold mb-2">About this rooms</h5>
@@ -323,7 +324,7 @@ const PropertyDetails = () => {
                 property.rooms[0].specialPrice ? (
                   <div className="mb-4">
                     <span className="font-semibold text-xl">
-                      Weekend Price :
+                      Weekend`&apos;`s Price :
                     </span>{' '}
                     {formatPrice(
                       getPrice(property.rooms[0], totalNights, true),

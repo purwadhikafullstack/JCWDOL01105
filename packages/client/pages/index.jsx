@@ -31,7 +31,6 @@ const Home = () => {
         <div>
           <Slider />
           <Categories />
-          <FilterSection />
           <PropertyList searchCriteria={searchCriteria} />
         </div>
       )}

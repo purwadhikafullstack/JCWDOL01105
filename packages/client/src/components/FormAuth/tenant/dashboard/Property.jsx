@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import api from '../../../../config/api';
+import Image from 'next/image';
 
 const PropertyComponent = () => {
   const [properties, setProperties] = useState([]);
@@ -31,7 +32,7 @@ const PropertyComponent = () => {
 
   const fetchProperties = async () => {
     try {
-      const response = await api.get('/property/properties');
+      const response = await api.get('/tenants/property');
       const propertiesData = await response.data.data.properties;
       setProperties(propertiesData);
     } catch (error) {
@@ -45,7 +46,8 @@ const PropertyComponent = () => {
       const propertyData = response.data.data.property;
 
       setEditingPropertyId(propertyId);
-      setEditFormData({
+      setEditFormData((prevData) => ({
+        ...prevData,
         name: propertyData.name,
         description: propertyData.description,
         address: propertyData.address,
@@ -63,8 +65,8 @@ const PropertyComponent = () => {
         available: propertyData.available,
         propertyPictures: propertyData.property_pictures || [],
         isForRent: propertyData.type === 'Property For Rent',
-        isForSale: propertyData.type === 'Property For Rent',
-      });
+        isForSale: propertyData.type === 'Property For Sale',
+      }));
       setIsEditingProperty(true);
     } catch (error) {
       console.error('Error updating room:', error);
@@ -169,12 +171,14 @@ const PropertyComponent = () => {
                         .split(',')
                         .map((url, imgIndex) => (
                           <div key={imgIndex} className="relative">
-                            <img
+                            <Image
                               src={url.trim()}
                               alt={`Property ${property.name} - Picture ${
                                 index + 1
                               }`}
                               className="mb-2 w-80 h-32 "
+                              width={700}
+                              height={300}
                             />
                             {isEditingProperty && (
                               <button
@@ -235,7 +239,6 @@ const PropertyComponent = () => {
                 property.categories
               )}
             </p>
-
             <p>
               Type :{' '}
               {editingPropertyId === property.id ? (

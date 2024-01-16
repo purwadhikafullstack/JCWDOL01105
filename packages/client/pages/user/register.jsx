@@ -30,15 +30,15 @@ const authRegister = () => {
               src={logo}
               alt="logo"
               className="mt-5"
-              width={500}
-              height={500}
+              width={300}
+              height={300}
             />
           </div>
           <div className="md:order-2 md:ml-2 mb-10">
             <FormRegister className="mb-10" showToast={showToast} />
           </div>
         </div>
-        <style jsx>{`
+        <style>{`
           @media (max-width: 768px) {
             .switch-auth-container {
               position: relative;

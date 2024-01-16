@@ -105,7 +105,7 @@ const PaymentProcessor = ({ singleOrder, onPaymentProcessed, showToast }) => {
         },
       });
     }
-  }, [token]);
+  }, [token, name, onPaymentProcessed, orderId, router, showToast, total]);
 
   return (
     <button

@@ -1,9 +1,9 @@
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
-import { API_URL } from '../../config/api';
+import api from '../../config/api';
 import PropertyList from './PropertyList';
-import axios from 'axios';
 import FurnishOptions from '../utils/Furnish';
+import Image from 'next/image';
 
 const Property = () => {
   const router = useRouter();
@@ -23,7 +23,7 @@ const Property = () => {
   const [specialPrice, setSpecialPrice] = useState(0);
   const [furnished, setFurnished] = useState('');
 
-  const [roomType, setRoomType] = useState('Regular Room');
+  const [roomType, setRoomType] = useState('');
   const [type, setType] = useState('');
   const [categories, setCategories] = useState('');
   const [available, setAvailable] = useState('');
@@ -47,6 +47,7 @@ const Property = () => {
     if (
       !name ||
       !description ||
+      !categories ||
       !address ||
       !bedrooms ||
       !bathrooms ||
@@ -100,16 +101,13 @@ const Property = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
-      const response = await axios.post(
-        `${API_URL}/property/upload`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data',
-          },
+      console.log('Token', token);
+      const response = await api.post('/property/upload', formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
         },
-      );
+      });
       const responseData = response.data;
 
       if (responseData.success === false) {
@@ -118,9 +116,6 @@ const Property = () => {
       }
 
       setFiles([]);
-      setName('');
-      setDescription('');
-      setAddress('');
       setPropertyCreated(true);
       setNewProperty(responseData.data);
 
@@ -149,10 +144,12 @@ const Property = () => {
       <>
         {files.map((file, index) => (
           <div key={index} className="flex gap-4 relative">
-            <img
+            <Image
               src={URL.createObjectURL(file)}
               alt={`Selected Image ${index + 1}`}
               className="w-20 h-20 rounded-lg"
+              width={200}
+              height={200}
             />
             <button
               onClick={() => handleDeleteImage(index)}
@@ -165,7 +162,7 @@ const Property = () => {
 
         {uploadedImages.map((image, index) => (
           <div key={index} className="flex gap-4">
-            <img
+            <Image
               src={`/property/${image}`}
               alt={`Uploaded Image ${index + 1}`}
               className="w-20 h-20 rounded-lg"
@@ -192,9 +189,9 @@ const Property = () => {
       setSell(false);
       setRent(true);
     } else if (checkboxId === 'roomTypeRegular') {
-      setRoomType('Regular room');
+      setRoomType('Twin Bed Bedroom');
     } else if (checkboxId === 'roomTypeSuperior') {
-      setRoomType('Superior room');
+      setRoomType('Kingsize Bed Bedroom');
     }
   };
 
@@ -265,23 +262,23 @@ const Property = () => {
               <input
                 type="radio"
                 id="roomTypeRegular"
-                value="Regular room"
-                checked={roomType === 'Regular room'}
+                value="Twin Bed"
+                checked={roomType === 'Twin Bed Bedroom'}
                 onChange={handleChange}
                 className="w-5"
               />
-              <label htmlFor="roomTypeRegular">Twin Bedroom</label>
+              <label htmlFor="roomTypeRegular">Twin Bed Bedroom</label>
             </div>
             <div className="flex gap-2">
               <input
                 type="radio"
                 id="roomTypeSuperior"
-                value="Superior room"
-                checked={roomType === 'Superior room'}
+                value="Kingsize Bed Bedroom"
+                checked={roomType === 'Kingsize Bed Bedroom'}
                 onChange={handleChange}
                 className="w-5"
               />
-              <label htmlFor="roomTypeSuperior">Kingsize Bedroom</label>
+              <label htmlFor="roomTypeSuperior">Kingsize Bed Bedroom</label>
             </div>
           </div>
           <div className="flex flex-wrap gap-6">
@@ -364,7 +361,7 @@ const Property = () => {
                 onChange={(e) => setSpecialPrice(e.target.value)}
               />
               <div className="flex flex-col items-center">
-                <p>Weekend Price</p>
+                <p>Weekend`&apos;`s Price</p>
                 <p className="text-xs">20% Higher</p>
                 <span className="text-xs">(Rp / Night)</span>
               </div>

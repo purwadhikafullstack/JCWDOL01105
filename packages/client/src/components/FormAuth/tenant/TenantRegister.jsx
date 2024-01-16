@@ -5,6 +5,7 @@ import YupPassword from 'yup-password';
 import { useFormik } from 'formik';
 import api from '../../../config/api';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 
 YupPassword(Yup);
 const validationRegister = Yup.object().shape({
@@ -286,12 +287,14 @@ const FormRegister = ({ showToast }) => {
                   ID Card Picture
                 </h3>
                 <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                  <img
+                  <Image
                     id="preview-image"
                     src="#"
                     alt="Preview"
                     className="mb-4 w-52 h-32 object-cover rounded-lg border" // Atur ukuran gambar sesuai yang diinginkan
                     style={{ maxHeight: '200px', maxWidth: '200px' }} // Sesuaikan ukuran gambar yang diinginkan di sini
+                    width={200}
+                    height={200}
                   />
                   <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
                     <span className="font-semibold">Click to upload</span>

@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Dashboard from '../../src/components/FormAuth/tenant/dashboard/index';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -19,18 +20,39 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-color-primary py-4">
-      <div className="container mx-auto flex items-center justify-between">
+    <nav className="bg-color-primary py-4 ">
+      <div className="container mx-auto flex flex-col lg:flex-row items-center justify-between">
         <Link href="/">
           <a className="text-color-pallete1 font-bold text-xl flex items-center">
-            <img src="/logo.png" alt="logo" className="w-14 h-14" /> Tenant
-            Dashbord
+            <Image
+              src="/logo.png"
+              alt="logo"
+              className="w-14 h-14"
+              width={150}
+              height={150}
+            />{' '}
+            Tenant Dashbord
           </a>
         </Link>
-        <ul className="flex space-x-4">
+        <ul className="flex flex-row lg:flex-row lg:space-x-4">
           <li>
-            <Link href="/PropertyListing">
+            <Link href="/tenant-dashboard">
+              <a className="text-white hover:text-gray-300">Dashboard</a>
+            </Link>
+          </li>
+          <li>
+            <Link href="/propertyListing">
               <a className="text-white hover:text-gray-300">Create Property</a>
+            </Link>
+          </li>
+          <li>
+            <Link href="/profile">
+              <a className="text-white hover:text-gray-300">Profile</a>
+            </Link>
+          </li>
+          <li>
+            <Link href="/settings">
+              <a className="text-white hover:text-gray-300">Settings</a>
             </Link>
           </li>
           <li>

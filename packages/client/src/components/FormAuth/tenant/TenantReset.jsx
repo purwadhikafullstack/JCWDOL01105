@@ -27,7 +27,7 @@ const FormForgotPassword = ({ showToast }) => {
       setToken(tokenFromUrl);
     }
     console.log(token);
-  }, []);
+  }, [token]);
 
   const formik = useFormik({
     initialValues: {

@@ -32,13 +32,13 @@ const authRegister = () => {
             src={logo}
             alt="logo"
             className="mt-5"
-            width={500}
-            height={500}
+            width={300}
+            height={200}
           />
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         @media (max-width: 768px) {
           .md\:flex-row {
             flex-direction: column-reverse;

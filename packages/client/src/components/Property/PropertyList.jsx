@@ -4,6 +4,8 @@ import api from '../../config/api';
 import { useRouter } from 'next/router';
 import Pagination from '../utils/Pagination';
 import Skeleton from '../utils/Skeleton';
+import FilterSection from '../Navbar/FilterSection';
+import Image from 'next/image';
 
 const PropertyList = () => {
   const [properties, setProperties] = useState([]);
@@ -38,12 +40,34 @@ const PropertyList = () => {
           endpoint = `/property/search?location=${query.location}`;
         }
 
+        if (query.sort) {
+          endpoint += `?sort=${query.sort}`;
+        }
+
         response = await api.get(endpoint);
 
         const propertiesData =
           query.category || query.location
             ? response.data.data
             : response.data.data.properties;
+
+        if (query.sort === 'priceAsc') {
+          propertiesData = propertiesData.sort((a, b) => {
+            return a.rooms[0].regularPrice - b.rooms[0].regularPrice;
+          });
+        } else if (query.sort === 'priceDesc') {
+          propertiesData = propertiesData.sort((a, b) => {
+            return b.rooms[0].regularPrice - a.rooms[0].regularPrice;
+          });
+        } else if (query.sort === 'az') {
+          propertiesData = propertiesData.sort((a, b) => {
+            return a.name.localeCompare(b.name);
+          });
+        } else if (query.sort === 'za') {
+          propertiesData = propertiesData.sort((a, b) => {
+            return b.name.localeCompare(a.name);
+          });
+        }
 
         setProperties(propertiesData);
       } catch (error) {
@@ -52,12 +76,12 @@ const PropertyList = () => {
       } finally {
         setTimeout(() => {
           setLoading(false);
-        }, 2000);
+        }, 1000);
       }
     };
 
     fetchProperties();
-  }, [query.category, query.location]);
+  }, [query.category, query.location, query.sort]);
 
   const renderProperties = () => {
     const startIndex = (page - 1) * itemsPerPage;
@@ -65,7 +89,6 @@ const PropertyList = () => {
 
     const propertiesToDisplay = properties.slice(startIndex, endIndex);
 
-    console.log(properties);
     if (loading) {
       return Array.from({ length: itemsPerPage }).map((_, index) => (
         <Skeleton key={index} />
@@ -99,10 +122,12 @@ const PropertyList = () => {
             <a>
               <div className="">
                 {imageUrl ? (
-                  <img
+                  <Image
                     src={imageUrl}
                     alt={`property cover`}
                     className="w-full h-48 object-cover rounded-t-lg"
+                    width={300}
+                    height={200}
                   />
                 ) : (
                   <p>No pictures available</p>
@@ -132,6 +157,9 @@ const PropertyList = () => {
 
   return (
     <div>
+      <div>
+        <FilterSection />
+      </div>
       <div className="landing-page grid md:grid-cols-5 sm:grid-cols-3 grid-cols-2 gap-4">
         {renderProperties()}
       </div>
