@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import api from '../src/config/api';
+import Image from 'next/image';
 
 const PropertyList = () => {
   const [properties, setProperties] = useState([]);
@@ -49,7 +50,7 @@ const PropertyList = () => {
       >
         <Link href={`/listing/${property.id}`} passHref>
           <a>
-            <img
+            <Image
               src={
                 property.pictures && property.pictures.length > 0
                   ? `${API_URL}/${property.pictures[0].replace(/["']/g, '')}`
@@ -57,6 +58,8 @@ const PropertyList = () => {
               }
               alt="property cover"
               className="h-16 w-16 object-contain"
+              width={300}
+              height={300}
             />
           </a>
         </Link>

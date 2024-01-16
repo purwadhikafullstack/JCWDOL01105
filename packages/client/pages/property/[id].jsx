@@ -19,6 +19,7 @@ import {
   CheckCircle,
   Warning,
 } from '@phosphor-icons/react';
+import Image from 'next/image';
 
 const PropertyDetails = () => {
   const router = useRouter();
@@ -214,10 +215,12 @@ const PropertyDetails = () => {
             >
               {imageUrls.map((imageUrl, index) => (
                 <div key={index} className="w-full h-full flex-shrink-0">
-                  <img
+                  <Image
                     src={imageUrl}
                     alt={`Property Image`}
-                    className="w-full h-full rounded-t-md"
+                    className="w-full h-full rounded-t-md object-cover"
+                    width={1200}
+                    height={700}
                     onError={() =>
                       console.error(`Error loading image: ${imageUrl}`)
                     }
@@ -311,7 +314,7 @@ const PropertyDetails = () => {
                 property.rooms[0].specialPrice ? (
                   <div className="mb-4">
                     <span className="font-semibold text-xl">
-                      Weekend's Price :
+                      Weekend`&apos;`s Price :
                     </span>{' '}
                     {formatPrice(
                       getPrice(property.rooms[0], totalNights, true),

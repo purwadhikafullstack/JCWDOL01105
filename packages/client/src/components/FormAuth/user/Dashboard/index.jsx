@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import React from 'react';
 
 const index = () => {
@@ -8,18 +9,22 @@ const index = () => {
           <div>
             <div className="-mx-6 px-6 py-4">
               <a href="#" title="home">
-                <img
+                <Image
                   src="https://tailus.io/sources/blocks/stats-cards/preview/images/logo.svg"
                   className="w-32"
                   alt="tailus logo"
+                  width={300}
+                  height={200}
                 />
               </a>
             </div>
             <div className="mt-8 text-center">
-              <img
+              <Image
                 src="https://tailus.io/sources/blocks/stats-cards/preview/images/second_user.webp"
                 alt=""
                 className="w-10 h-10 m-auto rounded-full object-cover lg:w-28 lg:h-28"
+                width={100}
+                height={100}
               />
               <h5 className="hidden mt-4 text-xl font-semibold text-gray-600 lg:block">
                 Cynthia J. Watts

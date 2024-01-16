@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import api from '../../../../config/api';
+import Image from 'next/image';
 
 const PropertyComponent = () => {
   const [properties, setProperties] = useState([]);
@@ -171,12 +172,14 @@ const PropertyComponent = () => {
                         .split(',')
                         .map((url, imgIndex) => (
                           <div key={imgIndex} className="relative">
-                            <img
+                            <Image
                               src={url.trim()}
                               alt={`Property ${property.name} - Picture ${
                                 index + 1
                               }`}
                               className="mb-2 w-80 h-32 "
+                              width={300}
+                              height={300}
                             />
                             {isEditingProperty && (
                               <button

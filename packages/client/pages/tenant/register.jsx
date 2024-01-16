@@ -29,11 +29,11 @@ const authRegister = () => {
           <FormRegister className="mb-10" showToast={showToast} />
         </div>
         <div className="md:order-2 md:ml-2 mt-20">
-          <Image src={logo} alt="logo" width={500} height={500} />
+          <Image src={logo} alt="logo" width={300} height={200} />
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         @media (max-width: 768px) {
           .md\:flex-row {
             flex-direction: column-reverse;

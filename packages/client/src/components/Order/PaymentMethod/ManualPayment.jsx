@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import api from '../../../config/api';
+import Image from 'next/image';
 
 const ManualPayment = ({
   closeModal,
@@ -80,10 +81,12 @@ const ManualPayment = ({
                   className="relative flex min-h-[200px] items-center justify-center border border-dashed border-color-primary p-12 text-center px-4 py-6 bg-white text-blue rounded-lg shadow-lg tracking-wide uppercase cursor-pointer hover:bg-blue hover:text-white"
                 >
                   {previewImage ? (
-                    <img
+                    <Image
                       src={previewImage}
                       alt="Preview"
                       className="max-w-full h-auto"
+                      width={300}
+                      height={200}
                     />
                   ) : (
                     <div className="w-64 flex flex-col items-center">

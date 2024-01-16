@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import api from '../../config/api';
 import PropertyList from './PropertyList';
 import FurnishOptions from '../utils/Furnish';
+import Image from 'next/image';
 
 const Property = () => {
   const router = useRouter();
@@ -144,10 +145,12 @@ const Property = () => {
       <>
         {files.map((file, index) => (
           <div key={index} className="flex gap-4 relative">
-            <img
+            <Image
               src={URL.createObjectURL(file)}
               alt={`Selected Image ${index + 1}`}
               className="w-20 h-20 rounded-lg"
+              width={200}
+              height={200}
             />
             <button
               onClick={() => handleDeleteImage(index)}
@@ -160,7 +163,7 @@ const Property = () => {
 
         {uploadedImages.map((image, index) => (
           <div key={index} className="flex gap-4">
-            <img
+            <Image
               src={`/property/${image}`}
               alt={`Uploaded Image ${index + 1}`}
               className="w-20 h-20 rounded-lg"
@@ -353,7 +356,7 @@ const Property = () => {
                 onChange={(e) => setSpecialPrice(e.target.value)}
               />
               <div className="flex flex-col items-center">
-                <p>Weekend's Price</p>
+                <p>Weekend`&apos;`s Price</p>
                 <p className="text-xs">20% Higher</p>
                 <span className="text-xs">(Rp / Night)</span>
               </div>

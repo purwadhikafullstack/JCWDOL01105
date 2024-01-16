@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import React from 'react';
 
 const TenantProfile = () => {
@@ -41,10 +42,12 @@ const TenantProfile = () => {
             {/* Tambahkan informasi lainnya tentang penyewa */}
           </div>
           <div className="sm:ml-4 mt-4 sm:mt-0">
-            <img
+            <Image
               src={profileImage}
               alt="Tenant Profile"
               className="w-32 h-32 object-cover rounded-full"
+              width={300}
+              height={300}
             />
           </div>
         </div>

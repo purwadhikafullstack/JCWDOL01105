@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Dashboard from '../../src/components/FormAuth/tenant/dashboard/index';
 import Link from 'next/link';
 
@@ -16,8 +17,14 @@ const Navbar = () => {
       <div className="container mx-auto flex flex-col lg:flex-row items-center justify-between">
         <Link href="/">
           <a className="text-color-pallete1 font-bold text-xl flex items-center">
-            <img src="/logo.png" alt="logo" className="w-14 h-14" /> Tenant
-            Dashbord
+            <Image
+              src="/logo.png"
+              alt="logo"
+              className="w-14 h-14"
+              width={150}
+              height={150}
+            />{' '}
+            Tenant Dashbord
           </a>
         </Link>
         <ul className="flex flex-row lg:flex-row lg:space-x-4">

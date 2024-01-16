@@ -4,6 +4,7 @@ import moment from 'moment';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { AiOutlineDollarCircle } from 'react-icons/ai';
+import Image from 'next/image';
 
 const SalesReport = () => {
   const [propertyName, setPropertyName] = useState('');
@@ -258,10 +259,12 @@ const SalesReport = () => {
                       <td className="px-5 py-5 border-gray-200 bg-white text-sm">
                         <div className="flex items-center">
                           <div className="flex-shrink-0 w-10 h-10">
-                            <img
+                            <Image
                               className="w-full h-full rounded-full"
                               src={order.User.User_Profile.profile_picture}
                               alt={order.User.name}
+                              width={200}
+                              height={200}
                             />
                           </div>
                           <div className="ml-3">

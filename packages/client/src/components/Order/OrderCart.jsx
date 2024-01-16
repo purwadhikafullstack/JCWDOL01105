@@ -4,6 +4,7 @@ import ReviewModal from './ReviewModal';
 import ModalPayment from './ModalPayment';
 import { toast } from 'react-toastify';
 import ModalCancel from './ModalCancel';
+import Image from 'next/image';
 
 const OrderCart = ({
   orders,
@@ -81,10 +82,12 @@ const OrderCart = ({
                     <p>No. Booking: {singleOrder.booking_code}</p>
                   </div>
                   <div className="relative mx-4  overflow-hidden rounded-xl bg-blue-gray-500 bg-clip-border text-white shadow-lg shadow-blue-gray-500/40">
-                    <img
+                    <Image
                       src="https://media-cdn.tripadvisor.com/media/photo-s/1c/d4/42/cd/hotel-entrance.jpg"
                       alt="ui/ux review check"
                       className="w-full"
+                      width={300}
+                      height={300}
                     />
                     <div className="to-bg-black-10 absolute inset-0 h-full w-full bg-gradient-to-tr from-transparent via-transparent to-black/60">
                       <button

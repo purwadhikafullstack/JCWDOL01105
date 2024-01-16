@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import Pagination from '../utils/Pagination';
 import Skeleton from '../utils/Skeleton';
 import FilterSection from '../Navbar/FilterSection';
+import Image from 'next/image';
 
 const PropertyList = () => {
   const [properties, setProperties] = useState([]);
@@ -121,10 +122,12 @@ const PropertyList = () => {
             <a>
               <div className="">
                 {imageUrl ? (
-                  <img
+                  <Image
                     src={imageUrl}
                     alt={`property cover`}
                     className="w-full h-48 object-cover rounded-t-lg"
+                    width={300}
+                    height={200}
                   />
                 ) : (
                   <p>No pictures available</p>
