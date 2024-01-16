@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Dashboard from '../../src/components/FormAuth/tenant/dashboard/index';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 const index = () => {
   return (
@@ -12,6 +13,12 @@ const index = () => {
 };
 
 const Navbar = () => {
+  const router = useRouter();
+  const handleLogout = () => {
+    localStorage.clear();
+    router.push('/');
+  };
+
   return (
     <nav className="bg-color-primary py-4 ">
       <div className="container mx-auto flex flex-col lg:flex-row items-center justify-between">
@@ -50,7 +57,9 @@ const Navbar = () => {
           </li>
           <li>
             <Link href="/">
-              <a className="text-white hover:text-gray-300">Logout</a>
+              <button onClick={handleLogout}>
+                <Link className="text-white hover:text-gray-300">Logout</Link>
+              </button>
             </Link>
           </li>
         </ul>

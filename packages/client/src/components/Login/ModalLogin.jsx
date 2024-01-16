@@ -16,7 +16,7 @@ const UserLoginModal = ({ isOpen, onClose, onUserLogin, onTenantLogin }) => {
     <>
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div className="bg-white w-2/6 h-2/8 p-6 rounded-lg shadow-lg bg-color-primary">
+          <div className="sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-2/5 h-4/10 p-6 rounded-lg shadow-lg bg-color-primary">
             <div className="text-center mb-6">
               <p className="text-xl font-bold mb-2 text-color-pallete1">
                 Masuk ke Renafin Rent

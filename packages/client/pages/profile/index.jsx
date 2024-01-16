@@ -8,7 +8,6 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 
 const ProfilePage = () => {
-  const router = useRouter();
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [isGoogleLogin, setIsGoogleLogin] = useState(false);
 

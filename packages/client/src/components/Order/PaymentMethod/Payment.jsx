@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import { RiBankCardLine } from 'react-icons/ri';
 import { useRouter } from 'next/router';
-
 import axios from 'axios';
 
 const PaymentProcessor = ({ singleOrder, onPaymentProcessed, showToast }) => {
@@ -12,9 +11,9 @@ const PaymentProcessor = ({ singleOrder, onPaymentProcessed, showToast }) => {
   const [total, setTotal] = useState(0);
 
   const router = useRouter();
+
   async function processPayment() {
     const { User, id, total_invoice } = singleOrder || {};
-    console.log(singleOrder);
 
     const data = {
       name: User?.name || '',
@@ -67,13 +66,11 @@ const PaymentProcessor = ({ singleOrder, onPaymentProcessed, showToast }) => {
   }, []);
 
   useEffect(() => {
-    // Ketika token diperoleh, redirect ke halaman pembayaran Midtrans
     if (token) {
-      // Memanggil Midtrans Snap dengan token untuk membuka halaman pembayaran
       window.snap.pay(token, {
         onSuccess: (result) => {
           localStorage.setItem('Pembayaran', JSON.stringify(result));
-          setTokenState(''); // Reset token setelah pembayaran selesai
+          setTokenState('');
           onPaymentProcessed(name, orderId, total);
           showToast('Payment success', 'success');
           setTimeout(() => {
@@ -105,7 +102,7 @@ const PaymentProcessor = ({ singleOrder, onPaymentProcessed, showToast }) => {
         },
       });
     }
-  }, [token, name, onPaymentProcessed, orderId, router, showToast, total]);
+  }, [token]);
 
   return (
     <button

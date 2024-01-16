@@ -22,7 +22,7 @@ const UserProfile = ({ showToast }) => {
       setGender(data.gender);
       setEmail(data.email);
     } catch (error) {
-      console.log(error);
+      console.error(error.message);
     }
   };
 
@@ -37,7 +37,6 @@ const UserProfile = ({ showToast }) => {
       showToast('Update Success', 'success');
       return response.data;
     } catch (error) {
-      console.log(error.response || error.message);
       throw error;
     }
   };

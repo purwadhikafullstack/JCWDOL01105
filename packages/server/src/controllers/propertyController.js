@@ -52,7 +52,6 @@ exports.createOrUpdateProperty = async (req, res, next) => {
           message: 'You do not have permission to update this property',
         });
       }
-
       property.sell = isForSale;
       property.rent = isForRent;
       property.categories = categories;
@@ -103,7 +102,6 @@ exports.createOrUpdateProperty = async (req, res, next) => {
       }
 
       await property.save();
-
       if (req.files) {
         const fileNames = req.files.map((file) => file.filename);
         const basePaths = fileNames.map(

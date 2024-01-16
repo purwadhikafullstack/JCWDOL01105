@@ -34,7 +34,6 @@ const PropertyComponent = () => {
     try {
       const response = await api.get('/tenants/property');
       const propertiesData = await response.data.data.properties;
-      console.log(propertiesData);
       setProperties(propertiesData);
     } catch (error) {
       console.error('Error fetching properties :', error);

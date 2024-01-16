@@ -109,7 +109,6 @@ const Property = () => {
         },
       });
       const responseData = response.data;
-      console.log('Response Data :', responseData);
 
       if (responseData.success === false) {
         setErrorMessage(responseData.message);
@@ -194,6 +193,12 @@ const Property = () => {
     } else if (checkboxId === 'roomTypeSuperior') {
       setRoomType('Kingsize Bed Bedroom');
     }
+  };
+
+  const handleDateChange = (e) => {
+    // Format the date as "YYYY-MM-DD"
+    const formattedDate = new Date(e.target.value).toISOString().split('T')[0];
+    setAvailable(formattedDate);
   };
 
   return (

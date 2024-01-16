@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { RiCloseLine, RiCashLine, RiBankCardLine } from 'react-icons/ri';
 import ManualPayment from './PaymentMethod/ManualPayment';
-
-import PaymentProcessor from './PaymentMethod/MidtransPayment';
+import PaymentProcessor from './PaymentMethod/Payment';
 
 const ModalPayment = ({
   closeModal,

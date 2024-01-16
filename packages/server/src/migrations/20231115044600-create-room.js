@@ -28,7 +28,7 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       available: {
-        type: Sequelize.BOOLEAN,
+        type: Sequelize.DATE,
       },
       type_room: {
         type: Sequelize.STRING,
