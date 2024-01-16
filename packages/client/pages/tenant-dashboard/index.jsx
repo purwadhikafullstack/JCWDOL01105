@@ -56,11 +56,9 @@ const Navbar = () => {
             </Link>
           </li>
           <li>
-            <Link href="/">
-              <button onClick={handleLogout}>
-                <Link className="text-white hover:text-gray-300">Logout</Link>
-              </button>
-            </Link>
+            <button onClick={handleLogout}>
+              <a className="text-white hover:text-gray-300">Logout</a>
+            </button>
           </li>
         </ul>
       </div>

@@ -177,7 +177,7 @@ const PropertyComponent = () => {
                                 index + 1
                               }`}
                               className="mb-2 w-80 h-32 "
-                              width={300}
+                              width={700}
                               height={300}
                             />
                             {isEditingProperty && (

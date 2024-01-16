@@ -4,8 +4,6 @@ import ChangePassword from '../../src/components/Profile/ChangePassword';
 import UserProfile from '../../src/components/Profile/UserProfile';
 import Navbar from '../../src/components/Navbar/Navbar';
 import { toast } from 'react-toastify';
-import { useRouter } from 'next/router';
-import Link from 'next/link';
 
 const ProfilePage = () => {
   const [isAuthorized, setIsAuthorized] = useState(false);
@@ -49,13 +47,6 @@ const ProfilePage = () => {
             <p className="text-gray-600">
               Oops! The page you are looking for could not be found.
             </p>
-            <Link
-              href="/"
-              className="mt-4 inline-block rounded bg-blue-500 px-4 py-2 font-semibold text-white hover:bg-blue-600"
-            >
-              {' '}
-              Go back to Home{' '}
-            </Link>
           </div>
         </div>
       </div>
