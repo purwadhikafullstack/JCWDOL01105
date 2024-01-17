@@ -82,13 +82,13 @@ const OrderCart = ({
                     <p>No. Booking: {singleOrder.booking_code}</p>
                   </div>
                   <div className="relative mx-4  overflow-hidden rounded-xl bg-blue-gray-500 bg-clip-border text-white shadow-lg shadow-blue-gray-500/40">
-                    {singleOrder.rooms.properties.propertyPictures &&
-                    singleOrder.rooms.properties.propertyPictures.length > 0 &&
-                    singleOrder.rooms.properties.propertyPictures[0]
+                    {singleOrder.rooms.property.propertyPictures &&
+                    singleOrder.rooms.property.propertyPictures.length > 0 &&
+                    singleOrder.rooms.property.propertyPictures[0]
                       .property_pictures ? (
                       <Image
                         src={
-                          singleOrder.rooms.properties.propertyPictures[0]
+                          singleOrder.rooms.property.propertyPictures[0]
                             .property_pictures
                         }
                         alt="ui/ux review check"
@@ -136,8 +136,8 @@ const OrderCart = ({
                   <div className="p-6">
                     <div className="mb-3 flex items-center justify-between">
                       <h5 className="block font-sans text-xl font-medium leading-snug tracking-normal text-blue-gray-900 antialiased">
-                        {singleOrder.rooms.properties.name}, <br />
-                        {singleOrder.rooms.properties.address}
+                        {singleOrder.rooms.property.name}, <br />
+                        {singleOrder.rooms.property.address}
                       </h5>
                       <p className="flex items-center gap-1.5 font-sans text-base font-normal leading-relaxed text-blue-gray-900 antialiased">
                         <svg
@@ -202,19 +202,16 @@ const OrderCart = ({
                       </span>
                     </p>
                     {singleOrder.booking_status === 'WAITING_FOR_PAYMENT' &&
-                      (moment().isBefore(
+                      moment().isBefore(
                         moment(singleOrder.check_in_date, 'YYYY-MM-DD'),
                         'day',
-                      ) ||
-                        moment().isSame(
-                          moment(singleOrder.check_in_date, 'YYYY-MM-DD'),
-                        )) && (
+                      ) && (
                         <div className="flex gap-2">
                           <button
                             className="block w-full select-none rounded-lg bg-color-blue py-3.5 px-7 text-center align-middle font-sans text-sm font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                             type="button"
                             data-ripple-light="true"
-                            onClick={() => handleModalPayment(singleOrder)} // Fungsi untuk menangani pembayaran
+                            onClick={() => handleModalPayment(singleOrder)}
                           >
                             Pay Now
                           </button>
@@ -222,7 +219,7 @@ const OrderCart = ({
                             className="block w-full select-none rounded-lg bg-color-red py-3.5 px-7 text-center align-middle font-sans text-sm font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                             type="button"
                             data-ripple-light="true"
-                            onClick={() => handleCancelOrder(singleOrder.id)} // Fungsi untuk membatalkan pesanan
+                            onClick={() => handleCancelOrder(singleOrder.id)}
                           >
                             Cancel
                           </button>
@@ -275,6 +272,23 @@ const OrderCart = ({
                         CANCELLED
                       </button>
                     )}
+                    {singleOrder.booking_status === 'WAITING_FOR_PAYMENT' &&
+                      (moment().isAfter(
+                        moment(singleOrder.check_in_date, 'YYYY-MM-DD'),
+                        'day',
+                      ) ||
+                        moment().isSame(
+                          moment(singleOrder.check_in_date, 'YYYY-MM-DD'),
+                        )) && (
+                        <button
+                          className="block w-full select-none rounded-lg bg-color-red py-3.5 px-7 text-center align-middle font-sans text-sm font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                          type="button"
+                          data-ripple-light="true"
+                          disabled
+                        >
+                          CANCELLED
+                        </button>
+                      )}
                   </div>
                 </div>
               </div>

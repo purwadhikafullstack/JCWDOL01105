@@ -272,21 +272,21 @@ const SalesReport = () => {
                               {order.User.name}
                             </p>
                             <p className="text-gray-500 text-xs">
-                              Property Id :{order.rooms.properties.id}
+                              Property Id: {order.rooms.property.id}
                             </p>
                           </div>
                         </div>
                       </td>
-                      <td className="px-5 py-5  border-gray-200 bg-white text-sm">
+                      <td className="px-5 py-5 border-gray-200 bg-white text-sm">
                         <p className="text-gray-900 whitespace-no-wrap">
-                          {order.rooms.properties.name}
+                          {order.rooms.property.name}
                         </p>
                       </td>
                       <td className="px-5 py-5 border-gray-200 bg-white text-sm">
                         <p className="text-gray-900 whitespace-no-wrap">
                           <span>
                             {moment(order.payment_date, 'YYYY-MM-DD').format(
-                              ' DD-MM-YYYY',
+                              'DD-MM-YYYY',
                             )}
                           </span>
                         </p>
@@ -295,7 +295,7 @@ const SalesReport = () => {
                         <p className="text-gray-900 whitespace-no-wrap">
                           <span>
                             {moment(order.check_in_date, 'YYYY-MM-DD').format(
-                              ' DD-MM-YYYY',
+                              'DD-MM-YYYY',
                             )}
                           </span>
                         </p>
@@ -306,19 +306,17 @@ const SalesReport = () => {
                         </p>
                       </td>
                       <td className="px-5 py-5 border-gray-200 bg-white text-sm">
-                        <td className="px-5 py-5 border-gray-200 bg-white text-sm">
-                          <p
-                            className={`${
-                              order.payment_status === 'ACCEPTED'
-                                ? 'text-color-pallete3'
-                                : order.payment_status === 'DECLINED'
-                                ? 'text-color-red'
-                                : ''
-                            }`}
-                          >
-                            {order.payment_status}
-                          </p>
-                        </td>
+                        <p
+                          className={`${
+                            order.payment_status === 'ACCEPTED'
+                              ? 'text-color-pallete3'
+                              : order.payment_status === 'DECLINED'
+                              ? 'text-color-red'
+                              : ''
+                          }`}
+                        >
+                          {order.payment_status}
+                        </p>
                       </td>
                     </tr>
                   ))}

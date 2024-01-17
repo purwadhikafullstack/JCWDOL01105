@@ -47,7 +47,6 @@ const paymentGateway = async (req, res) => {
 
 const midtransCallback = async (req, res) => {
   try {
-    // Verifikasi tanda tangan dari Midtrans menggunakan x-veritrans-signature header
     const signatureKey = process.env.MIDTRANS_SERVER_KEY;
     const { 'x-veritrans-signature': veritransSignature } = req.headers;
 

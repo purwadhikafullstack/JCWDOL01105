@@ -126,7 +126,7 @@ const PropertyList = () => {
                     src={imageUrl}
                     alt={`property cover`}
                     className="w-full h-48 object-cover rounded-t-lg"
-                    width={300}
+                    width={400}
                     height={200}
                   />
                 ) : (

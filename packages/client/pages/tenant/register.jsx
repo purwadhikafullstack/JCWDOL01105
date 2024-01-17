@@ -29,7 +29,13 @@ const authRegister = () => {
           <FormRegister className="mb-10" showToast={showToast} />
         </div>
         <div className="md:order-2 md:ml-2 mt-20">
-          <Image src={logo} alt="logo" width={300} height={200} />
+          <Image
+            src={logo}
+            alt="logo"
+            className="mt-5"
+            width={300}
+            height={300}
+          />
         </div>
       </div>
 

@@ -40,7 +40,6 @@ const PaymentProcessor = ({ singleOrder, onPaymentProcessed, showToast }) => {
         setOrderId(id || '');
         setTotal(total_invoice || 0);
         onPaymentProcessed(User?.name || '', id || '', total_invoice || 0);
-        showToast('Payment success', 'success');
       }
     } catch (error) {
       console.error('Error:', error);

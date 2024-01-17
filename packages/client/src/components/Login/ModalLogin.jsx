@@ -4,12 +4,12 @@ import React from 'react';
 const UserLoginModal = ({ isOpen, onClose, onUserLogin, onTenantLogin }) => {
   const handleUserLogin = () => {
     onClose();
-    onUserLogin(); // Lakukan navigasi ke /user/login
+    onUserLogin();
   };
 
   const handleTenantLogin = () => {
     onClose();
-    onTenantLogin(); // Lakukan navigasi ke /tenant/login
+    onTenantLogin();
   };
 
   return (
@@ -34,8 +34,8 @@ const UserLoginModal = ({ isOpen, onClose, onUserLogin, onTenantLogin }) => {
                   src="/user.png"
                   alt="login-tenant"
                   className="w-12 h-12 mr-4"
-                  width={15}
-                  height={15}
+                  width={50}
+                  height={50}
                 />
                 <p className="text-sm font-semibold">User</p>
               </div>
@@ -47,8 +47,8 @@ const UserLoginModal = ({ isOpen, onClose, onUserLogin, onTenantLogin }) => {
                   src="/user.png"
                   alt="login-owner"
                   className="w-12 h-12 mr-4"
-                  width={150}
-                  height={100}
+                  width={50}
+                  height={50}
                 />
                 <p className="text-sm font-semibold">Tenant</p>
               </div>

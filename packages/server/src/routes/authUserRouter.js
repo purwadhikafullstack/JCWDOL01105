@@ -7,7 +7,6 @@ const {
 } = require('../middleware/userValidation');
 const Oauth2Controller = require('../controllers/oauth2Controller');
 const authMiddleware = require('../middleware/authMiddleware');
-
 const validateRegister = userValidationRegister();
 const validateLogin = userValidationLogin();
 

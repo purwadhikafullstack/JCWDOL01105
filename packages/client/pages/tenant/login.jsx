@@ -3,7 +3,6 @@ import FormLogin from '../../src/components/FormAuth/tenant/TenantLogin';
 import { toast } from 'react-toastify';
 import Image from 'next/image';
 import logo from '../../public/logo.png';
-import SwitchAuth from '../../src/components/FormAuth/SwitchAuth';
 
 const authRegister = () => {
   const showToast = (message, type) => {
@@ -27,13 +26,13 @@ const authRegister = () => {
         <div className="md:order-2 md:ml-2 mt-20">
           <FormLogin className="mt-10" showToast={showToast} />
         </div>
-        <div className="md:order-2 md:ml-2 mt-15">
+        <div className="md:order-2 md:ml-2 mt-20">
           <Image
             src={logo}
             alt="logo"
             className="mt-5"
             width={300}
-            height={200}
+            height={300}
           />
         </div>
       </div>

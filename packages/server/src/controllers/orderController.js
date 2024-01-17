@@ -1,4 +1,11 @@
-const { Orders, User } = require('../models');
+const {
+  Orders,
+  User,
+  Room,
+  Properties,
+  Reviews,
+  property_picture,
+} = require('../models');
 
 const createOrder = async (req, res) => {
   try {
@@ -68,7 +75,7 @@ const getOrder = async (req, res) => {
         include: [
           {
             model: Properties,
-            as: 'properties',
+            as: 'property',
             attributes: ['name', 'address'],
             include: [
               {
@@ -112,7 +119,7 @@ const getOrder = async (req, res) => {
                   include: [
                     {
                       model: Properties,
-                      as: 'properties',
+                      as: 'property',
                       attributes: ['name'],
                     },
                   ],
@@ -356,7 +363,7 @@ const rejectPayment = async (req, res) => {
   }
 };
 
-const cancelOrder = async (req, res) => {
+const cancelPayment = async (req, res) => {
   const orderId = req.params.id;
   try {
     const order = await Orders.findByPk(orderId);
@@ -375,14 +382,44 @@ const cancelOrder = async (req, res) => {
   }
 };
 
+const cancelOrder = async (req, res) => {
+  const { order_id } = req.params;
+  const { cancel_reason } = req.body;
+
+  try {
+    const order = await Orders.findByPk(order_id);
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: 'Order not found',
+      });
+    }
+    order.booking_status = 'CANCELED';
+    order.cancel_reason = cancel_reason;
+    await order.save();
+
+    return res.status(200).json({
+      success: true,
+      message: 'Order cancelled successfully',
+    });
+  } catch (error) {
+    console.error('Error canceling order:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to cancel order.',
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   createOrder,
-  getAllOrders,
   confirmPayment,
   getPaymentProof,
-  createOrder,
+  payment_proof,
+  getOrder,
   getAllOrders,
-  confirmPayment,
   rejectPayment,
   cancelOrder,
+  cancelPayment,
 };

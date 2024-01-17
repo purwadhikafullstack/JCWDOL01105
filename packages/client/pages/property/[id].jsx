@@ -66,28 +66,23 @@ const PropertyDetails = () => {
   const tenantName = property.Tenant ? property.Tenant.name : 'Unknown Tenant';
 
   const nextSlide = () => {
-    console.log('Next Slide Clicked');
     setCurrentIndex((prevIndex) =>
       prevIndex < imageUrls.length - 1 ? prevIndex + 1 : 0,
     );
   };
 
   const prevSlide = () => {
-    console.log('Prev Slide Clicked');
     setCurrentIndex((prevIndex) =>
       prevIndex > 0 ? prevIndex - 1 : imageUrls.length - 1,
     );
   };
 
-  console.log('Property Pictures:', property.propertyPictures);
   let imageUrls = [];
 
   if (property.propertyPictures && property.propertyPictures.length > 0) {
     const firstImageUrl = property.propertyPictures[0].property_pictures;
     imageUrls = firstImageUrl.split(',').map((url) => url.trim());
   }
-
-  console.log('Image URLs:', imageUrls);
 
   const addGuests = () => {
     setShowGuestsInput(true);
@@ -150,12 +145,11 @@ const PropertyDetails = () => {
       const totalGuests = Number(guests.adults) + Number(guests.children);
 
       function generateBookingCode() {
-        const prefix = 'BOOK'; // Teks awalan untuk kode booking
-        const randomNum = Math.floor(1000 + Math.random() * 9000); // Angka acak antara 1000 - 9999
-        return prefix + randomNum; // Menggabungkan teks awalan dengan angka acak
+        const prefix = 'BOOK';
+        const randomNum = Math.floor(1000 + Math.random() * 9000);
+        return prefix + randomNum;
       }
 
-      // Contoh penggunaan
       const bookingCode = generateBookingCode();
 
       const orderData = {
@@ -170,7 +164,7 @@ const PropertyDetails = () => {
         total_invoice: property.rooms[0].specialPrice
           ? property.rooms[0].specialPrice * totalNights
           : property.rooms[0].regularPrice * totalNights,
-        payment_proof: 'default',
+        payment_proof: null,
         payment_status: null,
         payment_date: null,
         booking_status: null,
@@ -231,12 +225,6 @@ const PropertyDetails = () => {
                     className="w-full h-full rounded-t-md object-cover"
                     width={1200}
                     height={700}
-                    onError={() =>
-                      console.error(`Error loading image: ${imageUrl}`)
-                    }
-                    onLoad={() =>
-                      console.log(`Image loaded successfully: ${imageUrl}`)
-                    }
                   />
                 </div>
               ))}
@@ -323,9 +311,7 @@ const PropertyDetails = () => {
                 isWeekend(checkOutDate) &&
                 property.rooms[0].specialPrice ? (
                   <div className="mb-4">
-                    <span className="font-semibold text-xl">
-                      Weekend`&apos;`s Price :
-                    </span>{' '}
+                    <span className="font-semibold">Weekend&apos Price :</span>{' '}
                     {formatPrice(
                       getPrice(property.rooms[0], totalNights, true),
                     )}
@@ -371,7 +357,6 @@ const PropertyDetails = () => {
                   </div>
                 </div>
               </div>
-
               {showGuestsInput && (
                 <div className="mb-4">
                   <span className="font-semibold">Guests :</span>

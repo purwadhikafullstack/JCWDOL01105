@@ -141,7 +141,7 @@ const PropertyComponent = () => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
+    <div className="bg-color-primary rounded-lg shadow-md p-6">
       <h2 className="text-xl font-bold mb-4">Property List</h2>
       <div>
         {properties.map((property) => (
