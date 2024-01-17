@@ -3,7 +3,6 @@ import FormLogin from '../../src/components/FormAuth/user/FormLogin';
 import { toast } from 'react-toastify';
 import Image from 'next/image';
 import logo from '../../public/logo.png';
-import SwitchButton from '../../src/components/FormAuth/SwitchAuth';
 
 const authRegister = () => {
   const showToast = (message, type) => {

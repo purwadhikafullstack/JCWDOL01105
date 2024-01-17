@@ -22,7 +22,7 @@ const UserProfile = ({ showToast }) => {
       setGender(data.gender);
       setEmail(data.email);
     } catch (error) {
-      console.error(error.message);
+      console.log(error);
     }
   };
 
@@ -37,6 +37,7 @@ const UserProfile = ({ showToast }) => {
       showToast('Update Success', 'success');
       return response.data;
     } catch (error) {
+      console.log(error.response || error.message);
       throw error;
     }
   };
@@ -168,11 +169,6 @@ const UserProfile = ({ showToast }) => {
                   type="text"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  onKeyPress={(e) => {
-                    if (e.key === 'Enter') {
-                      setEditable(false);
-                    }
-                  }}
                   className="border rounded-md px-2 py-1 w-full"
                 />
               ) : (
