@@ -53,6 +53,7 @@ const Property = () => {
       !bathrooms ||
       !regularPrice ||
       !specialPrice ||
+      !available ||
       files.length === 0 ||
       files.length > 6
     ) {
@@ -101,7 +102,6 @@ const Property = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
-      console.log('Token', token);
       const response = await api.post('/property/upload', formData, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -148,8 +148,8 @@ const Property = () => {
               src={URL.createObjectURL(file)}
               alt={`Selected Image ${index + 1}`}
               className="w-20 h-20 rounded-lg"
-              width={200}
-              height={200}
+              width={120}
+              height={100}
             />
             <button
               onClick={() => handleDeleteImage(index)}
@@ -361,7 +361,7 @@ const Property = () => {
                 onChange={(e) => setSpecialPrice(e.target.value)}
               />
               <div className="flex flex-col items-center">
-                <p>Weekend`&apos;`s Price</p>
+                <p>Weekend&apos;s Price</p>
                 <p className="text-xs">20% Higher</p>
                 <span className="text-xs">(Rp / Night)</span>
               </div>

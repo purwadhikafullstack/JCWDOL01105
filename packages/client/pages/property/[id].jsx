@@ -46,7 +46,6 @@ const PropertyDetails = () => {
     const fetchPropertyDetails = async () => {
       try {
         const response = await api.get(`/property/${id}`);
-        console.log('API Response', response.data);
         const propertyData = response.data.data.property;
         setProperty(propertyData);
       } catch (error) {
@@ -312,7 +311,7 @@ const PropertyDetails = () => {
                 property.rooms[0].specialPrice ? (
                   <div className="mb-4">
                     <span className="font-semibold">
-                      Weekend`&apos;`s Price :
+                      Weekend&apos;s Price :
                     </span>{' '}
                     {formatPrice(
                       getPrice(property.rooms[0], totalNights, true),
