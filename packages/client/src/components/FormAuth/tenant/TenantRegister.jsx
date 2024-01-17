@@ -6,7 +6,10 @@ import { useFormik } from 'formik';
 import api from '../../../config/api';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
+<<<<<<< HEAD
 import img from '../../../../public/ID_CARD.jpeg';
+=======
+>>>>>>> upstream/main
 
 YupPassword(Yup);
 const validationRegister = Yup.object().shape({
@@ -287,7 +290,11 @@ const FormRegister = ({ showToast }) => {
                 <h3 className="block text-sm text-color-pallete1">
                   ID Card Picture
                 </h3>
+<<<<<<< HEAD
                 <div className="flex flex-col items-center justify-center">
+=======
+                <div className="flex flex-col items-center justify-center pt-5 pb-6">
+>>>>>>> upstream/main
                   <Image
                     id="preview-image"
                     src={
@@ -296,9 +303,16 @@ const FormRegister = ({ showToast }) => {
                         : img
                     }
                     alt="Preview"
+<<<<<<< HEAD
                     className="mb-4 w-52 h-32 object-cover rounded-lg border mt-2" // Atur ukuran gambar sesuai yang diinginkan
                     width={300}
                     height={180}
+=======
+                    className="mb-4 w-52 h-32 object-cover rounded-lg border" // Atur ukuran gambar sesuai yang diinginkan
+                    style={{ maxHeight: '200px', maxWidth: '200px' }} // Sesuaikan ukuran gambar yang diinginkan di sini
+                    width={200}
+                    height={200}
+>>>>>>> upstream/main
                   />
                   <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
                     <span className="font-semibold">Click to upload</span>

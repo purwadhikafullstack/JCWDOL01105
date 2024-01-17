@@ -1,4 +1,4 @@
-import Property from '../src/components/Property/Property';
+import Property from '../src/components/Property';
 
 const Rent = () => {
   return (

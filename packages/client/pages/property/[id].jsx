@@ -167,7 +167,7 @@ const PropertyDetails = () => {
         payment_proof: null,
         payment_status: null,
         payment_date: null,
-        booking_status: 'WAITING_FOR_PAYMENT',
+        booking_status: null,
         cancel_reason: '',
         reject_reason: '',
       };
