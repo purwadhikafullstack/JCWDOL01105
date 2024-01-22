@@ -41,4 +41,5 @@ jobs:
             cd ${{ secrets.SSH_FOLDER }}
             npm install
             npm run migrate
+            chown -R root:root .
             pm2 start deploy.config.js
